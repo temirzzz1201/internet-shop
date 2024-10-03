@@ -27,4 +27,9 @@ router.post('/upload-product', upload.single('image'), async (req: Request, res:
   }
 });
 
+
 export default router;
+
+
+
+
