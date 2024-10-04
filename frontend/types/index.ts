@@ -39,6 +39,5 @@ export interface IUserResponse {
 }
 
 export interface IProtectedRoute {
-  // onlyUnAuth?: boolean;
   component: React.ReactElement;
 }

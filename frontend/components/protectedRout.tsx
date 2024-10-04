@@ -1,12 +1,12 @@
 import Cookies from 'js-cookie';
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { redirect } from 'next/navigation';
 
 const withAuth = (WrappedComponent: any) => {
   return (props: any) => {
     const accessToken = Cookies.get('accessToken');
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       if (!accessToken) {
         redirect('/login');
       }

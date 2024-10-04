@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { register, login, logout } from '../actions/clientActions';
 import { IAuthState } from '../types';
 
-// Начальное состояние
+
 export const initialState: IAuthState = {
   user: null,
   isAuthenticated: false,
