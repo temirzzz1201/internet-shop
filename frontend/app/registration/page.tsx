@@ -3,16 +3,16 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
-import { login } from '@/actions/clientActions';
+import { register } from '@/actions/clientActions';
 import { FormControl, FormLabel, Button, Text, FormHelperText } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
 const SignupSchema = Yup.object().shape({
-  // name: Yup.string()
-  // .min(2, 'Too Short!')
-  // .max(50, 'Too Long!')
-  // .required('Required'),
+  username: Yup.string()
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
   password: Yup.string()
     // .min(6, 'Too Short!')
     // .max(50, 'Too Long!')
@@ -23,25 +23,27 @@ const SignupSchema = Yup.object().shape({
 });
 
 
-
-export default function Login() {
+export default function Register() {
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector(store => store.auth)
+  const { user, isAuthenticated } = useAppSelector(store => store.auth)
+  console.log(user);
+
   console.log(isAuthenticated);
   if (isAuthenticated) {
-    redirect('/')
+    redirect('/login')
   }
+
 
   return (
     <div className="container min-h-screen">
       <section className="p-3 flex mb-10">
-        <Text color="blue.600" fontSize="2xl">Login page</Text>
+        <Text color="blue.600" fontSize="2xl">Registration page</Text>
       </section>
       <section className="p-3 flex flex-col justify-center items-center">
         <FormControl className="max-w-[500px]">
-          <FormLabel>Please login</FormLabel>
+          <FormLabel>Registration</FormLabel>
           <Formik
-            initialValues={{ email: '', password: '' }}
+            initialValues={{ username: '', email: '', password: '' }}
             validationSchema={SignupSchema}
             validate={values => {
               const errors = {} as any;
@@ -63,7 +65,11 @@ export default function Login() {
 
               console.log('values ', values);
 
-              dispatch(login(values));
+              dispatch(register(values));
+              values.username = ''
+              values.email = ''
+              values.password = ''
+
             }}
           >
             {({
@@ -77,6 +83,19 @@ export default function Login() {
             }) => (
               <Form onSubmit={handleSubmit} className='flex flex-col'>
                 <Field
+                  type="text"
+                  name="username"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.username}
+                  className='border rounded-sm mb-2 h-10 p-1'
+                  placeholder='name'
+                />
+                {/* {errors.name && touched.name && errors.name} */}
+                {errors.username && touched.username ? (
+                  <div>{errors.username}</div>
+                ) : null}
+                <Field
                   type="email"
                   name="email"
                   onChange={handleChange}
@@ -84,7 +103,6 @@ export default function Login() {
                   value={values.email}
                   className='border rounded-sm mb-2 h-10 p-1'
                   placeholder='email'
-
                 />
                 {errors.email && touched.email && errors.email}
                 <Field
@@ -100,7 +118,9 @@ export default function Login() {
                 <Button mt={4} colorScheme="teal" className='items-start w-[120px] mb-7' type="submit">
                   Submit
                 </Button>
-                <FormHelperText>Don't registred yet? <Link className='underline' href='/registration'>Registration</Link></FormHelperText>
+                <FormHelperText>
+                  Have an account? <Link className="underline" href="/login">Login</Link>
+                </FormHelperText>
               </Form>
 
             )}
@@ -111,6 +131,5 @@ export default function Login() {
     </div>
   )
 }
-
 
 

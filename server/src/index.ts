@@ -7,11 +7,13 @@ import router from './routes'
 const app = express();
 const PORT = process.env.PORT || 3600;
 
+app.use(cors({
+  origin: 'http://localhost:3000', // Укажите порт вашего фронтенда
+}));
 app.use(express.json());
-app.use(cors());
-
 app.use('/uploads', express.static('uploads'));
 app.use('/', router);
+
 
 const start = async () => {
   try {

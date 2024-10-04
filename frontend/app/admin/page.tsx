@@ -1,6 +1,6 @@
 'use client'
 
-import { placeProduct } from '@/store/productReducer'
+import { placeProduct } from "@/actions/clientActions";
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useState } from 'react';
 import {

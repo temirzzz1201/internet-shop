@@ -1,5 +1,5 @@
 
-import { fetchProducts } from "@/actions";
+import { fetchProducts } from "@/actions/serverActions";
 import ProductCard from "@/components/productCard";
 import { IIProduct } from "@/types";
 import { Grid, Text } from '@chakra-ui/react'
@@ -8,7 +8,7 @@ export default async function Home() {
   const products = await fetchProducts() ?? []
 
 
-  console.log(products);
+  console.log('products ', products);
 
   return (
     <div className="container min-h-screen">
