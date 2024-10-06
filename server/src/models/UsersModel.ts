@@ -23,7 +23,7 @@ User.init({
   username: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
+    unique: false,
   },
   email: {
     type: DataTypes.STRING,
@@ -38,20 +38,13 @@ User.init({
   password: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: false,
     validate: {
       len: {
-        args: [6, 100],
+        args: [8, 100],
         msg: 'Password must be at least 6 characters long',
       },
     },
-    get() {
-      return undefined;
-    },
-  },
-  role: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    defaultValue: 'customer',
   },
 }, {
   sequelize,
@@ -62,12 +55,12 @@ User.init({
   hooks: {
     beforeCreate: async (user: User) => {
       if (user.password) {
-        user.password = await bcrypt.hash(user.password, 10);
+        user.password = await bcrypt.hash(user.password, 5);
       }
     },
     beforeUpdate: async (user: User) => {
       if (user.changed('password')) {
-        user.password = await bcrypt.hash(user.password, 10);
+        user.password = await bcrypt.hash(user.password, 5);
       }
     },
   },

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
-import { login } from '@/actions/clientActions';
+import { register } from '@/actions/clientActions';
 import {
   FormControl,
   FormLabel,
@@ -15,36 +15,40 @@ import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { IFormValues, IFormErrors } from '@/types';
 
-
 const SignupSchema = Yup.object().shape({
+  username: Yup.string()
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
   password: Yup.string()
     .min(8, 'Password should be of minimum 8 characters length')
     .required('Password is required'),
   email: Yup.string().email('Invalid email').required('Required'),
 });
 
-export default function Login() {
+export default function Register() {
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector((store) => store.auth);
+  const { user, isAuthenticated } = useAppSelector((store) => store.auth);
+  console.log(user);
 
   if (isAuthenticated) {
-    redirect('/');
+    redirect('/login');
   }
 
   return (
     <div className="container min-h-screen">
       <section className="p-3 flex mb-10">
         <Text color="blue.600" fontSize="2xl">
-          Login page
+          Registration page
         </Text>
       </section>
       <section className="p-3 flex flex-col justify-center items-center">
         <FormControl className="max-w-[500px]">
-          <FormLabel>Please login</FormLabel>
-          <Formik<IFormValues>
-            initialValues={{ email: '', password: '' }}
+          <FormLabel>Registration</FormLabel>
+          <Formik
+            initialValues={{ username: '', email: '', password: '' }}
             validationSchema={SignupSchema}
-            validate={(values) => {
+            validate={(values): IFormErrors => {
               const errors: IFormErrors = {};
               if (!values.email) {
                 errors.email = 'Required';
@@ -53,11 +57,12 @@ export default function Login() {
               ) {
                 errors.email = 'Invalid email address';
               }
+
               return errors;
             }}
-            onSubmit={(values) => {
+            onSubmit={(values: IFormValues) => {
               console.log('values ', values);
-              dispatch(login(values));
+              dispatch(register(values));
             }}
           >
             {({
@@ -69,6 +74,18 @@ export default function Login() {
               handleSubmit,
             }) => (
               <Form onSubmit={handleSubmit} className="flex flex-col">
+                <Field
+                  type="text"
+                  name="username"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.username}
+                  className="border rounded-sm mb-2 h-10 p-1"
+                  placeholder="name"
+                />
+                {errors.username && touched.username ? (
+                  <div>{errors.username}</div>
+                ) : null}
                 <Field
                   type="email"
                   name="email"
@@ -98,9 +115,9 @@ export default function Login() {
                   Submit
                 </Button>
                 <FormHelperText>
-                  Don't registered yet?{' '}
-                  <Link className="underline" href="/registration">
-                    Registration
+                  Have an account?{' '}
+                  <Link className="underline" href="/login">
+                    Login
                   </Link>
                 </FormHelperText>
               </Form>
