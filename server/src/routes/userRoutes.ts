@@ -79,6 +79,18 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
     const { accessToken, refreshToken } = generateTokens(user.id);
 
+    // Установка токенов в httpOnly cookies
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 1000, // 1 час
+    });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 дней
+    });
+
     res.json({
       message: 'Logged in successfully',
       accessToken,
@@ -100,6 +112,13 @@ router.post('/refresh-token', async (req: Request, res: Response): Promise<void>
   try {
     const decoded = jwt.verify(token, refreshSecret) as { userId: number };
     const newAccessToken = jwt.sign({ userId: decoded.userId }, secret, { expiresIn: accessTokenExpiresIn });
+
+    // Обновление токена
+    res.cookie('accessToken', newAccessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 1000, // 1 час
+    });
 
     res.json({ accessToken: newAccessToken });
   } catch (error: any) {

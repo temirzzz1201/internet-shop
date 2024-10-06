@@ -1,8 +1,8 @@
-'use client'
-import NavLinks from "./navlinks/nav-links";
-import Image from "next/image";
-import logoSrc from "@/app/images/logo.svg"
-
+'use client';
+import NavLinks from './navlinks/nav-links';
+import Image from 'next/image';
+import logoSrc from '@/app/images/logo.svg';
+import Link from 'next/link';
 
 export default function Header() {
   return (
@@ -10,7 +10,9 @@ export default function Header() {
       <div className="container">
         <div className="flex justify-between items-center">
           <div>
-            <Image className="w-9 h-9" src={logoSrc} alt="logo" />
+            <Link href="/">
+              <Image className="w-9 h-9" src={logoSrc} alt="logo" />
+            </Link>
           </div>
           <div>
             <NavLinks />
@@ -18,5 +20,5 @@ export default function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }

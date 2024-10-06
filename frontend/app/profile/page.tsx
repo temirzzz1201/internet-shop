@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
 import { useAppSelector } from '@/hooks/useAppSelector';
-import withAuth from "@/components/protectedRout";
+import withAuth from '@/components/protectedRout';
 
 function Profile() {
-  const { user } = useAppSelector(store => store.auth);
+  const { user } = useAppSelector((store) => store.auth);
 
   return (
     <div>

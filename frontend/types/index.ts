@@ -1,12 +1,12 @@
 export interface IIProduct {
-  id: string
-  name: string
-  description: string
-  price: number | null
-  stock: number | null
-  imageUrl: string,
-  createdAt: string
-  updatedAt: string
+  id: string;
+  name: string;
+  description: string;
+  price: number | null;
+  stock: number | null;
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface IIProducts {
@@ -23,21 +23,33 @@ export interface IAuthState {
 }
 
 export interface IUser {
-  id?: number
-  username?: string | null
-  email: string
-  password: string
-  role?: string
-  createdAt?: string
-  updatedAt?: string
+  id?: number;
+  username?: string | null;
+  email: string;
+  password: string;
+  role?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface IUserResponse {
   accessToken: string;
-  refreshToken: string
+  refreshToken: string;
   user: IUser;
 }
 
 export interface IProtectedRoute {
   component: React.ReactElement;
+}
+
+export interface IFormValues {
+  username?: string;
+  email: string;
+  password: string;
+}
+
+export interface IFormErrors {
+  username?: string;
+  email?: string;
+  password?: string;
 }

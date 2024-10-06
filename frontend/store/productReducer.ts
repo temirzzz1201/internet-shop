@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { placeProduct } from "@/actions/clientActions";
-import { IIProducts, IIProduct } from "../types";
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { placeProduct } from '@/actions/clientActions';
+import { IIProducts, IIProduct } from '../types';
 
 export const initialState: IIProducts = {
   products: [],
@@ -9,7 +9,7 @@ export const initialState: IIProducts = {
 };
 
 const productSlice = createSlice({
-  name: "products",
+  name: 'products',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -18,10 +18,13 @@ const productSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(placeProduct.fulfilled, (state, action: PayloadAction<IIProduct>) => {
-        state.isLoading = false;
-        state.products.push(action.payload);
-      })
+      .addCase(
+        placeProduct.fulfilled,
+        (state, action: PayloadAction<IIProduct>) => {
+          state.isLoading = false;
+          state.products.push(action.payload);
+        }
+      )
       .addCase(placeProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload ?? 'Что-то пошло не так';

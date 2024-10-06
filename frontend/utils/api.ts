@@ -13,7 +13,10 @@ const api = axios.create({
 const refreshToken = async (): Promise<string> => {
   try {
     const storedRefreshToken = localStorage.getItem('refreshToken');
-    const response = await api.post<{ accessToken: string }>('users/refresh-token', { token: storedRefreshToken });
+    const response = await api.post<{ accessToken: string }>(
+      'users/refresh-token',
+      { token: storedRefreshToken }
+    );
     const newAccessToken = response.data.accessToken;
 
     Cookies.set('accessToken', newAccessToken);

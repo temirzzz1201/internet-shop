@@ -53,6 +53,9 @@ server/build/
 server/.env
 server/.env.local
 server/uploads
+server/.env.development
+server/.env.production
+
 
 
 # OS specific files

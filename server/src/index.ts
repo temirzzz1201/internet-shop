@@ -1,19 +1,17 @@
-import 'dotenv/config'
 import express from 'express';
 import cors from 'cors';
 import { initModels } from './models';
-import router from './routes'
+import router from './routes';
 
 const app = express();
 const PORT = process.env.PORT || 3600;
 
 app.use(cors({
-  origin: 'http://localhost:3000', // Укажите порт вашего фронтенда
+  origin: 'http://localhost:3000',
 }));
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 app.use('/', router);
-
 
 const start = async () => {
   try {
@@ -24,6 +22,6 @@ const start = async () => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 start();

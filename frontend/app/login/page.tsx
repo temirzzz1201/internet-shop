@@ -4,47 +4,48 @@ import { redirect } from 'next/navigation';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { login } from '@/actions/clientActions';
-import { FormControl, FormLabel, Button, Text, FormHelperText } from '@chakra-ui/react';
+import {
+  FormControl,
+  FormLabel,
+  Button,
+  Text,
+  FormHelperText,
+} from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import { IFormValues, IFormErrors } from '@/types';
+
 
 const SignupSchema = Yup.object().shape({
-  // name: Yup.string()
-  // .min(2, 'Too Short!')
-  // .max(50, 'Too Long!')
-  // .required('Required'),
   password: Yup.string()
-    // .min(6, 'Too Short!')
-    // .max(50, 'Too Long!')
-    // .required('Required'),
     .min(8, 'Password should be of minimum 8 characters length')
     .required('Password is required'),
   email: Yup.string().email('Invalid email').required('Required'),
 });
 
-
-
 export default function Login() {
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector(store => store.auth)
-  console.log(isAuthenticated);
+  const { isAuthenticated } = useAppSelector((store) => store.auth);
+
   if (isAuthenticated) {
-    redirect('/')
+    redirect('/');
   }
 
   return (
     <div className="container min-h-screen">
       <section className="p-3 flex mb-10">
-        <Text color="blue.600" fontSize="2xl">Login page</Text>
+        <Text color="blue.600" fontSize="2xl">
+          Login page
+        </Text>
       </section>
       <section className="p-3 flex flex-col justify-center items-center">
         <FormControl className="max-w-[500px]">
           <FormLabel>Please login</FormLabel>
-          <Formik
+          <Formik<IFormValues>
             initialValues={{ email: '', password: '' }}
             validationSchema={SignupSchema}
-            validate={values => {
-              const errors = {} as any;
+            validate={(values) => {
+              const errors: IFormErrors = {};
               if (!values.email) {
                 errors.email = 'Required';
               } else if (
@@ -52,17 +53,10 @@ export default function Login() {
               ) {
                 errors.email = 'Invalid email address';
               }
-
               return errors;
             }}
             onSubmit={(values) => {
-              if (!values) {
-                alert('All fields are required');
-                return;
-              }
-
               console.log('values ', values);
-
               dispatch(login(values));
             }}
           >
@@ -73,18 +67,16 @@ export default function Login() {
               handleChange,
               handleBlur,
               handleSubmit,
-              /* and other goodies */
             }) => (
-              <Form onSubmit={handleSubmit} className='flex flex-col'>
+              <Form onSubmit={handleSubmit} className="flex flex-col">
                 <Field
                   type="email"
                   name="email"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.email}
-                  className='border rounded-sm mb-2 h-10 p-1'
-                  placeholder='email'
-
+                  className="border rounded-sm mb-2 h-10 p-1"
+                  placeholder="email"
                 />
                 {errors.email && touched.email && errors.email}
                 <Field
@@ -93,24 +85,29 @@ export default function Login() {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.password}
-                  className='border rounded-sm mb-4 h-10 p-1'
-                  placeholder='password'
+                  className="border rounded-sm mb-4 h-10 p-1"
+                  placeholder="password"
                 />
                 {errors.password && touched.password && errors.password}
-                <Button mt={4} colorScheme="teal" className='items-start w-[120px] mb-7' type="submit">
+                <Button
+                  mt={4}
+                  colorScheme="teal"
+                  className="items-start w-[120px] mb-7"
+                  type="submit"
+                >
                   Submit
                 </Button>
-                <FormHelperText>Don't registred yet? <Link className='underline' href='/registration'>Registration</Link></FormHelperText>
+                <FormHelperText>
+                  Don't registered yet?{' '}
+                  <Link className="underline" href="/registration">
+                    Registration
+                  </Link>
+                </FormHelperText>
               </Form>
-
             )}
-
           </Formik>
         </FormControl>
       </section>
     </div>
-  )
+  );
 }
-
-
-

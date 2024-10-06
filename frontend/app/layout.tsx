@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import Header from "../components/header/header";
-import Footer from "../components/footer";
-import Providers from "@/providers/providers";
+import type { Metadata } from 'next';
+import './globals.css';
+import Header from '../components/header/header';
+import Footer from '../components/footer';
+import Providers from '@/providers/providers';
 
 export const metadata: Metadata = {
-  title: "Electonic elephant",
-  description: "Created by tmzzz",
+  title: 'Electonic elephant',
+  description: 'Created by tmzzz',
 };
 
 export default function RootLayout({
@@ -19,9 +19,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <Header />
-          <main>
-            {children}
-          </main>
+          <main>{children}</main>
           <Footer />
         </Providers>
       </body>

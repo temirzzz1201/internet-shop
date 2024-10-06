@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { register, login, logout } from '../actions/clientActions';
 import { IAuthState } from '../types';
 
-
 export const initialState: IAuthState = {
   user: null,
   isAuthenticated: false,
@@ -27,7 +26,7 @@ const authSlice = createSlice({
       })
       .addCase(register.rejected, (state, action: PayloadAction<unknown>) => {
         state.isLoading = false;
-        state.error = action.payload as string || 'Ошибка регистрации';
+        state.error = (action.payload as string) || 'Ошибка регистрации';
       })
       .addCase(login.pending, (state) => {
         state.isLoading = true;
@@ -40,7 +39,7 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action: PayloadAction<unknown>) => {
         state.isLoading = false;
-        state.error = action.payload as string || 'Ошибка входа';
+        state.error = (action.payload as string) || 'Ошибка входа';
       })
       .addCase(logout.pending, (state) => {
         state.isLoading = true;
@@ -53,10 +52,9 @@ const authSlice = createSlice({
       })
       .addCase(logout.rejected, (state, action: PayloadAction<unknown>) => {
         state.isLoading = false;
-        state.error = action.payload as string || 'Ошибка выхода';
+        state.error = (action.payload as string) || 'Ошибка выхода';
       });
   },
 });
 
 export default authSlice.reducer;
-
