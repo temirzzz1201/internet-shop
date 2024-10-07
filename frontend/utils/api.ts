@@ -63,8 +63,6 @@ export const loginUser = async (userData: IUser): Promise<IUserResponse> => {
 };
 
 export const logoutUser = async (): Promise<void> => {
-  // const refreshToken = localStorage.getItem('refreshToken');
-  // await api.post('users/logout', { token: refreshToken });
   Cookies.remove('accessToken');
   localStorage.removeItem('refreshToken');
 };

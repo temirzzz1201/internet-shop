@@ -2,7 +2,7 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE_URL } from '../utils/baseUrl';
 import { loginUser, registerUser, logoutUser } from '@/utils/api';
-import { IUser, IIProduct } from '@/types';
+import { IUser, IIProduct, ICategiry } from '@/types';
 
 const getErrorMessage = (error: unknown): string => {
   if (axios.isAxiosError(error)) {
@@ -14,16 +14,19 @@ const getErrorMessage = (error: unknown): string => {
 export const placeProduct = createAsyncThunk<
   IIProduct,
   {
+    categoryId: number;
     name: string;
     description: string;
     price: number;
     stock: number;
     image: File | null;
+
   },
   { rejectValue: string }
 >('products/placeProduct', async (product, { rejectWithValue }) => {
   try {
     const formData = new FormData();
+    formData.append('categoryId', product.categoryId.toString());
     formData.append('name', product.name);
     formData.append('description', product.description);
     formData.append('price', product.price.toString());
@@ -32,8 +35,11 @@ export const placeProduct = createAsyncThunk<
       formData.append('image', product.image);
     }
 
+    console.log(formData);
+
+
     const response = await axios.post(
-      `${BASE_URL}/admin/upload-product`,
+      `${BASE_URL}/products/create-product`,
       formData,
       {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -44,6 +50,45 @@ export const placeProduct = createAsyncThunk<
       return response.data as IIProduct;
     } else {
       return rejectWithValue('Не удалось загрузить продукт');
+    }
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
+  }
+});
+
+export const placeCategory = createAsyncThunk<
+  ICategiry, { categoryName: string },
+  { rejectValue: string }
+>('categories/placeCategory', async (product, { rejectWithValue }) => {
+  try {
+    const categoryData = { categoryName: product.categoryName };
+
+    const response = await axios.post(`${BASE_URL}/products/create-category`, categoryData, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (response.status === 201 || response.status === 200) {
+      return response.data as ICategiry;
+    } else {
+      return rejectWithValue('Не удалось создать категорию');
+    }
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
+  }
+});
+
+export const getCategory = createAsyncThunk<
+  ICategiry[],
+  void,
+  { rejectValue: string }
+>('categories/getCategory', async (_, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/products/all-categories`);
+
+    if (response.status === 200) {
+      return response.data as ICategiry[];
+    } else {
+      return rejectWithValue('Не удалось получить категории');
     }
   } catch (error) {
     return rejectWithValue(getErrorMessage(error));
@@ -77,6 +122,24 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       return await logoutUser();
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
+
+export const getUsers = createAsyncThunk(
+  'users/getAll',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/users`)
+      const usersData = response.data.users || []
+
+      console.log('response ', usersData);
+
+
+      return usersData
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
     }
