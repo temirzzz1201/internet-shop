@@ -13,21 +13,16 @@ interface HomeProps {
 const Home = async ({ searchParams }: HomeProps) => {
   const products: IIProduct[] = await fetchProducts();
   const categories: ICategiry[] = await fetchCategories();
-  console.log('categories ', categories);
 
   const categoryId = searchParams.category;
 
-  console.log('categoryId ', categoryId);
-
   const filteredProducts = categoryId
     ? products.filter(product => {
-      console.log('product ', product);
 
       return product.categoryId?.toString() === categoryId;
     })
     : products;
 
-  console.log('filteredProducts ', filteredProducts);
 
   return (
     <div className="container min-h-screen">

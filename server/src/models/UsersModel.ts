@@ -25,6 +25,12 @@ User.init({
     allowNull: false,
     unique: false,
   },
+  role: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: true,
+    defaultValue: 'customer'
+  },
   email: {
     type: DataTypes.STRING,
     allowNull: false,

@@ -19,7 +19,7 @@ const refreshToken = async (): Promise<string> => {
     );
     const newAccessToken = response.data.accessToken;
 
-    Cookies.set('accessToken', newAccessToken);
+    Cookies.set('accessToken', newAccessToken, { secure: true });
     return newAccessToken;
   } catch (error) {
     throw error;
@@ -50,20 +50,22 @@ api.interceptors.response.use(
 
 export const registerUser = async (userData: IUser): Promise<IUserResponse> => {
   const response = await api.post<IUserResponse>('users/register', userData);
-  Cookies.set('accessToken', response.data.accessToken);
+  Cookies.set('accessToken', response.data.accessToken, { secure: true });
   localStorage.setItem('refreshToken', response.data.refreshToken);
   return response.data;
 };
 
 export const loginUser = async (userData: IUser): Promise<IUserResponse> => {
   const response = await api.post<IUserResponse>('users/login', userData);
-  Cookies.set('accessToken', response.data.accessToken);
+  Cookies.set('accessToken', response.data.accessToken, { secure: true });
   localStorage.setItem('refreshToken', response.data.refreshToken);
   return response.data;
 };
 
 export const logoutUser = async (): Promise<void> => {
   Cookies.remove('accessToken');
+  Cookies.remove('role');
+
   localStorage.removeItem('refreshToken');
 };
 
