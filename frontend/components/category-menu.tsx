@@ -1,14 +1,9 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { ICategiry } from '@/types';
-import { UnorderedList, ListItem } from '@chakra-ui/react';
+import { ICategoryMenuProps } from '@/types';
+import { UnorderedList, ListItem, Box } from '@chakra-ui/react';
 
-
-interface CategoryMenuProps {
-  categories: ICategiry[];
-}
-
-const CategoryMenu: React.FC<CategoryMenuProps> = ({ categories }) => {
+const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
   const router = useRouter();
 
   const handleCategoryClick = (categoryId: string | null) => {
@@ -16,9 +11,9 @@ const CategoryMenu: React.FC<CategoryMenuProps> = ({ categories }) => {
   };
 
   return (
-    <aside className='px-4 border'>
-      <nav>
-        <UnorderedList styleType="'-'">
+    <Box maxW='md' borderWidth='1px' borderRadius='lg' overflow='hidden' px={4} maxH={320} >
+      <aside>
+        <UnorderedList styleType="'->'">
           <ListItem onClick={() => handleCategoryClick(null)} style={{ cursor: 'pointer', margin: '5px 0' }}>All products</ListItem>
           {categories.map((cat) => (
             <ListItem key={cat.id} onClick={() => handleCategoryClick(cat.id)} style={{ cursor: 'pointer', margin: '5px 0' }}>
@@ -26,9 +21,8 @@ const CategoryMenu: React.FC<CategoryMenuProps> = ({ categories }) => {
             </ListItem>
           ))}
         </UnorderedList>
-      </nav>
-    </aside>
-
+      </aside>
+    </Box>
   );
 };
 

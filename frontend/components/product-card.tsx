@@ -26,7 +26,6 @@ export default function ProductCard({ product }: { product: IIProduct }) {
             {product.stock}
           </Badge>
         </Box>
-
         <Box
           mt='1'
           fontWeight='semibold'
@@ -36,7 +35,6 @@ export default function ProductCard({ product }: { product: IIProduct }) {
         >
           {product.name.toUpperCase()}
         </Box>
-
         <Box
           mt='1'
           fontWeight='semibold'
@@ -46,7 +44,6 @@ export default function ProductCard({ product }: { product: IIProduct }) {
         >
           {product.description}
         </Box>
-
         <Box>
           {product.price}
           <Box as='span' color='gray.600' fontSize='sm'>

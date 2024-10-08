@@ -21,6 +21,10 @@ export interface ICategiry {
   categoryName: string | null;
 }
 
+export interface ICategoryMenuProps {
+  categories: ICategiry[];
+}
+
 export interface ICategires {
   category: ICategiry[];
   isLoading: boolean;
