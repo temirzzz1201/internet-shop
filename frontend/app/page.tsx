@@ -1,29 +1,61 @@
-import { fetchProducts } from '@/actions/serverActions';
-import ProductCard from '@/components/productCard';
-import { IIProduct } from '@/types';
-import { Grid, Text } from '@chakra-ui/react';
+import { fetchProducts, fetchCategories } from '@/actions/serverActions';
+import ProductCard from '@/components/product-card';
+import CategoryMenu from '@/components/category-menu';
+import { IIProduct, ICategiry } from '@/types';
+import { Grid, Text, Box } from '@chakra-ui/react';
 
-export default async function Home() {
-  const products: IIProduct[] = (await fetchProducts()) ?? [];
+interface HomeProps {
+  searchParams: {
+    category?: string;
+  };
+}
 
-  console.log('products ', products);
+const Home = async ({ searchParams }: HomeProps) => {
+  const products: IIProduct[] = await fetchProducts();
+  const categories: ICategiry[] = await fetchCategories();
+  console.log('categories ', categories);
+
+  const categoryId = searchParams.category;
+
+  console.log('categoryId ', categoryId);
+
+  const filteredProducts = categoryId
+    ? products.filter(product => {
+      console.log('product ', product);
+
+      return product.categoryId?.toString() === categoryId;
+    })
+    : products;
+
+  console.log('filteredProducts ', filteredProducts);
 
   return (
     <div className="container min-h-screen">
-      <section className="p-3">
+
+      <section>
         <Text className="mb-8" color="blue.600" fontSize="4xl">
-          All Products: {products.length}
+          Все продукты: {filteredProducts.length}
         </Text>
-        <Grid templateColumns="repeat(5, 1fr)" gap={6}>
-          {products && products.length > 0 ? (
-            products.map((product: IIProduct) => (
-              <ProductCard product={product} key={product.id} />
-            ))
-          ) : (
-            <p>No products yet!</p>
-          )}
-        </Grid>
+      </section>
+      <section className='flex p-3'>
+        <Box mr='5'>
+          <CategoryMenu categories={categories} />
+        </Box>
+        <div >
+
+          <Grid templateColumns="repeat(5, 1fr)" gap={6}>
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map((product: IIProduct) => (
+                <ProductCard product={product} key={product.id} />
+              ))
+            ) : (
+              <p>Продукты отсутствуют!</p>
+            )}
+          </Grid>
+        </div>
       </section>
     </div>
   );
-}
+};
+
+export default Home;

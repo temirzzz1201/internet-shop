@@ -13,19 +13,19 @@ import {
 } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { IFormValues, IFormErrors } from '@/types';
+import { IFormValues } from '@/types';
 
 
 const SignupSchema = Yup.object().shape({
   password: Yup.string()
     .min(8, 'Password should be of minimum 8 characters length')
-    .required('Password is required'),
-  email: Yup.string().email('Invalid email').required('Required'),
+    .required('password is required'),
+  email: Yup.string().email('Invalid email').required('email is required'),
 });
 
 export default function Login() {
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector((store) => store.auth);
+  const { isAuthenticated, isLoading } = useAppSelector((store) => store.auth);
 
   if (isAuthenticated) {
     redirect('/');
@@ -40,23 +40,11 @@ export default function Login() {
       </section>
       <section className="p-3 flex flex-col justify-center items-center">
         <FormControl className="max-w-[500px]">
-          <FormLabel>Please login</FormLabel>
+          <FormLabel fontSize="24px" mb="5" color="blue.600">Please login</FormLabel>
           <Formik<IFormValues>
             initialValues={{ email: '', password: '' }}
             validationSchema={SignupSchema}
-            validate={(values) => {
-              const errors: IFormErrors = {};
-              if (!values.email) {
-                errors.email = 'Required';
-              } else if (
-                !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-              ) {
-                errors.email = 'Invalid email address';
-              }
-              return errors;
-            }}
             onSubmit={(values) => {
-              console.log('values ', values);
               dispatch(login(values));
             }}
           >
@@ -78,7 +66,7 @@ export default function Login() {
                   className="border rounded-sm mb-2 h-10 p-1"
                   placeholder="email"
                 />
-                {errors.email && touched.email && errors.email}
+                <small className='text-red-700'>{errors.email && touched.email && errors.email}</small>
                 <Field
                   type="password"
                   name="password"
@@ -88,14 +76,16 @@ export default function Login() {
                   className="border rounded-sm mb-4 h-10 p-1"
                   placeholder="password"
                 />
-                {errors.password && touched.password && errors.password}
+                <small className='text-red-700'>{errors.password && touched.password && errors.password}</small>
                 <Button
                   mt={4}
-                  colorScheme="teal"
-                  className="items-start w-[120px] mb-7"
+                  isLoading={isLoading}
+                  loadingText='Submitting'
+                  colorScheme='teal'
+                  variant='outline'
                   type="submit"
                 >
-                  Submit
+                  Login
                 </Button>
                 <FormHelperText>
                   Don't registered yet?{' '}

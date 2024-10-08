@@ -23,6 +23,23 @@ const generateTokens = (userId: number) => {
   return { accessToken, refreshToken };
 };
 
+router.get('/', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const users = await User.findAll();
+    console.log(users);
+
+    res.status(201).json({
+      users,
+      message: 'Users found',
+    });
+    return;
+  }
+  catch (error: any) {
+    res.status(500).json({ message: 'Can not find users', error: error.message });
+  }
+
+})
+
 router.post('/register', async (req: Request, res: Response): Promise<void> => {
   const { username, email, password } = req.body;
 

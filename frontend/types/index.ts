@@ -1,5 +1,6 @@
 export interface IIProduct {
   id: string;
+  categoryId: number;
   name: string;
   description: string;
   price: number | null;
@@ -11,6 +12,21 @@ export interface IIProduct {
 
 export interface IIProducts {
   products: IIProduct[];
+  isLoading: boolean;
+  error: string | null;
+}
+
+export interface ICategiry {
+  id: string;
+  categoryName: string | null;
+}
+
+export interface ICategoryMenuProps {
+  categories: ICategiry[];
+}
+
+export interface ICategires {
+  category: ICategiry[];
   isLoading: boolean;
   error: string | null;
 }
@@ -31,6 +47,13 @@ export interface IUser {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface IUsersState {
+  users: IUser[];
+  isLoading: boolean;
+  error: string | null | object;
+}
+
 
 export interface IUserResponse {
   accessToken: string;

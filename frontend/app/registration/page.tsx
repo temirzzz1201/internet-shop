@@ -17,18 +17,18 @@ import { IFormValues, IFormErrors } from '@/types';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
-    .min(2, 'Too Short!')
+    .min(4, 'Too Short!')
     .max(50, 'Too Long!')
-    .required('Required'),
+    .required('name is required'),
   password: Yup.string()
     .min(8, 'Password should be of minimum 8 characters length')
-    .required('Password is required'),
-  email: Yup.string().email('Invalid email').required('Required'),
+    .required('password is required'),
+  email: Yup.string().email('Invalid email').required('email is required'),
 });
 
 export default function Register() {
   const dispatch = useAppDispatch();
-  const { user, isAuthenticated } = useAppSelector((store) => store.auth);
+  const { user, isAuthenticated, isLoading } = useAppSelector((store) => store.auth);
   console.log(user);
 
   if (isAuthenticated) {
@@ -44,22 +44,10 @@ export default function Register() {
       </section>
       <section className="p-3 flex flex-col justify-center items-center">
         <FormControl className="max-w-[500px]">
-          <FormLabel>Registration</FormLabel>
+          <FormLabel fontSize="24px" mb="5" color="blue.600">Registration</FormLabel>
           <Formik
             initialValues={{ username: '', email: '', password: '' }}
             validationSchema={SignupSchema}
-            validate={(values): IFormErrors => {
-              const errors: IFormErrors = {};
-              if (!values.email) {
-                errors.email = 'Required';
-              } else if (
-                !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-              ) {
-                errors.email = 'Invalid email address';
-              }
-
-              return errors;
-            }}
             onSubmit={(values: IFormValues) => {
               console.log('values ', values);
               dispatch(register(values));
@@ -83,9 +71,7 @@ export default function Register() {
                   className="border rounded-sm mb-2 h-10 p-1"
                   placeholder="name"
                 />
-                {errors.username && touched.username ? (
-                  <div>{errors.username}</div>
-                ) : null}
+                <small className='text-red-700'>{errors.username && touched.username && errors.username}</small>
                 <Field
                   type="email"
                   name="email"
@@ -95,7 +81,7 @@ export default function Register() {
                   className="border rounded-sm mb-2 h-10 p-1"
                   placeholder="email"
                 />
-                {errors.email && touched.email && errors.email}
+                <small className='text-red-700'>{errors.email && touched.email && errors.email}</small>
                 <Field
                   type="password"
                   name="password"
@@ -105,14 +91,16 @@ export default function Register() {
                   className="border rounded-sm mb-4 h-10 p-1"
                   placeholder="password"
                 />
-                {errors.password && touched.password && errors.password}
+                <small className='text-red-700'>{errors.password && touched.password && errors.password}</small>
                 <Button
                   mt={4}
-                  colorScheme="teal"
-                  className="items-start w-[120px] mb-7"
+                  isLoading={isLoading}
+                  loadingText='Submitting'
+                  colorScheme='teal'
+                  variant='outline'
                   type="submit"
                 >
-                  Submit
+                  Registration
                 </Button>
                 <FormHelperText>
                   Have an account?{' '}
