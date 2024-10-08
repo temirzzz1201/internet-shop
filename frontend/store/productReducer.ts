@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { placeProduct } from '@/actions/clientActions';
+import { placeProduct, getProducts, deleteProduct, updateProduct } from '@/actions/clientActions';
 import { IIProducts, IIProduct } from '../types';
 
 export const initialState: IIProducts = {
@@ -23,12 +23,52 @@ const productSlice = createSlice({
         (state, action: PayloadAction<IIProduct>) => {
           state.isLoading = false;
           state.products.push(action.payload);
+          console.log(state.products);
         }
       )
       .addCase(placeProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload ?? 'Что-то пошло не так';
+      })
+      .addCase(getProducts.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(
+        getProducts.fulfilled,
+        (state, action: PayloadAction<IIProduct[]>) => {
+          state.isLoading = false;
+          state.products = action.payload;
+          console.log(state.products);
+        }
+      )
+      .addCase(getProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload ?? 'Что-то пошло не так';
+      })
+
+
+      .addCase(deleteProduct.fulfilled, (state, action: PayloadAction<number>) => {
+        state.isLoading = false;
+        state.products = state.products.filter((product) => Number(product.id) !== action.payload);
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload ?? 'Не удалось удалить продукт';
+      })
+      .addCase(updateProduct.fulfilled, (state, action: PayloadAction<IIProduct>) => {
+        state.isLoading = false;
+        const index = state.products.findIndex((product) => product.id === action.payload.id);
+        if (index !== -1) {
+          state.products[index] = action.payload;
+        }
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload ?? 'Не удалось обновить продукт';
       });
+
+
   },
 });
 

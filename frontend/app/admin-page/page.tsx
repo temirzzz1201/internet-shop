@@ -1,13 +1,11 @@
 'use client';
-
-import { getUsers, placeProduct, placeCategory, getCategory } from '@/actions/clientActions';
+import { getUsers, placeProduct, placeCategory, getCategory, getProducts } from '@/actions/clientActions';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { useEffect, useState } from 'react';
 import {
   FormControl,
   FormLabel,
-  FormHelperText,
   Input,
   Button,
   Text,
@@ -16,21 +14,17 @@ import {
   Tab,
   TabPanels,
   TabPanel,
-  TableContainer,
-  Table,
-  TableCaption,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-  Select
+  Select,
+  FormHelperText,
 } from '@chakra-ui/react';
+import { AdminTable } from '@/components/admin-table';
 
 export default function Admin() {
   const dispatch = useAppDispatch();
   const { users } = useAppSelector((state) => state.users);
   const { category } = useAppSelector((state) => state.category);
+  const { products, isLoading } = useAppSelector((state) => state.products);
+
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);
@@ -47,15 +41,7 @@ export default function Admin() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const productData = {
-      categoryId,
-      name,
-      description,
-      price,
-      stock,
-      image: file,
-    };
-
+    const productData = { categoryId, name, description, price, stock, image: file };
     dispatch(placeProduct(productData));
   };
 
@@ -67,11 +53,28 @@ export default function Admin() {
 
   useEffect(() => {
     dispatch(getUsers());
+    dispatch(getCategory());
+    dispatch(getProducts());
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(getCategory());
-  }, [dispatch]);
+  const productColumns = [
+    { label: 'Name', key: 'name' },
+    { label: 'Description', key: 'description' },
+    { label: 'Price', key: 'price' },
+    { label: 'Stock', key: 'stock' },
+    { label: 'Image', key: 'imageUrl' },
+    { label: 'Created At', key: 'createdAt', format: (value: string) => (value ? new Date(value).toLocaleString() : 'N/A') },
+    { label: 'Updated At', key: 'updatedAt', format: (value: string) => (value ? new Date(value).toLocaleString() : 'N/A') },
+  ];
+
+  const userColumns = [
+    { label: 'Username', key: 'username' },
+    { label: 'Email', key: 'email' },
+    { label: 'Password', key: 'password' },
+    { label: 'Created At', key: 'createdAt', format: (value: string) => (value ? new Date(value).toLocaleString() : 'N/A') },
+    { label: 'Updated At', key: 'updatedAt', format: (value: string) => (value ? new Date(value).toLocaleString() : 'N/A') },
+    { label: 'Role', key: 'role' },
+  ];
 
   return (
     <>
@@ -80,6 +83,7 @@ export default function Admin() {
           Admin page
         </Text>
       </section>
+
       <div className="p-5">
         <Tabs isLazy>
           <TabList>
@@ -99,13 +103,7 @@ export default function Admin() {
                     value={categoryName}
                     onChange={(e) => setCategoryName(e.target.value)}
                   />
-
-                  <Button
-                    mt={4}
-                    colorScheme="teal"
-                    type="submit"
-                    onClick={handleSubmitCategory}
-                  >
+                  <Button mt={4} colorScheme="teal" type="submit" onClick={handleSubmitCategory}>
                     Submit
                   </Button>
                 </FormControl>
@@ -113,10 +111,7 @@ export default function Admin() {
                 <section className="p-3 flex flex-col justify-center items-center">
                   <FormControl className="max-w-[500px]">
                     <FormLabel>Upload new product</FormLabel>
-                    <Select
-                      placeholder="Choose category"
-                      onChange={(e) => setCategoryId(Number(e.target.value))}
-                    >
+                    <Select placeholder="Choose category" onChange={(e) => setCategoryId(Number(e.target.value))}>
                       {category?.map((cat) => (
                         <option key={cat.id} value={cat.id}>
                           {cat.categoryName}
@@ -155,18 +150,8 @@ export default function Admin() {
                       value={stock}
                       onChange={(e) => setStock(Number(e.target.value))}
                     />
-                    <Input
-                      className="mb-4"
-                      size="md"
-                      type="file"
-                      onChange={handleFileChange}
-                    />
-                    <Button
-                      mt={4}
-                      colorScheme="teal"
-                      type="submit"
-                      onClick={handleSubmit}
-                    >
+                    <Input className="mb-4" size="md" type="file" onChange={handleFileChange} />
+                    <Button mt={4} colorScheme="teal" type="submit" onClick={handleSubmit}>
                       Submit
                     </Button>
 
@@ -174,38 +159,12 @@ export default function Admin() {
                   </FormControl>
                 </section>
               </div>
+
+              <AdminTable caption="List of products" columns={productColumns} data={products} isLoading={isLoading} />
             </TabPanel>
 
             <TabPanel>
-              <div className="container min-h-screen">
-                <TableContainer>
-                  <Table variant="striped" size="sm" colorScheme="teal">
-                    <TableCaption>List of users</TableCaption>
-                    <Thead>
-                      <Tr>
-                        <Th>Username</Th>
-                        <Th>Email</Th>
-                        <Th>Password</Th>
-                        <Th>Created At</Th>
-                        <Th>Updated At</Th>
-                        <Th>Role</Th>
-                      </Tr>
-                    </Thead>
-                    <Tbody>
-                      {users?.map((user) => (
-                        <Tr key={user.id}>
-                          <Td>{user.username}</Td>
-                          <Td>{user.email}</Td>
-                          <Td>{user.password}</Td>
-                          <Td>{user.createdAt ? new Date(user.createdAt).toLocaleString() : 'N/A'}</Td>
-                          <Td>{user.updatedAt ? new Date(user.updatedAt).toLocaleString() : 'N/A'}</Td>
-                          <Td>{user.role || 'N/A'}</Td>
-                        </Tr>
-                      ))}
-                    </Tbody>
-                  </Table>
-                </TableContainer>
-              </div>
+              <AdminTable caption="List of users" columns={userColumns} data={users} isLoading={isLoading} />
             </TabPanel>
           </TabPanels>
         </Tabs>

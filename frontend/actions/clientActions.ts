@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE_URL } from '../utils/baseUrl';
-import { loginUser, registerUser, logoutUser } from '@/utils/api';
-import { IUser, IIProduct, ICategiry } from '@/types';
+import { loginUser, registerUser, logoutUser, createProduct, createCategory, fetchCategories, fetchProducts, deleteChoosenProduct, updateChoosenProduct } from '@/utils/api';
+import { IUser, IIProduct, ICategory } from '@/types';
 import Cookies from 'js-cookie';
 
 
@@ -22,7 +22,6 @@ export const placeProduct = createAsyncThunk<
     price: number;
     stock: number;
     image: File | null;
-
   },
   { rejectValue: string }
 >('products/placeProduct', async (product, { rejectWithValue }) => {
@@ -37,17 +36,10 @@ export const placeProduct = createAsyncThunk<
       formData.append('image', product.image);
     }
 
-
-    const response = await axios.post(
-      `${BASE_URL}/products/create-product`,
-      formData,
-      {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      }
-    );
+    const response = await createProduct(formData);
 
     if (response.status === 201 || response.status === 200) {
-      return response.data as IIProduct;
+      return response.data;
     } else {
       return rejectWithValue('Не удалось загрузить продукт');
     }
@@ -56,19 +48,38 @@ export const placeProduct = createAsyncThunk<
   }
 });
 
-export const placeCategory = createAsyncThunk<
-  ICategiry, { categoryName: string },
-  { rejectValue: string }
->('categories/placeCategory', async (product, { rejectWithValue }) => {
-  try {
-    const categoryData = { categoryName: product.categoryName };
 
-    const response = await axios.post(`${BASE_URL}/products/create-category`, categoryData, {
-      headers: { 'Content-Type': 'application/json' },
-    });
+
+export const getProducts = createAsyncThunk<
+  IIProduct[],
+  void,
+  { rejectValue: string }
+>('products/getProducts', async (_, { rejectWithValue }) => {
+  try {
+    const response = await fetchProducts();
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      return rejectWithValue('Не удалось получить категории');
+    }
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
+  }
+});
+
+
+
+export const placeCategory = createAsyncThunk<
+  ICategory,
+  { categoryName: string },
+  { rejectValue: string }
+>('categories/placeCategory', async (category, { rejectWithValue }) => {
+  try {
+    const response = await createCategory({ categoryName: category.categoryName });
 
     if (response.status === 201 || response.status === 200) {
-      return response.data as ICategiry;
+      return response.data as ICategory;
     } else {
       return rejectWithValue('Не удалось создать категорию');
     }
@@ -78,15 +89,15 @@ export const placeCategory = createAsyncThunk<
 });
 
 export const getCategory = createAsyncThunk<
-  ICategiry[],
+  ICategory[],
   void,
   { rejectValue: string }
 >('categories/getCategory', async (_, { rejectWithValue }) => {
   try {
-    const response = await axios.get(`${BASE_URL}/products/all-categories`);
+    const response = await fetchCategories();
 
     if (response.status === 200) {
-      return response.data as ICategiry[];
+      return response.data;
     } else {
       return rejectWithValue('Не удалось получить категории');
     }
@@ -117,7 +128,7 @@ export const login = createAsyncThunk(
       }
 
 
-      Cookies.set('role', response.user.role ?? 'customer'); // Укажите значение по умолчанию
+      Cookies.set('role', response.user.role ?? 'customer');
 
       return response;
     } catch (error) {
@@ -125,7 +136,6 @@ export const login = createAsyncThunk(
     }
   }
 );
-
 
 export const logout = createAsyncThunk(
   'auth/logout',
@@ -137,7 +147,6 @@ export const logout = createAsyncThunk(
     }
   }
 );
-
 
 export const getUsers = createAsyncThunk(
   'users/getAll',
@@ -152,3 +161,39 @@ export const getUsers = createAsyncThunk(
     }
   }
 );
+
+export const deleteProduct = createAsyncThunk<
+  number,
+  number,
+  { rejectValue: string }
+>('products/deleteProduct', async (productId, { rejectWithValue }) => {
+  try {
+    const response = await deleteChoosenProduct(productId);
+
+    if (response.status === 200) {
+      return productId;
+    } else {
+      return rejectWithValue('Не удалось удалить продукт');
+    }
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
+  }
+});
+
+export const updateProduct = createAsyncThunk<
+  IIProduct,
+  { productId: number; updates: Partial<IIProduct> },
+  { rejectValue: string }
+>('products/updateProduct', async ({ productId, updates }, { rejectWithValue }) => {
+  try {
+    const response = await updateChoosenProduct(productId, updates);
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      return rejectWithValue('Не удалось обновить продукт');
+    }
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
+  }
+});

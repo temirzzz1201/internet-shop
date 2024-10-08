@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { AxiosResponse } from 'axios';
 import { BASE_URL } from './baseUrl';
 import Cookies from 'js-cookie';
-import { IUser, IUserResponse } from '../types';
+import { IUser, IUserResponse, IIProduct, ICategory } from '../types';
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -48,11 +49,47 @@ api.interceptors.response.use(
   }
 );
 
+export const createProduct = async (formData: FormData): Promise<AxiosResponse<IIProduct>> => {
+  const response = await axios.post<IIProduct>(
+    `${BASE_URL}/products/create-product`,
+    formData,
+    {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }
+  );
+  return response;
+};
+
+export const createCategory = async (categoryData: { categoryName: string }): Promise<AxiosResponse<ICategory>> => {
+  const response = await axios.post<ICategory>(
+    `${BASE_URL}/products/create-category`,
+    categoryData,
+    {
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
+  return response;
+};
+
 export const registerUser = async (userData: IUser): Promise<IUserResponse> => {
   const response = await api.post<IUserResponse>('users/register', userData);
   Cookies.set('accessToken', response.data.accessToken, { secure: true });
   localStorage.setItem('refreshToken', response.data.refreshToken);
   return response.data;
+};
+
+export const fetchCategories = async (): Promise<AxiosResponse<ICategory[]>> => {
+  const response = await axios.get<ICategory[]>(
+    `${BASE_URL}/products/all-categories`
+  );
+  return response;
+};
+
+export const fetchProducts = async (): Promise<AxiosResponse<IIProduct[]>> => {
+  const response = await axios.get<IIProduct[]>(
+    `${BASE_URL}/products/all-products`
+  );
+  return response;
 };
 
 export const loginUser = async (userData: IUser): Promise<IUserResponse> => {
@@ -67,6 +104,14 @@ export const logoutUser = async (): Promise<void> => {
   Cookies.remove('role');
 
   localStorage.removeItem('refreshToken');
+};
+
+export const deleteChoosenProduct = async (productId: number): Promise<AxiosResponse> => {
+  return await axios.delete(`${BASE_URL}/products/delete-product/${productId}`);
+};
+
+export const updateChoosenProduct = async (productId: number, updates: Partial<IIProduct>): Promise<AxiosResponse<IIProduct>> => {
+  return await axios.put(`${BASE_URL}/products/update-product/${productId}`, updates);
 };
 
 export default api;

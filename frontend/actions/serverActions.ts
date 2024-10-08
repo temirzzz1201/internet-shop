@@ -1,7 +1,7 @@
 'use server';
 import axios from 'axios';
 import { BASE_URL } from '@/utils/baseUrl';
-import { IIProduct, ICategiry } from '@/types';
+import { IIProduct, ICategory } from '@/types';
 
 export const fetchProducts = async () => {
   try {
@@ -24,7 +24,7 @@ export const fetchCategories = async () => {
     const response = await axios.get(`${BASE_URL}/products/all-categories`);
 
     if (response.data && Array.isArray(response.data)) {
-      return response.data as ICategiry[];
+      return response.data as ICategory[];
     }
 
     console.error('No categories field in response');
