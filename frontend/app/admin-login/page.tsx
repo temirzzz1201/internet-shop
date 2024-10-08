@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
-import { register } from '@/actions/clientActions';
+import { login } from '@/actions/clientActions';
+import { useEffect } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -16,39 +17,46 @@ import * as Yup from 'yup';
 import { IFormValues } from '@/types';
 
 const SignupSchema = Yup.object().shape({
-  username: Yup.string()
-    .min(4, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('name is required'),
   password: Yup.string()
     .min(8, 'Password should be of minimum 8 characters length')
     .required('password is required'),
   email: Yup.string().email('Invalid email').required('email is required'),
 });
 
-export default function Register() {
+export default function AdminLogin() {
   const dispatch = useAppDispatch();
-  const { user, isAuthenticated, isLoading } = useAppSelector((store) => store.auth);
+  const { isAuthenticated, isLoading, user } = useAppSelector((store) => store.auth);
 
-  if (isAuthenticated) {
-    redirect('/login');
+  const handleSubmit = (email: string, password: string) => {
+    dispatch(login({ email, password }));
   }
+
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     if (user?.role === 'admin') {
+  //       redirect('/admin-page');
+  //     } else {
+  //       redirect('/');
+  //     }
+  //   }
+  // }, [isAuthenticated, user]);
+
 
   return (
     <div className="container min-h-screen">
       <section className="p-3 flex mb-10">
         <Text color="blue.600" fontSize="2xl">
-          Registration page
+          Admin authorization
         </Text>
       </section>
       <section className="p-3 flex flex-col justify-center items-center">
         <FormControl className="max-w-[500px]">
-          <FormLabel fontSize="24px" mb="5" color="blue.600">Registration</FormLabel>
-          <Formik
-            initialValues={{ username: '', email: '', password: '' }}
+          <FormLabel fontSize="24px" mb="5" color="blue.600">Please authorize</FormLabel>
+          <Formik<IFormValues>
+            initialValues={{ email: '', password: '' }}
             validationSchema={SignupSchema}
-            onSubmit={(values: IFormValues) => {
-              dispatch(register(values));
+            onSubmit={({ email, password }) => {
+              handleSubmit(email, password);
             }}
           >
             {({
@@ -60,16 +68,6 @@ export default function Register() {
               handleSubmit,
             }) => (
               <Form onSubmit={handleSubmit} className="flex flex-col">
-                <Field
-                  type="text"
-                  name="username"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.username}
-                  className="border rounded-sm mb-2 h-10 p-1"
-                  placeholder="name"
-                />
-                <small className='text-red-700'>{errors.username && touched.username && errors.username}</small>
                 <Field
                   type="email"
                   name="email"
@@ -98,12 +96,12 @@ export default function Register() {
                   variant='outline'
                   type="submit"
                 >
-                  Registration
+                  Login
                 </Button>
                 <FormHelperText>
-                  Have an account?{' '}
-                  <Link className="underline" href="/login">
-                    Login
+                  Don't registered yet?{' '}
+                  <Link className="underline" href="/registration">
+                    authorisation
                   </Link>
                 </FormHelperText>
               </Form>

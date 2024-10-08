@@ -18,9 +18,10 @@ const links = [
     blueImgSrc: profileSrcBlue,
     whiteImgSrc: profileSrcWhite,
   },
-  { id: 5, title: 'Admin', path: '/admin' },
-  { id: 6, title: 'Logout', path: '/logout' },
+  { id: 5, title: 'Logout', path: '/logout' },
 ];
+
+// TWO PROTECTED ROUTS: ADMIN-PAGE, ADMIN-LOGIN
 
 export default function NavLinks() {
   const pathname = usePathname();

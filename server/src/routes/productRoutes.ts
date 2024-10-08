@@ -9,8 +9,6 @@ const router = Router();
 router.get('/all-products', async (req: Request, res: Response) => {
   try {
     const products = await Product.findAll({ include: Category });
-    console.log('products products products products productsproducts', products);
-
     res.json(products);
     return
   } catch (error) {
@@ -21,8 +19,6 @@ router.get('/all-products', async (req: Request, res: Response) => {
 
 router.post('/create-product', upload.single('image'), async (req: Request, res: Response): Promise<void> => {
   const { name, description, price, stock, categoryId } = req.body;
-  console.log(categoryId, name, description, price, stock);
-
 
   if (!req.file) {
     res.status(400).send({ message: 'No file uploaded' });

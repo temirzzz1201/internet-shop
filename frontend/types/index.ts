@@ -54,8 +54,8 @@ export interface IUsersState {
   error: string | null | object;
 }
 
-
 export interface IUserResponse {
+  role: string;
   accessToken: string;
   refreshToken: string;
   user: IUser;

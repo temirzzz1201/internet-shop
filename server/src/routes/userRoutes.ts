@@ -12,11 +12,9 @@ if (!secret || !refreshSecret) {
   throw new Error('JWT_SECRET or JWT_REFRESH_SECRET environment variables are not set');
 }
 
-// Время жизни токенов
 const accessTokenExpiresIn = '1h';
 const refreshTokenExpiresIn = '7d';
 
-// Генерация токенов
 const generateTokens = (userId: number) => {
   const accessToken = jwt.sign({ userId }, secret, { expiresIn: accessTokenExpiresIn });
   const refreshToken = jwt.sign({ userId }, refreshSecret, { expiresIn: refreshTokenExpiresIn });
@@ -26,7 +24,6 @@ const generateTokens = (userId: number) => {
 router.get('/', async (req: Request, res: Response): Promise<void> => {
   try {
     const users = await User.findAll();
-    console.log(users);
 
     res.status(201).json({
       users,
@@ -41,7 +38,7 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
 })
 
 router.post('/register', async (req: Request, res: Response): Promise<void> => {
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
 
   if (!username || !email || !password) {
     res.status(400).json({ message: 'All fields are required' });
@@ -56,7 +53,7 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 5);
-    const newUser = await User.create({ username, email, password: hashedPassword });
+    const newUser = await User.create({ username, email, password: hashedPassword, role });
 
     const { accessToken, refreshToken } = generateTokens(newUser.id);
 
@@ -96,22 +93,11 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
     const { accessToken, refreshToken } = generateTokens(user.id);
 
-    // Установка токенов в httpOnly cookies
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 1000, // 1 час
-    });
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 дней
-    });
-
     res.json({
       message: 'Logged in successfully',
       accessToken,
       refreshToken,
+      user
     });
   } catch (error: any) {
     res.status(500).json({ message: 'Error logging in', error: error.message });
@@ -130,12 +116,6 @@ router.post('/refresh-token', async (req: Request, res: Response): Promise<void>
     const decoded = jwt.verify(token, refreshSecret) as { userId: number };
     const newAccessToken = jwt.sign({ userId: decoded.userId }, secret, { expiresIn: accessTokenExpiresIn });
 
-    // Обновление токена
-    res.cookie('accessToken', newAccessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 1000, // 1 час
-    });
 
     res.json({ accessToken: newAccessToken });
   } catch (error: any) {

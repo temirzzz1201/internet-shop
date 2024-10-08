@@ -6,7 +6,6 @@ import { IIProduct, ICategiry } from '@/types';
 export const fetchProducts = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/products/all-products`);
-    console.log('response ', response);
 
     if (response.data && Array.isArray(response.data)) {
       return response.data as IIProduct[];
@@ -20,11 +19,9 @@ export const fetchProducts = async () => {
   }
 };
 
-// Функция для получения категорий
 export const fetchCategories = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/products/all-categories`);
-    console.log('response ', response);
 
     if (response.data && Array.isArray(response.data)) {
       return response.data as ICategiry[];

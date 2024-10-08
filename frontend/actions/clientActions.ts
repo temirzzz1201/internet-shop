@@ -3,6 +3,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE_URL } from '../utils/baseUrl';
 import { loginUser, registerUser, logoutUser } from '@/utils/api';
 import { IUser, IIProduct, ICategiry } from '@/types';
+import Cookies from 'js-cookie';
+
 
 const getErrorMessage = (error: unknown): string => {
   if (axios.isAxiosError(error)) {
@@ -34,8 +36,6 @@ export const placeProduct = createAsyncThunk<
     if (product.image) {
       formData.append('image', product.image);
     }
-
-    console.log(formData);
 
 
     const response = await axios.post(
@@ -110,12 +110,22 @@ export const login = createAsyncThunk(
   'auth/login',
   async (userData: IUser, { rejectWithValue }) => {
     try {
-      return await loginUser(userData);
+      const response = await loginUser(userData);
+
+      if (!response) {
+        throw new Error('Response is undefined');
+      }
+
+
+      Cookies.set('role', response.user.role ?? 'customer'); // Укажите значение по умолчанию
+
+      return response;
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
     }
   }
 );
+
 
 export const logout = createAsyncThunk(
   'auth/logout',
@@ -135,9 +145,6 @@ export const getUsers = createAsyncThunk(
     try {
       const response = await axios.get(`${BASE_URL}/users`)
       const usersData = response.data.users || []
-
-      console.log('response ', usersData);
-
 
       return usersData
     } catch (error) {
