@@ -1,7 +1,7 @@
 import { fetchProducts, fetchCategories } from '@/actions/serverActions';
 import ProductCard from '@/components/product-card';
 import CategoryMenu from '@/components/category-menu';
-import { IIProduct, ICategiry } from '@/types';
+import { IIProduct, ICategory } from '@/types';
 import { Grid, Text, Box } from '@chakra-ui/react';
 
 interface HomeProps {
@@ -12,7 +12,7 @@ interface HomeProps {
 
 const Home = async ({ searchParams }: HomeProps) => {
   const products: IIProduct[] = await fetchProducts();
-  const categories: ICategiry[] = await fetchCategories();
+  const categories: ICategory[] = await fetchCategories();
 
   const categoryId = searchParams.category;
 

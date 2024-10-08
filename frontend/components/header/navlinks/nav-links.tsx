@@ -6,6 +6,11 @@ import { logout } from '@/actions/clientActions';
 import profileSrcBlue from '../../../app/images/profile_blue.svg';
 import profileSrcWhite from '../../../app/images/profile_white.svg';
 import { usePathname } from 'next/navigation';
+import Cookies from 'js-cookie';
+
+const isAdmin = Cookies.get('role')
+console.log('isAdmin ', isAdmin);
+
 
 const links = [
   { id: 1, title: 'Home', path: '/' },
@@ -19,6 +24,9 @@ const links = [
     whiteImgSrc: profileSrcWhite,
   },
   { id: 5, title: 'Logout', path: '/logout' },
+  ...(isAdmin === 'admin'
+    ? [{ id: 6, title: 'Admin-page', path: '/admin-page' }]
+    : []),
 ];
 
 // TWO PROTECTED ROUTS: ADMIN-PAGE, ADMIN-LOGIN

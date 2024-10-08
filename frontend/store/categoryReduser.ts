@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { placeCategory, getCategory } from '@/actions/clientActions';
-import { ICategires, ICategiry } from '../types';
+import { ICategires, ICategory } from '../types';
 
 export const initialState: ICategires = {
   category: [],
@@ -18,7 +18,7 @@ const categorySlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getCategory.fulfilled, (state, action: PayloadAction<ICategiry[]>) => {
+      .addCase(getCategory.fulfilled, (state, action: PayloadAction<ICategory[]>) => {
         state.isLoading = false;
         state.category = action.payload;
       })
@@ -32,7 +32,7 @@ const categorySlice = createSlice({
       })
       .addCase(
         placeCategory.fulfilled,
-        (state, action: PayloadAction<ICategiry>) => {
+        (state, action: PayloadAction<ICategory>) => {
           state.isLoading = false;
           state.category.push(action.payload);
         }

@@ -16,17 +16,17 @@ export interface IIProducts {
   error: string | null;
 }
 
-export interface ICategiry {
+export interface ICategory {
   id: string;
   categoryName: string | null;
 }
 
 export interface ICategoryMenuProps {
-  categories: ICategiry[];
+  categories: ICategory[];
 }
 
 export interface ICategires {
-  category: ICategiry[];
+  category: ICategory[];
   isLoading: boolean;
   error: string | null;
 }
@@ -75,4 +75,17 @@ export interface IFormErrors {
   username?: string;
   email?: string;
   password?: string;
+}
+
+export interface ITableColumn {
+  label: string;
+  key: string;
+  format?: (value: any) => string;
+}
+
+export interface IAdminTableProps {
+  caption: string;
+  columns: ITableColumn[];
+  data: any[];
+  isLoading: boolean;
 }
