@@ -28,7 +28,7 @@ const SignupSchema = Yup.object().shape({
 
 export default function Register() {
   const dispatch = useAppDispatch();
-  const { user, isAuthenticated, isLoading } = useAppSelector((store) => store.auth);
+  const { isAuthenticated, isLoading } = useAppSelector((store) => store.auth);
 
   if (isAuthenticated) {
     redirect('/login');

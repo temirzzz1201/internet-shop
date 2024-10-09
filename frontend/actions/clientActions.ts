@@ -162,13 +162,14 @@ export const getUsers = createAsyncThunk(
   }
 );
 
+
 export const deleteProduct = createAsyncThunk<
   number,
-  number,
+  { productId: number; deleteFlag: string },
   { rejectValue: string }
->('products/deleteProduct', async (productId, { rejectWithValue }) => {
+>('products/deleteProduct', async ({ productId, deleteFlag }, { rejectWithValue }) => {
   try {
-    const response = await deleteChoosenProduct(productId);
+    const response = await deleteChoosenProduct(productId, deleteFlag);
 
     if (response.status === 200) {
       return productId;
@@ -182,11 +183,11 @@ export const deleteProduct = createAsyncThunk<
 
 export const updateProduct = createAsyncThunk<
   IIProduct,
-  { productId: number; updates: Partial<IIProduct> },
+  { productId: number; updates: Partial<IIProduct>; updateFlag: string },
   { rejectValue: string }
->('products/updateProduct', async ({ productId, updates }, { rejectWithValue }) => {
+>('products/updateProduct', async ({ productId, updates, updateFlag }, { rejectWithValue }) => {
   try {
-    const response = await updateChoosenProduct(productId, updates);
+    const response = await updateChoosenProduct(productId, updates, updateFlag);
 
     if (response.status === 200) {
       return response.data;
@@ -197,3 +198,4 @@ export const updateProduct = createAsyncThunk<
     return rejectWithValue(getErrorMessage(error));
   }
 });
+

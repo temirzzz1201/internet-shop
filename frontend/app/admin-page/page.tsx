@@ -160,11 +160,11 @@ export default function Admin() {
                 </section>
               </div>
 
-              <AdminTable caption="List of products" columns={productColumns} data={products} isLoading={isLoading} />
+              <AdminTable caption="List of products" columns={productColumns} data={products} isLoading={isLoading} deleteFlag="products/delete-product" updateFlag="products/update-product" />
             </TabPanel>
 
             <TabPanel>
-              <AdminTable caption="List of users" columns={userColumns} data={users} isLoading={isLoading} />
+              <AdminTable caption="List of users" columns={userColumns} data={users} isLoading={isLoading} deleteFlag="users/delete-user" updateFlag="users/update-user" />
             </TabPanel>
           </TabPanels>
         </Tabs>

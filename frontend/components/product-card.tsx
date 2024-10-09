@@ -5,6 +5,7 @@ import {
   Box,
   Badge,
 } from '@chakra-ui/react';
+import formatDate from '@/utils/dateHelper';
 
 export default function ProductCard({ product }: { product: IIProduct }) {
   const imageUrl = `${process.env.NEXT_PUBLIC_API_URL}/uploads/${product.imageUrl}`;
@@ -51,7 +52,7 @@ export default function ProductCard({ product }: { product: IIProduct }) {
           </Box>
         </Box>
         <Box display='flex' mt='2' alignItems='center'>
-          {new Date(product.createdAt).toLocaleDateString()}
+          {formatDate(product.createdAt)}
           <Box as='span' ml='2' color='gray.600' fontSize='sm'>
             reviews
           </Box>

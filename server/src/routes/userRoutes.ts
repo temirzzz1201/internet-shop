@@ -123,4 +123,32 @@ router.post('/refresh-token', async (req: Request, res: Response): Promise<void>
   }
 });
 
+router.delete('/delete-user/:id', async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+    await User.destroy({ where: { id: userId } });
+    res.status(200).json({ message: 'Продукт удален' });
+  } catch (error) {
+    res.status(500).json({ error: 'Ошибка при удалении продукта' });
+  }
+});
+
+
+router.put('/update-user/:id', async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+    const updates = req.body;
+    const users = await User.findByPk(userId);
+
+    if (users) {
+      await users.update(updates);
+      res.status(200).json(users);
+    } else {
+      res.status(404).json({ error: 'Продукт не найден' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Ошибка при обновлении продукта' });
+  }
+});
+
 export default router;

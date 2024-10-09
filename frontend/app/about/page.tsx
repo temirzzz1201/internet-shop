@@ -1,7 +1,15 @@
+import { Box, Text } from "@chakra-ui/react";
+
 export default function Profile() {
   return (
-    <div>
-      <h1>About page</h1>
-    </div>
+    <Box className="container min-h-screen">
+
+      <section className='px-3'>
+        <Text className="mb-8" color="blue.600" fontSize="4xl">
+          About
+        </Text>
+      </section>
+
+    </Box>
   );
 }

@@ -96,6 +96,11 @@ export const loginUser = async (userData: IUser): Promise<IUserResponse> => {
   const response = await api.post<IUserResponse>('users/login', userData);
   Cookies.set('accessToken', response.data.accessToken, { secure: true });
   localStorage.setItem('refreshToken', response.data.refreshToken);
+
+  console.log(response.data.user.username);
+
+  localStorage.setItem('userName', response.data.user.username || '');
+
   return response.data;
 };
 
@@ -104,14 +109,17 @@ export const logoutUser = async (): Promise<void> => {
   Cookies.remove('role');
 
   localStorage.removeItem('refreshToken');
+  localStorage.removeItem('userName');
+
 };
 
-export const deleteChoosenProduct = async (productId: number): Promise<AxiosResponse> => {
-  return await axios.delete(`${BASE_URL}/products/delete-product/${productId}`);
+export const deleteChoosenProduct = async (productId: number, deleteFlag: string): Promise<AxiosResponse> => {
+  return await axios.delete(`${BASE_URL}/${deleteFlag}/${productId}`);
 };
 
-export const updateChoosenProduct = async (productId: number, updates: Partial<IIProduct>): Promise<AxiosResponse<IIProduct>> => {
-  return await axios.put(`${BASE_URL}/products/update-product/${productId}`, updates);
+export const updateChoosenProduct = async (productId: number, updates: Partial<IIProduct>, updateFlag: string): Promise<AxiosResponse<IIProduct>> => {
+  return await axios.put(`${BASE_URL}/${updateFlag}/${productId}`, updates);
 };
+
 
 export default api;

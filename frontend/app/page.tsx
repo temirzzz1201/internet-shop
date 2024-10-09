@@ -27,7 +27,7 @@ const Home = async ({ searchParams }: HomeProps) => {
   return (
     <div className="container min-h-screen">
 
-      <section>
+      <section className='px-3'>
         <Text className="mb-8" color="blue.600" fontSize="4xl">
           Все продукты: {filteredProducts.length}
         </Text>
