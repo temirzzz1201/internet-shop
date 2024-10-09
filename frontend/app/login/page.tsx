@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { login } from '@/actions/clientActions';
@@ -15,7 +16,6 @@ import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { IFormValues } from '@/types';
 
-
 const SignupSchema = Yup.object().shape({
   password: Yup.string()
     .min(8, 'Password should be of minimum 8 characters length')
@@ -25,11 +25,14 @@ const SignupSchema = Yup.object().shape({
 
 export default function Login() {
   const dispatch = useAppDispatch();
-  const { isAuthenticated, isLoading } = useAppSelector((store) => store.auth);
+  const { isLoading, isAuthenticated, user } = useAppSelector((store) => store.auth);
+  const router = useRouter();
 
-  // if (isAuthenticated) {
-  //   redirect('/');
-  // }
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/profile');
+    }
+  }, [isAuthenticated, user, router]);
 
   return (
     <div className="container min-h-screen">

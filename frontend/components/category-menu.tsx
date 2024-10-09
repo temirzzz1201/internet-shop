@@ -13,7 +13,7 @@ const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
   return (
     <Box maxW='md' borderWidth='1px' borderRadius='lg' overflow='hidden' px={4} maxH={320} >
       <aside>
-        <UnorderedList styleType="'->'">
+        <UnorderedList>
           <ListItem onClick={() => handleCategoryClick(null)} style={{ cursor: 'pointer', margin: '5px 0' }}>All products</ListItem>
           {categories.map((cat) => (
             <ListItem key={cat.id} onClick={() => handleCategoryClick(cat.id)} style={{ cursor: 'pointer', margin: '5px 0' }}>

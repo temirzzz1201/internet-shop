@@ -1,9 +1,9 @@
 'use client';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { login } from '@/actions/clientActions';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import {
   FormControl,
@@ -25,22 +25,18 @@ const SignupSchema = Yup.object().shape({
 
 export default function AdminLogin() {
   const dispatch = useAppDispatch();
-  const { isAuthenticated, isLoading, user } = useAppSelector((store) => store.auth);
+  const { isLoading, isAuthenticated, user } = useAppSelector((store) => store.auth);
+  const router = useRouter();
 
-  const handleSubmit = (email: string, password: string) => {
-    dispatch(login({ email, password }));
-  }
+  const handleSubmit = async (email: string, password: string) => {
+    await dispatch(login({ email, password }));
+  };
 
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     if (user?.role === 'admin') {
-  //       redirect('/admin-page');
-  //     } else {
-  //       redirect('/');
-  //     }
-  //   }
-  // }, [isAuthenticated, user]);
-
+  useEffect(() => {
+    if (isAuthenticated && user?.role === 'admin') {
+      router.push('/admin-page');
+    }
+  }, [isAuthenticated, user, router]);
 
   return (
     <div className="container min-h-screen">
@@ -101,7 +97,7 @@ export default function AdminLogin() {
                 <FormHelperText>
                   Don't registered yet?{' '}
                   <Link className="underline" href="/registration">
-                    authorisation
+                    Register
                   </Link>
                 </FormHelperText>
               </Form>

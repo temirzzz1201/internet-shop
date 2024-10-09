@@ -41,35 +41,6 @@ router.post('/create-product', upload.single('image'), async (req: Request, res:
   }
 });
 
-router.delete('/delete-product/:id', async (req: Request, res: Response) => {
-  try {
-    const productId = req.params.id;
-    await Product.destroy({ where: { id: productId } });
-    res.status(200).json({ message: 'Продукт удален' });
-  } catch (error) {
-    res.status(500).json({ error: 'Ошибка при удалении продукта' });
-  }
-});
-
-
-router.put('/update-product/:id', async (req: Request, res: Response) => {
-  try {
-    const productId = req.params.id;
-    const updates = req.body;
-    const product = await Product.findByPk(productId);
-
-    if (product) {
-      await product.update(updates);
-      res.status(200).json(product);
-    } else {
-      res.status(404).json({ error: 'Продукт не найден' });
-    }
-  } catch (error) {
-    res.status(500).json({ error: 'Ошибка при обновлении продукта' });
-  }
-});
-
-
 router.get('/all-categories', async (req: Request, res: Response) => {
   try {
     const categories = await Category.findAll();
@@ -88,6 +59,36 @@ router.post('/create-category', async (req: Request, res: Response) => {
     return
   } catch (error) {
     res.status(500).json({ error: 'Ошибка при создании категории' });
+  }
+});
+
+router.delete('/delete-product/:id', async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.id;
+    await Product.destroy({ where: { id: productId } });
+    res.status(200).json({ message: 'Продукт удален' });
+  } catch (error) {
+    res.status(500).json({ error: 'Ошибка при удалении продукта' });
+  }
+});
+
+
+router.put('/update-product/:id', async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.id;
+    const updates = req.body;
+    console.log('updates ', updates);
+
+    const product = await Product.findByPk(productId);
+
+    if (product) {
+      await product.update(updates);
+      res.status(200).json(product);
+    } else {
+      res.status(404).json({ error: 'Продукт не найден' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Ошибка при обновлении продукта' });
   }
 });
 

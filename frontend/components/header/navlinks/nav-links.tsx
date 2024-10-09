@@ -1,43 +1,53 @@
 'use client';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { logout } from '@/actions/clientActions';
 import profileSrcBlue from '../../../app/images/profile_blue.svg';
 import profileSrcWhite from '../../../app/images/profile_white.svg';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
-
-const isAdmin = Cookies.get('role')
-console.log('isAdmin ', isAdmin);
-
-
-const links = [
-  { id: 1, title: 'Home', path: '/' },
-  { id: 2, title: 'About', path: '/about' },
-  { id: 3, title: 'Login', path: '/login' },
-  {
-    id: 4,
-    title: 'Profile',
-    path: '/profile',
-    blueImgSrc: profileSrcBlue,
-    whiteImgSrc: profileSrcWhite,
-  },
-  { id: 5, title: 'Logout', path: '/logout' },
-  ...(isAdmin === 'admin'
-    ? [{ id: 6, title: 'Admin-page', path: '/admin-page' }]
-    : []),
-];
-
-// TWO PROTECTED ROUTS: ADMIN-PAGE, ADMIN-LOGIN
 
 export default function NavLinks() {
   const pathname = usePathname();
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const role = Cookies.get('role');
+    setIsAdmin(role === 'admin');
+
+    if (typeof window !== 'undefined') {
+      const name = localStorage.getItem('userName');
+      setUserName(name);
+    }
+  }, []);
 
   const logoutUser = () => {
     dispatch(logout());
+    Cookies.remove('role');
+    setIsAdmin(false);
+    setUserName(null);
+    router.push('/login');
   };
+
+  const links = [
+    { id: 1, title: 'Home', path: '/' },
+    { id: 2, title: 'About', path: '/about' },
+    { id: 3, title: 'Contacts', path: '/contacts' },
+    {
+      id: 4,
+      title: userName ? `Welcome ${userName.charAt(0).toUpperCase() + userName.slice(1)}` : 'Profile',
+      path: '/profile',
+      blueImgSrc: profileSrcBlue,
+      whiteImgSrc: profileSrcWhite,
+    },
+    { id: 5, title: userName ? 'Logout' : 'Login', path: userName ? 'logout' : '/login' },
+    ...(isAdmin ? [{ id: 6, title: 'Admin-page', path: '/admin-page' }] : []),
+  ];
 
   return (
     <ul className="flex">

@@ -88,4 +88,6 @@ export interface IAdminTableProps {
   columns: ITableColumn[];
   data: any[];
   isLoading: boolean;
+  deleteFlag: string;
+  updateFlag: string;
 }

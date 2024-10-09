@@ -16,7 +16,7 @@ import { useAppDispatch } from '@/hooks/useAppDispatch';
 
 import { deleteProduct, updateProduct } from '@/actions/clientActions';
 
-export const AdminTable: React.FC<IAdminTableProps> = ({ caption, columns, data, isLoading }) => {
+export const AdminTable: React.FC<IAdminTableProps> = ({ caption, columns, data, isLoading, deleteFlag, updateFlag }) => {
   const [editableData, setEditableData] = useState(data);
 
   const dispatch = useAppDispatch()
@@ -29,13 +29,17 @@ export const AdminTable: React.FC<IAdminTableProps> = ({ caption, columns, data,
 
   const handleInputChange = (productId: number, key: string, value: string) => {
     const updates = { [key]: value };
-    dispatch(updateProduct({ productId, updates }));
+
+    console.log('updates ', updates);
+
+    dispatch(updateProduct({ productId, updates, updateFlag }));
   };
 
 
   const handleDelete = (id: number) => {
-    dispatch(deleteProduct(id))
+    dispatch(deleteProduct({ productId: id, deleteFlag }));
   };
+
 
   return (
     <TableContainer>
@@ -85,3 +89,4 @@ export const AdminTable: React.FC<IAdminTableProps> = ({ caption, columns, data,
     </TableContainer>
   );
 };
+
