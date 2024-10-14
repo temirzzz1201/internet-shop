@@ -28,11 +28,11 @@ export default function Login() {
   const { isLoading, isAuthenticated, user } = useAppSelector((store) => store.auth);
   const router = useRouter();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push('/profile');
-    }
-  }, [isAuthenticated, user, router]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     router.push('/profile');
+  //   }
+  // }, [isAuthenticated, user, router]);
 
   return (
     <div className="container min-h-screen">
@@ -48,6 +48,8 @@ export default function Login() {
             initialValues={{ email: '', password: '' }}
             validationSchema={SignupSchema}
             onSubmit={(values) => {
+              console.log(values);
+              
               dispatch(login(values));
             }}
           >

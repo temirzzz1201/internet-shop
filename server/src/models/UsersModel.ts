@@ -28,8 +28,7 @@ User.init({
   role: {
     type: DataTypes.STRING,
     allowNull: true,
-    unique: true,
-    defaultValue: 'customer'
+    defaultValue: 'customer',
   },
   email: {
     type: DataTypes.STRING,
@@ -44,11 +43,10 @@ User.init({
   password: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: false,
     validate: {
       len: {
         args: [8, 100],
-        msg: 'Password must be at least 6 characters long',
+        msg: 'Password must be at least 8 characters long',
       },
     },
   },
@@ -61,12 +59,12 @@ User.init({
   hooks: {
     beforeCreate: async (user: User) => {
       if (user.password) {
-        user.password = await bcrypt.hash(user.password, 5);
+        user.password = await bcrypt.hash(user.password, 10);
       }
     },
     beforeUpdate: async (user: User) => {
       if (user.changed('password')) {
-        user.password = await bcrypt.hash(user.password, 5);
+        user.password = await bcrypt.hash(user.password, 10); 
       }
     },
   },
