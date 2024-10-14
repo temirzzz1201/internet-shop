@@ -8,7 +8,7 @@ export function authMiddleware(request: NextRequest) {
   }
 
   if (role === 'admin') {
-    return NextResponse.next();
+    return NextResponse.redirect(new URL('/login', request.url));
   } else {
     return NextResponse.redirect(new URL('/', request.url));
   }

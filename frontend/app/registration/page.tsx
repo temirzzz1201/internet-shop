@@ -30,9 +30,9 @@ export default function Register() {
   const dispatch = useAppDispatch();
   const { isAuthenticated, isLoading } = useAppSelector((store) => store.auth);
 
-  if (isAuthenticated) {
-    redirect('/login');
-  }
+  // if (isAuthenticated) {
+  //   redirect('/login');
+  // }
 
   return (
     <div className="container min-h-screen">

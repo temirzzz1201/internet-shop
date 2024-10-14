@@ -1,41 +1,10 @@
-import 'dotenv/config';
 import { Router, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import User from '../models/UsersModel';
+import { generateAccessToken, generateRefreshToken } from '../utils/tokenUtils';
+import jwt from 'jsonwebtoken';
 
 const router = Router();
-const secret = process.env.JWT_SECRET;
-const refreshSecret = process.env.JWT_REFRESH_SECRET;
-
-if (!secret || !refreshSecret) {
-  throw new Error('JWT_SECRET or JWT_REFRESH_SECRET environment variables are not set');
-}
-
-const accessTokenExpiresIn = '1h';
-const refreshTokenExpiresIn = '7d';
-
-const generateTokens = (userId: number) => {
-  const accessToken = jwt.sign({ userId }, secret, { expiresIn: accessTokenExpiresIn });
-  const refreshToken = jwt.sign({ userId }, refreshSecret, { expiresIn: refreshTokenExpiresIn });
-  return { accessToken, refreshToken };
-};
-
-router.get('/', async (req: Request, res: Response): Promise<void> => {
-  try {
-    const users = await User.findAll();
-
-    res.status(201).json({
-      users,
-      message: 'Users found',
-    });
-    return;
-  }
-  catch (error: any) {
-    res.status(500).json({ message: 'Can not find users', error: error.message });
-  }
-
-})
 
 router.post('/register', async (req: Request, res: Response): Promise<void> => {
   const { username, email, password, role } = req.body;
@@ -52,10 +21,11 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const hashedPassword = await bcrypt.hash(password, 5);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({ username, email, password: hashedPassword, role });
 
-    const { accessToken, refreshToken } = generateTokens(newUser.id);
+    const accessToken = generateAccessToken(newUser);
+    const refreshToken = generateRefreshToken(newUser);
 
     res.status(201).json({
       message: 'User registered successfully',
@@ -84,20 +54,21 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     }
 
     const hashedPassword = user.getDataValue('password');
-    const isPasswordValid = await bcrypt.compare(password, hashedPassword);
+    const isPasswordValid = bcrypt.compare(password, hashedPassword);
 
     if (!isPasswordValid) {
       res.status(401).json({ message: 'Invalid credentials' });
       return;
     }
 
-    const { accessToken, refreshToken } = generateTokens(user.id);
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
 
     res.json({
       message: 'Logged in successfully',
       accessToken,
       refreshToken,
-      user
+      user,
     });
   } catch (error: any) {
     res.status(500).json({ message: 'Error logging in', error: error.message });
@@ -105,20 +76,21 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 });
 
 router.post('/refresh-token', async (req: Request, res: Response): Promise<void> => {
-  const { token } = req.body;
+  const { token: refreshToken } = req.body;
 
-  if (!token) {
+  if (!refreshToken) {
     res.status(400).json({ message: 'Refresh token is required' });
     return;
   }
 
   try {
-    const decoded = jwt.verify(token, refreshSecret) as { userId: number };
-    const newAccessToken = jwt.sign({ userId: decoded.userId }, secret, { expiresIn: accessTokenExpiresIn });
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET!) as { userId: number };
 
+    const newAccessToken = generateAccessToken({ id: decoded.userId });
 
     res.json({ accessToken: newAccessToken });
   } catch (error: any) {
+    console.error('Error verifying refresh token:', error);
     res.status(403).json({ message: 'Invalid refresh token', error: error.message });
   }
 });
@@ -127,27 +99,26 @@ router.delete('/delete-user/:id', async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
     await User.destroy({ where: { id: userId } });
-    res.status(200).json({ message: 'Продукт удален' });
+    res.status(200).json({ message: 'User deleted' });
   } catch (error) {
-    res.status(500).json({ error: 'Ошибка при удалении продукта' });
+    res.status(500).json({ error: 'Error deleting user' });
   }
 });
-
 
 router.put('/update-user/:id', async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
     const updates = req.body;
-    const users = await User.findByPk(userId);
+    const user = await User.findByPk(userId);
 
-    if (users) {
-      await users.update(updates);
-      res.status(200).json(users);
+    if (user) {
+      await user.update(updates);
+      res.status(200).json(user);
     } else {
-      res.status(404).json({ error: 'Продукт не найден' });
+      res.status(404).json({ error: 'User not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Ошибка при обновлении продукта' });
+    res.status(500).json({ error: 'Error updating user' });
   }
 });
 

@@ -20,15 +20,19 @@ export default function NavLinks() {
     const role = Cookies.get('role');
     setIsAdmin(role === 'admin');
 
+    console.log('role ', role);
+    
+
     if (typeof window !== 'undefined') {
       const name = localStorage.getItem('userName');
+      console.log('name ', name);
+      
       setUserName(name);
     }
   }, []);
 
   const logoutUser = () => {
     dispatch(logout());
-    Cookies.remove('role');
     setIsAdmin(false);
     setUserName(null);
     router.push('/login');
@@ -48,6 +52,9 @@ export default function NavLinks() {
     { id: 5, title: userName ? 'Logout' : 'Login', path: userName ? 'logout' : '/login' },
     ...(isAdmin ? [{ id: 6, title: 'Admin-page', path: '/admin-page' }] : []),
   ];
+
+  console.log('links ', links);
+  
 
   return (
     <ul className="flex">

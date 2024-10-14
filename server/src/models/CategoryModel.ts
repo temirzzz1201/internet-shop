@@ -9,7 +9,7 @@ Category.init({
     autoIncrement: true,
     primaryKey: true,
   },
-  categoryName: {
+  name: { 
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -17,7 +17,7 @@ Category.init({
   sequelize,
   modelName: 'Category',
   tableName: 'categories',
-  timestamps: true,
+  timestamps: true, 
 });
 
 export default Category;

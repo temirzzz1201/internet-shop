@@ -1,8 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/config';
-import Category from './CategoryModel'
+import Category from './CategoryModel';
 
-class Product extends Model { }
+class Product extends Model {}
 
 Product.init({
   id: {
@@ -37,6 +37,7 @@ Product.init({
       model: 'categories',
       key: 'id',
     },
+    allowNull: false, 
   },
 }, {
   sequelize,
@@ -45,7 +46,7 @@ Product.init({
   timestamps: true,
 });
 
-Product.belongsTo(Category, { foreignKey: 'categoryId' });
-Category.hasMany(Product, { foreignKey: 'categoryId' });
+Product.belongsTo(Category, { foreignKey: 'categoryId' as 'category' });
+Category.hasMany(Product, { foreignKey: 'categoryId' as 'products' });
 
 export default Product;
