@@ -54,7 +54,8 @@ router.get('/all-categories', async (req: Request, res: Response) => {
 router.post('/create-category', async (req: Request, res: Response) => {
   const { categoryName } = req.body;
   try {
-    const category = await Category.create({ categoryName });
+    const category = await Category.create( {name: categoryName} );
+
     res.json(category);
     return
   } catch (error) {

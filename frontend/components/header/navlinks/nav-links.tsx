@@ -7,36 +7,17 @@ import { logout } from '@/actions/clientActions';
 import profileSrcBlue from '../../../app/images/profile_blue.svg';
 import profileSrcWhite from '../../../app/images/profile_white.svg';
 import { usePathname, useRouter } from 'next/navigation';
+import { useAppSelector } from '@/hooks/useAppSelector';
 import Cookies from 'js-cookie';
 
 export default function NavLinks() {
   const pathname = usePathname();
   const dispatch = useAppDispatch();
-  const router = useRouter();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [userName, setUserName] = useState<string | null>(null);
-
-  useEffect(() => {
-    const role = Cookies.get('role');
-    setIsAdmin(role === 'admin');
-
-    console.log('role ', role);
-    
-
-    if (typeof window !== 'undefined') {
-      const name = localStorage.getItem('userName');
-      console.log('name ', name);
-      
-      setUserName(name);
-    }
-  }, []);
 
   const logoutUser = () => {
     dispatch(logout());
-    setIsAdmin(false);
-    setUserName(null);
-    router.push('/login');
   };
+
 
   const links = [
     { id: 1, title: 'Home', path: '/' },
@@ -44,17 +25,16 @@ export default function NavLinks() {
     { id: 3, title: 'Contacts', path: '/contacts' },
     {
       id: 4,
-      title: userName ? `Welcome ${userName.charAt(0).toUpperCase() + userName.slice(1)}` : 'Profile',
+      // title: userName ? `Welcome ${ userName }` : 'Profile',
+      title: 'Profile',
+
       path: '/profile',
       blueImgSrc: profileSrcBlue,
       whiteImgSrc: profileSrcWhite,
     },
-    { id: 5, title: userName ? 'Logout' : 'Login', path: userName ? 'logout' : '/login' },
-    ...(isAdmin ? [{ id: 6, title: 'Admin-page', path: '/admin-page' }] : []),
+    { id: 5, title: 'Login', path: '/login' },
+    { id: 6, title: 'Logout', path: '/logout' },
   ];
-
-  console.log('links ', links);
-  
 
   return (
     <ul className="flex">

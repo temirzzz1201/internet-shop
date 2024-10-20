@@ -1,7 +1,5 @@
 'use client';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { login } from '@/actions/clientActions';
@@ -25,14 +23,7 @@ const SignupSchema = Yup.object().shape({
 
 export default function Login() {
   const dispatch = useAppDispatch();
-  const { isLoading, isAuthenticated, user } = useAppSelector((store) => store.auth);
-  const router = useRouter();
-
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     router.push('/profile');
-  //   }
-  // }, [isAuthenticated, user, router]);
+  const { isLoading } = useAppSelector((store) => store.auth);
 
   return (
     <div className="container min-h-screen">

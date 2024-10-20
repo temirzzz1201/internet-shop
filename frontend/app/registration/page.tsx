@@ -1,6 +1,5 @@
 'use client';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { register } from '@/actions/clientActions';
@@ -29,10 +28,6 @@ const SignupSchema = Yup.object().shape({
 export default function Register() {
   const dispatch = useAppDispatch();
   const { isAuthenticated, isLoading } = useAppSelector((store) => store.auth);
-
-  // if (isAuthenticated) {
-  //   redirect('/login');
-  // }
 
   return (
     <div className="container min-h-screen">

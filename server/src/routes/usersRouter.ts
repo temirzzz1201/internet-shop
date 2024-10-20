@@ -122,4 +122,14 @@ router.put('/update-user/:id', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/get-users', async (req: Request, res: Response) => {
+  try {
+  const users = await User.findAll()
+  res.status(200).json(users);
+  }
+  catch (error) {
+    res.status(500).json({ error: 'Error can not upload users' });
+  }
+})
+
 export default router;

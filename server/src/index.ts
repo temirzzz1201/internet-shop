@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import cors from 'cors';
 import { initModels } from './models';
 import router from './routes';
@@ -10,7 +11,7 @@ app.use(cors({
   origin: 'http://localhost:3000',
 }));
 app.use(express.json());
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/', router);
 
 const start = async () => {
