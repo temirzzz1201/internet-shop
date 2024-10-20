@@ -18,7 +18,7 @@ export interface IIProducts {
 
 export interface ICategory {
   id: string;
-  categoryName: string | null;
+  name: string | null;
 }
 
 export interface ICategoryMenuProps {
@@ -67,6 +67,7 @@ export interface IProtectedRoute {
 
 export interface IFormValues {
   username?: string;
+  role?: string;
   email: string;
   password: string;
 }
@@ -90,4 +91,10 @@ export interface IAdminTableProps {
   isLoading: boolean;
   deleteFlag: string;
   updateFlag: string;
+}
+
+export interface IHomeProps {
+  searchParams: {
+    category?: string;
+  };
 }

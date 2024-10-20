@@ -11,21 +11,13 @@ import {
   Button
 } from '@chakra-ui/react';
 import { IAdminTableProps } from '@/types';
-import { useEffect, useState } from 'react';
+import { memo } from 'react';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 
 import { deleteProduct, updateProduct } from '@/actions/clientActions';
 
-export const AdminTable: React.FC<IAdminTableProps> = ({ caption, columns, data, isLoading, deleteFlag, updateFlag }) => {
-  const [editableData, setEditableData] = useState(data);
-
+export const AdminTable: React.FC<IAdminTableProps> = memo(({ caption, columns, data, isLoading, deleteFlag, updateFlag }) => {
   const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    if (data) {
-      setEditableData(data);
-    }
-  }, [data]);
 
   const handleInputChange = (productId: number, key: string, value: string) => {
     const updates = { [key]: value };
@@ -54,8 +46,8 @@ export const AdminTable: React.FC<IAdminTableProps> = ({ caption, columns, data,
           </Tr>
         </Thead>
         <Tbody>
-          {!isLoading && editableData.length > 0 ? (
-            editableData.map((row, rowIndex) => (
+          {!isLoading && data.length > 0 ? (
+            data.map((row, rowIndex) => (
               <Tr key={rowIndex}>
                 {columns.map((col) => (
                   <Td key={col.key}>
@@ -88,5 +80,5 @@ export const AdminTable: React.FC<IAdminTableProps> = ({ caption, columns, data,
       </Table>
     </TableContainer>
   );
-};
+});
 

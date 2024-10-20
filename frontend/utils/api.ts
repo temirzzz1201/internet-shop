@@ -9,6 +9,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  // withCredentials: true,
 });
 
 const refreshToken = async (): Promise<string | null> => {
@@ -63,23 +64,36 @@ export const registerUser = async (userData: IUser): Promise<IUserResponse> => {
   const response = await api.post<IUserResponse>('users/register', userData);
   localStorage.setItem('refreshToken', response.data.refreshToken); 
   Cookies.set('accessToken', response.data.accessToken, { secure: true }); 
+
   return response.data;
 };
 
 export const loginUser = async (userData: IUser): Promise<IUserResponse> => {
   const response = await api.post<IUserResponse>('users/login', userData);
   localStorage.setItem('refreshToken', response.data.refreshToken); 
-  localStorage.setItem('userName', response.data.user.username ?? ''); 
-
   Cookies.set('accessToken', response.data.accessToken, { secure: true });
+  Cookies.set('userRole', response.data.user.role ?? '', { secure: true })
+  Cookies.set('userName', response.data.user.username ?? '', { secure: true })
+
   return response.data;
+};
+
+export const fetchAllUsers = async (): Promise<AxiosResponse<IUser[]>> => {
+  return await api.get<IUser[]>('/users/get-users');
+};
+
+export const logoutUser = async (): Promise<void> => {
+  Cookies.remove('accessToken'); 
+  Cookies.remove('userRole')
+  Cookies.remove('userName')
+  localStorage.removeItem('refreshToken'); 
 };
 
 export const fetchCategories = async (): Promise<AxiosResponse<ICategory[]>> => {
   return await api.get<ICategory[]>('products/all-categories');
 };
 
-export const fetchProducts = async (): Promise<AxiosResponse<IIProduct[]>> => {
+export const fetchAllProducts = async (): Promise<AxiosResponse<IIProduct[]>> => {
   return await api.get<IIProduct[]>('products/all-products');
 };
 
@@ -101,12 +115,6 @@ export const createCategory = async (categoryData: { categoryName: string }): Pr
       headers: { 'Content-Type': 'application/json' },
     }
   );
-};
-
-export const logoutUser = async (): Promise<void> => {
-  Cookies.remove('accessToken'); 
-  localStorage.removeItem('refreshToken'); 
-  localStorage.removeItem('userName'); 
 };
 
 export const deleteChoosenProduct = async (productId: number, deleteFlag: string): Promise<AxiosResponse> => {

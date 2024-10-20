@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authMiddleware } from './middleware/authAdminMiddleware';
+import { adminAdminMiddleware } from './middleware/adminAdminMiddleware'
 import { profileMiddleware } from './middleware/profileMiddleware';
 
 export function middleware(req: NextRequest) {
   if (req.nextUrl.pathname.startsWith('/admin-page')) {
-    return authMiddleware(req);
+    return adminAdminMiddleware(req);
   } else if (req.nextUrl.pathname.startsWith('/profile')) {
     return profileMiddleware(req);
   }

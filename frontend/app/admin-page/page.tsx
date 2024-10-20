@@ -2,7 +2,7 @@
 import { getUsers, placeProduct, placeCategory, getCategory, getProducts } from '@/actions/clientActions';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -24,7 +24,6 @@ export default function Admin() {
   const { users } = useAppSelector((state) => state.users);
   const { category } = useAppSelector((state) => state.category);
   const { products, isLoading } = useAppSelector((state) => state.products);
-
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);
@@ -39,7 +38,7 @@ export default function Admin() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmitProduct = (e: React.FormEvent) => {
     e.preventDefault();
     const productData = { categoryId, name, description, price, stock, image: file };
     dispatch(placeProduct(productData));
@@ -51,11 +50,29 @@ export default function Admin() {
     dispatch(placeCategory(categoryData));
   };
 
+  const memoizedUsers = useMemo(() => {
+    return users;
+  }, [users]);
+
+  const memoizedProducts = useMemo(() => {
+    return products;
+  }, [products]);
+  
+  const memoizedCategory = useMemo(() => {
+    return category;
+  }, [category]);
+
   useEffect(() => {
     dispatch(getUsers());
+  }, []);
+
+  useEffect(() => {
     dispatch(getCategory());
+  }, []);
+
+  useEffect(() => {
     dispatch(getProducts());
-  }, [dispatch]);
+  }, []);
 
   const productColumns = [
     { label: 'Name', key: 'name' },
@@ -112,9 +129,9 @@ export default function Admin() {
                   <FormControl className="max-w-[500px]">
                     <FormLabel>Upload new product</FormLabel>
                     <Select placeholder="Choose category" onChange={(e) => setCategoryId(Number(e.target.value))}>
-                      {category?.map((cat) => (
+                      {memoizedCategory?.map((cat) => (
                         <option key={cat.id} value={cat.id}>
-                          {cat.categoryName}
+                          {cat.name}
                         </option>
                       ))}
                     </Select>
@@ -151,7 +168,7 @@ export default function Admin() {
                       onChange={(e) => setStock(Number(e.target.value))}
                     />
                     <Input className="mb-4" size="md" type="file" onChange={handleFileChange} />
-                    <Button mt={4} colorScheme="teal" type="submit" onClick={handleSubmit}>
+                    <Button mt={4} colorScheme="teal" type="submit" onClick={handleSubmitProduct}>
                       Submit
                     </Button>
 
@@ -160,11 +177,11 @@ export default function Admin() {
                 </section>
               </div>
 
-              <AdminTable caption="List of products" columns={productColumns} data={products} isLoading={isLoading} deleteFlag="products/delete-product" updateFlag="products/update-product" />
+              <AdminTable caption="List of products" columns={productColumns} data={memoizedProducts} isLoading={isLoading} deleteFlag="products/delete-product" updateFlag="products/update-product" />
             </TabPanel>
 
             <TabPanel>
-              <AdminTable caption="List of users" columns={userColumns} data={users} isLoading={isLoading} deleteFlag="users/delete-user" updateFlag="users/update-user" />
+              <AdminTable caption="List of users" columns={userColumns} data={memoizedUsers} isLoading={isLoading} deleteFlag="users/delete-user" updateFlag="users/update-user" />
             </TabPanel>
           </TabPanels>
         </Tabs>

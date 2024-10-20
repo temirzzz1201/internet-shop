@@ -1,10 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { BASE_URL } from '../utils/baseUrl';
-import { loginUser, registerUser, logoutUser, createProduct, createCategory, fetchCategories, fetchProducts, deleteChoosenProduct, updateChoosenProduct } from '@/utils/api';
+import { loginUser, registerUser, logoutUser, fetchAllUsers, createProduct, createCategory, fetchCategories, fetchAllProducts, deleteChoosenProduct, updateChoosenProduct } from '@/utils/api';
 import { IUser, IIProduct, ICategory } from '@/types';
-import Cookies from 'js-cookie';
-
 
 const getErrorMessage = (error: unknown): string => {
   if (axios.isAxiosError(error)) {
@@ -48,15 +45,13 @@ export const placeProduct = createAsyncThunk<
   }
 });
 
-
-
 export const getProducts = createAsyncThunk<
   IIProduct[],
   void,
   { rejectValue: string }
 >('products/getProducts', async (_, { rejectWithValue }) => {
   try {
-    const response = await fetchProducts();
+    const response = await fetchAllProducts();
 
     if (response.status === 200) {
       return response.data;
@@ -68,8 +63,6 @@ export const getProducts = createAsyncThunk<
   }
 });
 
-
-
 export const placeCategory = createAsyncThunk<
   ICategory,
   { categoryName: string },
@@ -77,6 +70,9 @@ export const placeCategory = createAsyncThunk<
 >('categories/placeCategory', async (category, { rejectWithValue }) => {
   try {
     const response = await createCategory({ categoryName: category.categoryName });
+
+    console.log('response ', response);
+    
 
     if (response.status === 201 || response.status === 200) {
       return response.data as ICategory;
@@ -127,9 +123,6 @@ export const login = createAsyncThunk(
         throw new Error('Response is undefined');
       }
 
-
-      Cookies.set('role', response.user.role ?? 'customer');
-
       return response;
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
@@ -152,8 +145,11 @@ export const getUsers = createAsyncThunk(
   'users/getAll',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${BASE_URL}/users`)
-      const usersData = response.data.users || []
+      const response = await fetchAllUsers()
+      const usersData = response.data || []
+
+      console.log('usersData ', usersData);
+      
 
       return usersData
     } catch (error) {
@@ -161,7 +157,6 @@ export const getUsers = createAsyncThunk(
     }
   }
 );
-
 
 export const deleteProduct = createAsyncThunk<
   number,

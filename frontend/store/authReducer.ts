@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { register, login, logout } from '../actions/clientActions';
 import { IAuthState } from '../types';
+import Cookies from 'js-cookie';
 
 export const initialState: IAuthState = {
   user: null,
