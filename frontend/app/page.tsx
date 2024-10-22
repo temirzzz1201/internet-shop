@@ -4,6 +4,7 @@ import CategoryMenu from '@/components/category-menu';
 import { IIProduct, ICategory } from '@/types';
 import { Grid, Text, Box } from '@chakra-ui/react';
 import { IHomeProps } from '@/types';
+import AppContainer from '@/components/app-container';
 
 const Home = async ({ searchParams }: IHomeProps) => {
   const products: IIProduct[] = await fetchAllProducts();
@@ -18,29 +19,22 @@ const Home = async ({ searchParams }: IHomeProps) => {
     : products;
 
   return (
-    <div className="container min-h-screen">
-      <Box as='section'>
-        <Text className="mb-8" color="blue.600" fontSize="4xl">
-          Все продукты: {filteredProducts.length}
-        </Text>
+    <AppContainer title={`Все продукты ${products.length}`} myClass='justify-start'>
+      <Box as='aside' mr='120px'>
+        <CategoryMenu categories={categories} />
       </Box>
-      <Box as='section' className='flex'>
-        <Box mr='5'>
-          <CategoryMenu categories={categories} />
-        </Box>
-        <div>
-          <Grid templateColumns="repeat(5, 1fr)" gap={6}>
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product: IIProduct) => (
-                <ProductCard product={product} key={product.id} />
-              ))
-            ) : (
-              <p>Продукты отсутствуют!</p>
-            )}
-          </Grid>
-        </div>
+      <Box as='main' mb='20'>
+        <Grid templateColumns="repeat(5, 1fr)" gap={6}>
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product: IIProduct) => (
+              <ProductCard product={product} key={product.id} />
+            ))
+          ) : (
+            <p>Продукты отсутствуют!</p>
+          )}
+        </Grid>
       </Box>
-    </div>
+    </AppContainer>
   );
 };
 

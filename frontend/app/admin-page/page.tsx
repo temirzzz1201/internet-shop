@@ -30,7 +30,6 @@ export default function Admin() {
   const [stock, setStock] = useState(0);
   const [categoryId, setCategoryId] = useState(1);
   const [categoryName, setCategoryName] = useState('');
-  // const [file, setFile] = useState<File | null>(null);
   const [files, setFiles] = useState<File[]>([]);
 
   
@@ -168,6 +167,7 @@ export default function Admin() {
                       placeholder="Product price"
                       size="md"
                       className="mb-2"
+                      min={0}
                       type="number"
                       value={price}
                       onChange={(e) => setPrice(Number(e.target.value))}

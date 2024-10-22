@@ -2,9 +2,8 @@ import { Box, Text, Container } from "@chakra-ui/react";
 
 export default function Profile() {
   return (
-    <Box className="container min-h-screen">
-      <Box as="section" className='px-3'>
-        <Container>
+    <Box as="section" px='3'>
+      <Container>
         <Box className="mb-6" color="blue.600" fontSize="4xl" as="h1">Контакты</Box>
 
         <Text className="mb-8" fontSize="14">
@@ -30,8 +29,7 @@ export default function Profile() {
             8 800 800 80 80
           </Text>
         </Box>
-        </Container>
-      </Box>
+      </Container>
     </Box>
   );
 }
