@@ -2,9 +2,10 @@
 
 import { IProductCardProps } from '@/types';
 import {
-  AspectRatio,
   Box,
   Badge,
+  Heading,
+  Text
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -26,38 +27,26 @@ export default function ProductCard({ product }: IProductCardProps) {
   const handleOpen = () => setIsModalOpen(true);
   const handleClose = () => setIsModalOpen(false);
 
+  console.log(product);
+  
+
   return (
-    <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden'>
-      <AppModal isOpen={isModalOpen} onClose={handleClose} title="Product Carousel">
+
+    <Box>
+      <AppModal isOpen={isModalOpen} onClose={handleClose} title={product.category.name}>
         <EmblaCarousel slides={imageUrls} options={OPTIONS} />
       </AppModal>
 
-      <AspectRatio maxW='480px' ratio={4 / 6} onClick={handleOpen} cursor="pointer">
-        <EmblaCarousel slides={imageUrls} options={OPTIONS} />
-      </AspectRatio>
-
-      <Box p='6'>
-        <Box display='flex' alignItems='baseline'>
-          <Badge borderRadius='full' px='2' colorScheme='teal'>
-            {product.stock}
-          </Badge>
+      <Box maxW='240px' minW='240' p={5} bg="gray.200"  borderRadius={20} as="article">
+        <Box cursor="pointer" mb='3' onClick={handleOpen}>
+          <EmblaCarousel slides={imageUrls} options={OPTIONS}  />
         </Box>
-        <Box mt='1' fontWeight='semibold' as='h2' lineHeight='tight' noOfLines={1}>
-          {product.name.toUpperCase()}
-        </Box>
-        <Box mt='1' fontWeight='500' as='h4' lineHeight='tight' noOfLines={1}>
-          {product.description}
-        </Box>
-        <Box>
-          {product.price}
-          <Box as='span' color='gray.600' fontSize='sm'>
-            {" "} руб
-          </Box>
-        </Box>
-        <Box display='flex' mt='2' as='small' alignItems='center'>
-          {formatDate(product.createdAt)}
-        </Box>
-      </Box>
+        <Heading noOfLines={1} size="l" fontWeight="bold"> {product.name.toUpperCase()} </Heading> 
+        <Badge my='1' borderRadius='full' px='2' colorScheme='teal'> {product.stock} </Badge>
+        <Text noOfLines={1}> {product.description} </Text>
+        <Text fontWeight="bold"> {product.price}{" "} руб. </Text>
+        <Text fontSize='xs'> {formatDate(product.createdAt)} </Text>
+      </Box>  
     </Box>
   );
 }

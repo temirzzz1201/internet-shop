@@ -18,29 +18,34 @@ const Home = async ({ searchParams }: IHomeProps) => {
     : products;
 
   return (
-    <div className="container min-h-screen">
-      <Box as='section'>
-        <Text className="mb-8" color="blue.600" fontSize="4xl">
-          Все продукты: {filteredProducts.length}
-        </Text>
-      </Box>
-      <Box as='section' className='flex'>
-        <Box mr='5'>
-          <CategoryMenu categories={categories} />
+    <>
+      <Box as='section' mb='8' className="flex justify-center items-center">
+        <Box className="flex" maxW='1920' w='100%' px='5'>
+          <Text color="blue.600" fontSize="4xl">
+            Все продукты: {filteredProducts.length}
+          </Text>
         </Box>
-        <div>
-          <Grid templateColumns="repeat(5, 1fr)" gap={6}>
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product: IIProduct) => (
-                <ProductCard product={product} key={product.id} />
-              ))
-            ) : (
-              <p>Продукты отсутствуют!</p>
-            )}
-          </Grid>
-        </div>
       </Box>
-    </div>
+
+      <Box as='section' mb='8' className="flex justify-center items-center">
+        <Box className="flex" maxW='1920' w='100%' px='5'>
+          <Box as='aside' mr='120px'>
+            <CategoryMenu categories={categories} />
+          </Box>
+          <Box as='main' mb='20'>
+            <Grid templateColumns="repeat(5, 1fr)" gap={6}>
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map((product: IIProduct) => (
+                  <ProductCard product={product} key={product.id} />
+                ))
+              ) : (
+                <p>Продукты отсутствуют!</p>
+              )}
+            </Grid>
+          </Box>
+        </Box>
+      </Box>
+    </>
   );
 };
 

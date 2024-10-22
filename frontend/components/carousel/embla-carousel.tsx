@@ -1,13 +1,13 @@
 'use client'
+import './embla-carousel.css'
 import React, { useCallback } from 'react'
 import { EmblaOptionsType, EmblaCarouselType } from 'embla-carousel'
 import { DotButton, useDotButton } from './embla-carousel-btns'
 import Autoplay from 'embla-carousel-autoplay'
 import useEmblaCarousel from 'embla-carousel-react'
-import { Image } from '@chakra-ui/react'
+import { Image, Box } from '@chakra-ui/react'
 
 type PropType = {
-  // slides: number[]
   slides: string[]
   options?: EmblaOptionsType
 }
@@ -38,17 +38,21 @@ const EmblaCarousel: React.FC<PropType> = ({ slides, options}) => {
         <div className="embla__container">
           {slides.map((url) => (
             <div className="embla__slide" key={url}>
-              <Image
-                objectFit="cover"
-                src={url}
-                alt={url}
-              />
+              <Box maxW='250px' p={5} borderRadius={20} as="article" key={url}>
+                <Image
+                  h="250px" 
+                  objectFit='fill' 
+                  w="100%" 
+                  src={url}
+                  alt={url}
+                />
+              </Box>        
             </div>
           ))}
         </div>
       </div>
 
-      <div className="embla__controls">
+      {/* <div className="embla__controls">
         <div className="embla__dots">
           {scrollSnaps.map((_, index) => (
             <DotButton
@@ -60,7 +64,7 @@ const EmblaCarousel: React.FC<PropType> = ({ slides, options}) => {
             />
           ))}
         </div>
-      </div>
+      </div> */}
     </section>
   )
 }

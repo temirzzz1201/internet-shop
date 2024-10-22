@@ -9,6 +9,7 @@ import {
   Button,
   Text,
   FormHelperText,
+  Box,
 } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -26,13 +27,13 @@ export default function Login() {
   const { isLoading } = useAppSelector((store) => store.auth);
 
   return (
-    <div className="container min-h-screen">
-      <section className="p-3 flex mb-10">
+    <Box as='section' mb='8'>
+      <Box px='5' mb='10'>
         <Text color="blue.600" fontSize="2xl">
           Login page
         </Text>
-      </section>
-      <section className="p-3 flex flex-col justify-center items-center">
+      </Box>
+      <Box px='5' className="flex flex-col justify-center items-center">
         <FormControl className="max-w-[500px]">
           <FormLabel fontSize="24px" mb="5" color="blue.600">Please login</FormLabel>
           <Formik<IFormValues>
@@ -93,7 +94,7 @@ export default function Login() {
             )}
           </Formik>
         </FormControl>
-      </section>
-    </div>
+      </Box>
+    </Box>
   );
 }
