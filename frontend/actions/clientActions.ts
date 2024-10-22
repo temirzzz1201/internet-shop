@@ -18,7 +18,8 @@ export const placeProduct = createAsyncThunk<
     description: string;
     price: number;
     stock: number;
-    image: File | null;
+    // images: File | null;
+    images: File[] | null;
   },
   { rejectValue: string }
 >('products/placeProduct', async (product, { rejectWithValue }) => {
@@ -29,9 +30,14 @@ export const placeProduct = createAsyncThunk<
     formData.append('description', product.description);
     formData.append('price', product.price.toString());
     formData.append('stock', product.stock.toString());
-    if (product.image) {
-      formData.append('image', product.image);
+    console.log('product ', product);
+
+    if (product.images) {
+      product.images.forEach((image) => {
+        formData.append('images', image); // Используйте 'images', если вы хотите, чтобы на сервере они были доступны как массив
+      });
     }
+
 
     const response = await createProduct(formData);
 

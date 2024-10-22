@@ -2,7 +2,14 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/config';
 import Category from './CategoryModel';
 
-class Product extends Model {}
+class Product extends Model {
+  public id!: number; // Убедитесь, что поле id указано как public
+  public name!: string;
+  public description!: string;
+  public price!: number;
+  public stock!: number;
+  public categoryId!: number;
+}
 
 Product.init({
   id: {
@@ -27,10 +34,6 @@ Product.init({
     allowNull: false,
     defaultValue: 0,
   },
-  imageUrl: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
   categoryId: {
     type: DataTypes.INTEGER,
     references: {
@@ -46,7 +49,7 @@ Product.init({
   timestamps: true,
 });
 
-Product.belongsTo(Category, { foreignKey: 'categoryId' as 'category' });
-Category.hasMany(Product, { foreignKey: 'categoryId' as 'products' });
+Product.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
+Category.hasMany(Product, { foreignKey: 'categoryId', as: 'products' });
 
 export default Product;

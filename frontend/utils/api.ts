@@ -87,14 +87,16 @@ export const logoutUser = async (): Promise<void> => {
   Cookies.remove('userRole')
   Cookies.remove('userName')
   localStorage.removeItem('refreshToken'); 
+  console.log(11);
+  
 };
 
 export const fetchCategories = async (): Promise<AxiosResponse<ICategory[]>> => {
-  return await api.get<ICategory[]>('products/all-categories');
+  return await api.get<ICategory[]>('products/all-categories') || [];
 };
 
 export const fetchAllProducts = async (): Promise<AxiosResponse<IIProduct[]>> => {
-  return await api.get<IIProduct[]>('products/all-products');
+  return await api.get<IIProduct[]>('products/all-products') || [];
 };
 
 export const createProduct = async (formData: FormData): Promise<AxiosResponse<IIProduct>> => {
