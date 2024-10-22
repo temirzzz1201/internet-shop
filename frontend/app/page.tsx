@@ -5,7 +5,6 @@ import { IIProduct, ICategory } from '@/types';
 import { Grid, Text, Box } from '@chakra-ui/react';
 import { IHomeProps } from '@/types';
 
-
 const Home = async ({ searchParams }: IHomeProps) => {
   const products: IIProduct[] = await fetchAllProducts();
   const categories: ICategory[] = await fetchCategories();
@@ -14,26 +13,22 @@ const Home = async ({ searchParams }: IHomeProps) => {
 
   const filteredProducts = categoryId
     ? products.filter(product => {
-
-      return product.categoryId?.toString() === categoryId;
-    })
+        return product.categoryId?.toString() === categoryId;
+      })
     : products;
-
 
   return (
     <div className="container min-h-screen">
-
-      <section className='px-3'>
+      <Box as='section'>
         <Text className="mb-8" color="blue.600" fontSize="4xl">
           Все продукты: {filteredProducts.length}
         </Text>
-      </section>
-      <section className='flex p-3'>
+      </Box>
+      <Box as='section' className='flex'>
         <Box mr='5'>
           <CategoryMenu categories={categories} />
         </Box>
-        <div >
-
+        <div>
           <Grid templateColumns="repeat(5, 1fr)" gap={6}>
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product: IIProduct) => (
@@ -44,7 +39,7 @@ const Home = async ({ searchParams }: IHomeProps) => {
             )}
           </Grid>
         </div>
-      </section>
+      </Box>
     </div>
   );
 };

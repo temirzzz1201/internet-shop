@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import Product from '../models/ProductModel';
+import Image from '../models/ProductImage';
 import Category from '../models/CategoryModel';
 import upload from '../middleware/upload';
 
@@ -8,38 +9,74 @@ const router = Router();
 
 router.get('/all-products', async (req: Request, res: Response) => {
   try {
-    const products = await Product.findAll({ include: Category });
-    res.json(products);
-    return
-  } catch (error) {
+    const products = await Product.findAll({
+      include: [
+        {
+          model: Category,
+          as: 'category',
+        },
+        {
+          model: Image,
+          as: 'images',
+        },
+      ],
+    });
 
+    console.log('products ', products);
+
+    if (products.length > 0) {
+      res.json(products);
+    } else {
+      res.status(404).json({ message: 'Продукты не найдены' });
+    }
+  } catch (error) {
+    console.error('Ошибка при получении продуктов:', error);
     res.status(500).json({ error: 'Ошибка при получении продуктов' });
   }
 });
 
-router.post('/create-product', upload.single('image'), async (req: Request, res: Response): Promise<void> => {
-  const { name, description, price, stock, categoryId } = req.body;
 
-  if (!req.file) {
-    res.status(400).send({ message: 'No file uploaded' });
-    return;
-  }
-
+router.post('/create-product', upload.array('images', 10), async (req: Request, res: Response) => {
   try {
+    const { name, description, price, stock, categoryId } = req.body;
+
     const newProduct = await Product.create({
-      categoryId,
       name,
       description,
       price,
       stock,
-      imageUrl: req.file.filename,
+      categoryId,
     });
 
-    res.json(newProduct);
+    if (req.files && Array.isArray(req.files)) {
+      const imageUrls = (req.files as Express.Multer.File[]).map(file => file.filename);
+
+      await Image.bulkCreate(
+        imageUrls.map(url => ({
+          productId: newProduct.id, 
+          imageUrl: url,
+        }))
+      );
+    }
+
+    res.status(201).json({ message: 'Product created successfully', product: newProduct });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to upload product' });
+    console.error(error);
+    res.status(500).json({ message: 'Error creating product' });
   }
 });
+
+
+router.get('/all-images', async (req: Request, res: Response) => {
+  try {
+    const images = await Image.findAll();
+    res.json(images);
+    return
+  } catch (error) {
+    res.status(500).json({ error: 'Ошибка при получении категорий' });
+  }
+});
+
 
 router.get('/all-categories', async (req: Request, res: Response) => {
   try {

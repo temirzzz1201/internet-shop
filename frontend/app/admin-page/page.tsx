@@ -30,19 +30,32 @@ export default function Admin() {
   const [stock, setStock] = useState(0);
   const [categoryId, setCategoryId] = useState(1);
   const [categoryName, setCategoryName] = useState('');
-  const [file, setFile] = useState<File | null>(null);
+  // const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]);
+  
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const selectedFiles = Array.from(event.target.files);
+      setFiles(selectedFiles);
     }
   };
 
   const handleSubmitProduct = (e: React.FormEvent) => {
     e.preventDefault();
-    const productData = { categoryId, name, description, price, stock, image: file };
-    dispatch(placeProduct(productData));
+  
+    const productData = {
+      categoryId,
+      name,
+      description,
+      price,
+      stock,
+      images: files, 
+    };
+
+    dispatch(placeProduct(productData)); 
   };
+
 
   const handleSubmitCategory = (e: React.FormEvent) => {
     e.preventDefault();
@@ -167,7 +180,8 @@ export default function Admin() {
                       value={stock}
                       onChange={(e) => setStock(Number(e.target.value))}
                     />
-                    <Input className="mb-4" size="md" type="file" onChange={handleFileChange} />
+                    <Input className="mb-4" size="md" type="file" multiple onChange={handleFileChange} />
+                    {/* <MultipleImageUploader /> */}
                     <Button mt={4} colorScheme="teal" type="submit" onClick={handleSubmitProduct}>
                       Submit
                     </Button>

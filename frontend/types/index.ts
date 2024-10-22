@@ -1,13 +1,34 @@
+import { ReactNode } from "react";
+
+interface Image {
+  id: number;
+  imageUrl: string;
+  productId: number;
+  createdAt: string; // Или Date, если вы будете работать с объектами Date
+  updatedAt: string; // Или Date, если вы будете работать с объектами Date
+}
+
 export interface IIProduct {
-  id: string;
-  categoryId: number;
+  // id: string;
+  // categoryId: number;
+  // name: string;
+  // description: string;
+  // price: number | null;
+  // stock: number | null;
+  // imageUrl: string;
+  // createdAt: string;
+  // updatedAt: string;
+  // images: [];
+  id: number;
   name: string;
   description: string;
-  price: number | null;
-  stock: number | null;
-  imageUrl: string;
-  createdAt: string;
-  updatedAt: string;
+  price: number;
+  stock: number;
+  categoryId: number;
+  createdAt: string; // Или Date
+  updatedAt: string; // Или Date
+  category: ICategory;
+  images: Image[];
 }
 
 export interface IIProducts {
@@ -17,8 +38,12 @@ export interface IIProducts {
 }
 
 export interface ICategory {
-  id: string;
-  name: string | null;
+  // id: string;
+  // name: string | null;
+  id: number;
+  name: string;
+  createdAt: string; // Или Date
+  updatedAt: string; // Или Date
 }
 
 export interface ICategoryMenuProps {
@@ -97,4 +122,12 @@ export interface IHomeProps {
   searchParams: {
     category?: string;
   };
+}
+
+export interface IModalProps {
+  children: ReactNode;
+}
+
+export interface IProductCardProps {
+  product: IIProduct;
 }
