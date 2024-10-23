@@ -12,6 +12,7 @@ import dynamic from 'next/dynamic';
 import formatDate from '@/utils/dateHelper';
 import AppModal from './app-modal';
 import { EmblaOptionsType } from 'embla-carousel';
+import { capitalize } from '@/utils/capitalize';
 
 // Динамический импорт карусели без SSR
 const EmblaCarousel = dynamic(() => import('./carousel/embla-carousel'), { ssr: false });
@@ -28,22 +29,20 @@ export default function ProductCard({ product }: IProductCardProps) {
   const handleClose = () => setIsModalOpen(false);
 
   console.log(product);
-  
 
   return (
-
     <Box>
       <AppModal isOpen={isModalOpen} onClose={handleClose} title={product.category.name}>
-        <EmblaCarousel slides={imageUrls} options={OPTIONS} />
+        <EmblaCarousel slides={imageUrls} options={OPTIONS} autoPlayFlag imageClass='340' />
       </AppModal>
 
-      <Box maxW='240px' minW='240' p={5} bg="gray.200"  borderRadius={20} as="article">
-        <Box cursor="pointer" mb='3' onClick={handleOpen}>
-          <EmblaCarousel slides={imageUrls} options={OPTIONS}  />
+      <Box maxW='140px' minW='140' p={4} bg="gray.200"  borderRadius={10} as="article">
+        <Box cursor="pointer" mb='3'>
+          <EmblaCarousel slides={imageUrls} options={OPTIONS} handleOpen={handleOpen} />
         </Box>
-        <Heading noOfLines={1} size="l" fontWeight="bold"> {product.name.toUpperCase()} </Heading> 
+        <Heading noOfLines={1} size="l" fontWeight="bold"> {capitalize(product.name)} </Heading> 
         <Badge my='1' borderRadius='full' px='2' colorScheme='teal'> {product.stock} </Badge>
-        <Text noOfLines={1}> {product.description} </Text>
+        <Text fontSize='md' noOfLines={1}> {capitalize(product.description)} </Text>
         <Text fontWeight="bold"> {product.price}{" "} руб. </Text>
         <Text fontSize='xs'> {formatDate(product.createdAt)} </Text>
       </Box>  

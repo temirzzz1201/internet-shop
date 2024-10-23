@@ -18,9 +18,7 @@ export default function AppContainer({title, children, myClass}: IContainerProps
           {title}
         </Text>
       </Box>
-      {/* <Box as='section' className='flex justify-center' px='5' maxW='1920' w='100%'> */}
       <Box as='section' className={['flex', myClass].join(" ")} px='5' maxW='1920' w='100%'>
-
         {children}
       </Box>
     </Box>

@@ -20,7 +20,7 @@ const Home = async ({ searchParams }: IHomeProps) => {
 
   return (
     <AppContainer title={`Все продукты ${products.length}`} myClass='justify-start'>
-      <Box as='aside' mr='120px'>
+      <Box as='aside' mr='80px'>
         <CategoryMenu categories={categories} />
       </Box>
       <Box as='main' mb='20'>

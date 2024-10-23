@@ -38,12 +38,10 @@ export interface IIProducts {
 }
 
 export interface ICategory {
-  // id: string;
-  // name: string | null;
-  id: number;
+  id: string;
   name: string;
-  createdAt: string; // Или Date
-  updatedAt: string; // Или Date
+  createdAt: string; 
+  updatedAt: string; 
 }
 
 export interface ICategoryMenuProps {

@@ -10,13 +10,18 @@ import { Image, Box } from '@chakra-ui/react'
 type PropType = {
   slides: string[]
   options?: EmblaOptionsType
+  handleOpen?: () => void
+  autoPlayFlag?: boolean
+  imageClass?: string
 }
 
-const EmblaCarousel: React.FC<PropType> = ({ slides, options}) => {
+const EmblaCarousel: React.FC<PropType> = ({ slides, options, handleOpen, autoPlayFlag, imageClass}) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()])
+  const autoplay = emblaApi?.plugins()?.autoplay
+
+  if (!autoPlayFlag) autoplay?.stop()
 
   const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
-    const autoplay = emblaApi?.plugins()?.autoplay
     if (!autoplay) return
 
     const resetOrStop =
@@ -38,21 +43,20 @@ const EmblaCarousel: React.FC<PropType> = ({ slides, options}) => {
         <div className="embla__container">
           {slides.map((url) => (
             <div className="embla__slide" key={url}>
-              <Box maxW='250px' p={5} borderRadius={20} as="article" key={url}>
                 <Image
-                  h="250px" 
+                onClick={handleOpen}
+                  h={imageClass ? imageClass : '140'} 
                   objectFit='fill' 
                   w="100%" 
                   src={url}
                   alt={url}
                 />
-              </Box>        
             </div>
           ))}
         </div>
       </div>
 
-      {/* <div className="embla__controls">
+      <div className="embla__controls">
         <div className="embla__dots">
           {scrollSnaps.map((_, index) => (
             <DotButton
@@ -64,7 +68,7 @@ const EmblaCarousel: React.FC<PropType> = ({ slides, options}) => {
             />
           ))}
         </div>
-      </div> */}
+      </div> 
     </section>
   )
 }
