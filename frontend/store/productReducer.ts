@@ -23,7 +23,6 @@ const productSlice = createSlice({
         (state, action: PayloadAction<IIProduct>) => {
           state.isLoading = false;
           state.products.push(action.payload);
-          console.log(state.products);
         }
       )
       .addCase(placeProduct.rejected, (state, action) => {
@@ -39,7 +38,6 @@ const productSlice = createSlice({
         (state, action: PayloadAction<IIProduct[]>) => {
           state.isLoading = false;
           state.products = action.payload;
-          console.log(state.products);
         }
       )
       .addCase(getProducts.rejected, (state, action) => {

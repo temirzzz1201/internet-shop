@@ -38,26 +38,28 @@ const EmblaCarousel: React.FC<PropType> = ({ slides, options, handleOpen, autoPl
   )
 
   return (
-    <section className="embla">
-      <div className="embla__viewport" ref={emblaRef}>
-        <div className="embla__container">
+    <Box className="embla">
+      <Box className="embla__viewport" ref={emblaRef}>
+        <Box className="embla__container">
           {slides.map((url) => (
-            <div className="embla__slide" key={url}>
+            <Box className="embla__slide" key={url}>
                 <Image
-                onClick={handleOpen}
-                  h={imageClass ? imageClass : '140'} 
+                  onClick={handleOpen}
+                  h={imageClass ? imageClass : '160'} 
                   objectFit='fill' 
-                  w="100%" 
+                  // w="100%" 
+                  w="auto" 
                   src={url}
                   alt={url}
+                  cursor='pointer'
                 />
-            </div>
+            </Box>
           ))}
-        </div>
-      </div>
+        </Box>
+      </Box>
 
-      <div className="embla__controls">
-        <div className="embla__dots">
+      <Box className="embla__controls">
+        <Box className="embla__dots">
           {scrollSnaps.map((_, index) => (
             <DotButton
               key={index}
@@ -67,9 +69,9 @@ const EmblaCarousel: React.FC<PropType> = ({ slides, options, handleOpen, autoPl
               )}
             />
           ))}
-        </div>
-      </div> 
-    </section>
+        </Box>
+      </Box> 
+    </Box>
   )
 }
 

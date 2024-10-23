@@ -4,7 +4,6 @@ import Image from '../models/ProductImage';
 import Category from '../models/CategoryModel';
 import upload from '../middleware/upload';
 
-
 const router = Router();
 
 router.get('/all-products', async (req: Request, res: Response) => {
@@ -22,8 +21,6 @@ router.get('/all-products', async (req: Request, res: Response) => {
       ],
     });
 
-    console.log('products ', products);
-
     if (products.length > 0) {
       res.json(products);
     } else {
@@ -36,7 +33,7 @@ router.get('/all-products', async (req: Request, res: Response) => {
 });
 
 
-router.post('/create-product', upload.array('images', 10), async (req: Request, res: Response) => {
+router.post('/create-product', upload.array('images', 5), async (req: Request, res: Response) => {
   try {
     const { name, description, price, stock, categoryId } = req.body;
 
@@ -110,12 +107,10 @@ router.delete('/delete-product/:id', async (req: Request, res: Response) => {
   }
 });
 
-
 router.put('/update-product/:id', async (req: Request, res: Response) => {
   try {
     const productId = req.params.id;
     const updates = req.body;
-    console.log('updates ', updates);
 
     const product = await Product.findByPk(productId);
 

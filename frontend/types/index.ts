@@ -4,29 +4,19 @@ interface Image {
   id: number;
   imageUrl: string;
   productId: number;
-  createdAt: string; // Или Date, если вы будете работать с объектами Date
-  updatedAt: string; // Или Date, если вы будете работать с объектами Date
+  createdAt: string; 
+  updatedAt: string;
 }
 
 export interface IIProduct {
-  // id: string;
-  // categoryId: number;
-  // name: string;
-  // description: string;
-  // price: number | null;
-  // stock: number | null;
-  // imageUrl: string;
-  // createdAt: string;
-  // updatedAt: string;
-  // images: [];
   id: number;
   name: string;
   description: string;
   price: number;
   stock: number;
   categoryId: number;
-  createdAt: string; // Или Date
-  updatedAt: string; // Или Date
+  createdAt: string; 
+  updatedAt: string; 
   category: ICategory;
   images: Image[];
 }
@@ -128,4 +118,17 @@ export interface IModalProps {
 
 export interface IProductCardProps {
   product: IIProduct;
+}
+
+export interface IOrder {
+  quantity: number;
+  total_price: number;
+  userId: number;
+  productId: number;
+}
+
+export interface IOrdersState {
+  orders: IOrder[];
+  loading: boolean;
+  error: string | null;
 }

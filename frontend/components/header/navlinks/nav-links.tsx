@@ -20,21 +20,14 @@ export default function NavLinks() {
   const logoutUser = () => {
     dispatch(logout());
     setUserName(capitalize(''))
-
   };
 
   const name = Cookies.get('userName') ?? ''
 
-
-
-
   useEffect(() => {
     setUserName(`Приветствую ${ capitalize(name) }`)
-    console.log(capitalize(name));
   }, [name])
   
-
-
   const links = [
     { id: 1, title: 'Главная', path: '/' },
     { id: 2, title: 'О нас', path: '/about' },
