@@ -1,14 +1,7 @@
-import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser, registerUser, logoutUser, fetchAllUsers, createProduct, createCategory, fetchCategories, fetchAllProducts, deleteChoosenProduct, updateChoosenProduct } from '@/utils/api';
-import { IUser, IIProduct, ICategory } from '@/types';
-
-const getErrorMessage = (error: unknown): string => {
-  if (axios.isAxiosError(error)) {
-    return error.response?.data?.message || 'Произошла ошибка';
-  }
-  return 'Произошла ошибка';
-};
+import { loginUser, registerUser, logoutUser, fetchAllUsers, createProduct, createCategory, fetchCategories, fetchAllProducts, deleteChoosenProduct, updateChoosenProduct, createOrder } from '@/utils/api';
+import { IUser, IIProduct, ICategory, IOrder } from '@/types';
+import { getErrorMessage } from '@/utils/errorMessage';
 
 export const placeProduct = createAsyncThunk<
   IIProduct,
@@ -18,7 +11,6 @@ export const placeProduct = createAsyncThunk<
     description: string;
     price: number;
     stock: number;
-    // images: File | null;
     images: File[] | null;
   },
   { rejectValue: string }
@@ -30,7 +22,6 @@ export const placeProduct = createAsyncThunk<
     formData.append('description', product.description);
     formData.append('price', product.price.toString());
     formData.append('stock', product.stock.toString());
-    console.log('product ', product);
 
     if (product.images) {
       product.images.forEach((image) => {
@@ -76,9 +67,6 @@ export const placeCategory = createAsyncThunk<
 >('categories/placeCategory', async (category, { rejectWithValue }) => {
   try {
     const response = await createCategory({ categoryName: category.categoryName });
-
-    console.log('response ', response);
-    
 
     if (response.status === 201 || response.status === 200) {
       return response.data as ICategory;
@@ -154,9 +142,6 @@ export const getUsers = createAsyncThunk(
       const response = await fetchAllUsers()
       const usersData = response.data || []
 
-      console.log('usersData ', usersData);
-      
-
       return usersData
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
@@ -200,3 +185,23 @@ export const updateProduct = createAsyncThunk<
   }
 });
 
+export const placeOrder = createAsyncThunk<
+  IOrder,
+  {
+    quantity: number; 
+    total_price: number; 
+    userId: number; 
+    productId: number;
+  },
+  { rejectValue: string }
+>('orders/createOrder', async (orderData, { rejectWithValue }) => {
+  try {
+    const response = await createOrder(orderData); 
+
+    console.log('placeOrder response ', response);
+    
+    return response.data; 
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error)); 
+  }
+});

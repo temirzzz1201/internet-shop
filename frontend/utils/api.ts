@@ -2,7 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { AxiosResponse } from 'axios';
 import { BASE_URL } from './baseUrl';
-import { IUser, IUserResponse, IIProduct, ICategory } from '../types';
+import { IUser, IUserResponse, IIProduct, ICategory, IOrder } from '../types';
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -15,9 +15,6 @@ const api = axios.create({
 const refreshToken = async (): Promise<string | null> => {
   try {
     const storedRefreshToken = localStorage.getItem('refreshToken');
-
-    console.log('storedRefreshToken ', storedRefreshToken);
-    
 
     if (!storedRefreshToken) {
       throw new Error('Refresh token not found');
@@ -74,6 +71,7 @@ export const loginUser = async (userData: IUser): Promise<IUserResponse> => {
   Cookies.set('accessToken', response.data.accessToken, { secure: true });
   Cookies.set('userRole', response.data.user.role ?? '', { secure: true })
   Cookies.set('userName', response.data.user.username ?? '', { secure: true })
+  Cookies.set('user', JSON.stringify(response.data.user), { secure: true });
 
   return response.data;
 };
@@ -87,8 +85,6 @@ export const logoutUser = async (): Promise<void> => {
   Cookies.remove('userRole')
   Cookies.remove('userName')
   localStorage.removeItem('refreshToken'); 
-  console.log(11);
-  
 };
 
 export const fetchCategories = async (): Promise<AxiosResponse<ICategory[]>> => {
@@ -125,6 +121,25 @@ export const deleteChoosenProduct = async (productId: number, deleteFlag: string
 
 export const updateChoosenProduct = async (productId: number, updates: Partial<IIProduct>, updateFlag: string): Promise<AxiosResponse<IIProduct>> => {
   return await axios.put(`${BASE_URL}/${updateFlag}/${productId}`, updates);
+};
+
+
+
+
+// Функция для создания заказа
+export const createOrder = async (orderData: { 
+  quantity: number; 
+  total_price: number; 
+  userId: number; 
+  productId: number 
+}): Promise<AxiosResponse<IOrder>> => {
+  return await api.post<IOrder>(
+    'orders/create-order', 
+    orderData, 
+    {
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
 };
 
 export default api;

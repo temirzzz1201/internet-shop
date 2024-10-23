@@ -3,10 +3,8 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Button,
 } from '@chakra-ui/react';
 import { IModalProps } from '@/types';
 
@@ -26,11 +24,6 @@ function AppModal({ children, isOpen, onClose, title }: AppModalProps) {
         <ModalBody>
           {children}
         </ModalBody>
-
-        <ModalFooter>
-          <Button variant="ghost"  mr={3}>Добавить в корзину</Button>
-          <Button colorScheme="blue" >Удалить</Button>
-        </ModalFooter>
       </ModalContent>
     </Modal>
   );

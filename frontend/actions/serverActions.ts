@@ -7,9 +7,6 @@ export const fetchAllProducts = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/products/all-products`);
 
-    console.log('response ', response);
-    
-
     if (response.data && Array.isArray(response.data)) {
       return response.data as IIProduct[];
     }

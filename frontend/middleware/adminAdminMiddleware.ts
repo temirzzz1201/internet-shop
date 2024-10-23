@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export function adminAdminMiddleware(request: NextRequest) {
-  console.log('Cookies in request:', request.cookies);
   const role = request.cookies.get('userRole')?.value;
 
   if (!role) {

@@ -20,6 +20,22 @@ Order.init({
     type: DataTypes.FLOAT,
     allowNull: false,
   },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'users',
+      key: 'id',
+    },
+  },
+  productId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'products', 
+      key: 'id',
+    },
+  },
 }, {
   sequelize,
   modelName: 'Order',
@@ -27,10 +43,12 @@ Order.init({
   timestamps: true,
 });
 
-User.hasMany(Order);
-Order.belongsTo(User);
 
-Product.hasMany(Order);
-Order.belongsTo(Product);
+User.hasMany(Order, { foreignKey: 'userId' });
+Order.belongsTo(User, { foreignKey: 'userId' });
+
+Product.hasMany(Order, { foreignKey: 'productId' });
+Order.belongsTo(Product, { foreignKey: 'productId' });
+
 
 export default Order;
