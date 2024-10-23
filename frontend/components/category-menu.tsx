@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { ICategoryMenuProps } from '@/types';
 import { UnorderedList, ListItem, Box } from '@chakra-ui/react';
+import { capitalize } from '@/utils/capitalize';
 
 const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
   const router = useRouter();
@@ -17,7 +18,7 @@ const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
           <ListItem onClick={() => handleCategoryClick(null)} style={{ cursor: 'pointer', margin: '5px 0' }}>Все товары</ListItem>
           {categories.map((cat) => (
             <ListItem key={cat.id} onClick={() => handleCategoryClick(cat.id)} style={{ cursor: 'pointer', margin: '5px 0' }}>
-              {cat.name}
+              {capitalize(cat.name)}
             </ListItem>
           ))}
         </UnorderedList>
