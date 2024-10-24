@@ -56,13 +56,12 @@ export default function ProductCard({ product }: IProductCardProps) {
   const [userId, setUserId] = useState<string | null>(null);
   const userCookie = Cookies.get('user');
 
-
   useEffect(() => {
     if (userCookie) {
       const userFromCookie = JSON.parse(userCookie);
       setUserId(userFromCookie.id);
     }
-  }, [userId]);
+  }, [userId, userCookie]);
 
   const handleOrder = () => {
     if (!userCookie) {

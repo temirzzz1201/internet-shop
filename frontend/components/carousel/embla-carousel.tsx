@@ -55,7 +55,6 @@ const EmblaCarousel: React.FC<PropType> = ({
                 h={imageHeightClass ? imageHeightClass : '300'}
                 // objectFit="fill"
                 objectFit="cover"
-
                 w="100%"
                 // w="auto"
                 src={url}

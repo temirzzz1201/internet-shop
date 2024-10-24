@@ -15,7 +15,10 @@ export const fetchAllProducts = async ({ page = 1, limit = 30 } = {}) => {
     });
 
     // Проверяем, есть ли данные и являются ли они массивом
-    if (Array.isArray(response.data.products) && typeof response.data.totalPages === 'number') {
+    if (
+      Array.isArray(response.data.products) &&
+      typeof response.data.totalPages === 'number'
+    ) {
       return {
         products: response.data.products as IIProduct[],
         totalPages: response.data.totalPages,

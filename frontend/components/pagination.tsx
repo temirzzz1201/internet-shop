@@ -1,4 +1,4 @@
-'use client'; 
+'use client';
 
 import { Box, Button } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
@@ -10,11 +10,11 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage }) => {
-  const router = useRouter(); 
+  const router = useRouter();
   const [page, setPage] = useState(currentPage);
 
   useEffect(() => {
-    setPage(currentPage); 
+    setPage(currentPage);
   }, [currentPage]);
 
   const handlePageChange = (newPage: number) => {
@@ -25,9 +25,9 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage }) => {
 
   const renderPageButtons = () => {
     const buttons = [];
-    const maxButtonsToShow = 5; 
-    let startPage = Math.max(1, page - 2); 
-    let endPage = Math.min(totalPages, startPage + maxButtonsToShow - 1); 
+    const maxButtonsToShow = 5;
+    let startPage = Math.max(1, page - 2);
+    const endPage = Math.min(totalPages, startPage + maxButtonsToShow - 1);
 
     if (endPage - startPage < maxButtonsToShow - 1) {
       startPage = Math.max(1, endPage - maxButtonsToShow + 1);
