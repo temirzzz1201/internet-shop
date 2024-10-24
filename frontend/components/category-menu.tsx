@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { ICategoryMenuProps } from '@/types';
-import { UnorderedList, ListItem, Box } from '@chakra-ui/react';
+import { UnorderedList, ListItem } from '@chakra-ui/react';
 import { capitalize } from '@/utils/capitalize';
 
 const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
@@ -12,16 +12,16 @@ const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
   };
 
   return (
-    <UnorderedList 
+    <UnorderedList
       // maxW="md"
-      w='100%'
+      w="100%"
       borderWidth="1px"
       borderRadius="lg"
       overflow="hidden"
       as="aside"
       px={4}
-      listStyleType='none'
-      ml='0'
+      listStyleType="none"
+      ml="0"
     >
       <ListItem
         onClick={() => handleCategoryClick(null)}

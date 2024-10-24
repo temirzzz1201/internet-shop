@@ -16,7 +16,7 @@ interface AppModalProps extends IModalProps {
 
 function AppModal({ children, isOpen, onClose, title }: AppModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size='xs'>
+    <Modal isOpen={isOpen} onClose={onClose} size="xs">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{title}</ModalHeader>
