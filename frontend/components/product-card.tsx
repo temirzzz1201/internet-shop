@@ -61,7 +61,7 @@ export default function ProductCard({ product }: IProductCardProps) {
       const userFromCookie = JSON.parse(userCookie);
       setUserId(userFromCookie.id);
     }
-  }, [userId]);
+  }, [userId, userCookie]);
 
   const handleOrder = () => {
     if (!userCookie) {
