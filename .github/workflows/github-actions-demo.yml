@@ -63,21 +63,21 @@ jobs:
           cd frontend
           npm run lint -- --fix  # Запускаем линтер с --fix
 
-          - name: Commit changes
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            cd frontend
-            git config user.name "temirzzz1201"
-            git config user.email "temir1201@mail.ru"
-            git add .
-            git commit -m "chore: format code" || echo "No changes to commit"
-            
-            # Получаем изменения из удаленного репозитория
-            git pull --rebase origin main
-            
-            # Затем выполняем push
-            git push https://x-access-token:${GITHUB_TOKEN}@github.com/temirzzz1201/express-next-app.git HEAD:main
+      - name: Commit changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd frontend
+          git config user.name "temirzzz1201"
+          git config user.email "temir1201@mail.ru"
+          git add .
+          git commit -m "chore: format code" || echo "No changes to commit"
+          
+          # Получаем изменения из удаленного репозитория
+          git pull --rebase origin main
+          
+          # Затем выполняем push
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/temirzzz1201/express-next-app.git HEAD:main
 
   build:
     runs-on: ubuntu-latest
