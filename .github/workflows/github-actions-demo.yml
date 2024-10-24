@@ -57,14 +57,16 @@ jobs:
           cd frontend
           npm run lint -- --fix  # Автоматически исправляем ошибки линтера
 
-      - name: Commit changes
-        run: |
-          cd frontend
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add .
-          git commit -m "chore: format code" || echo "No changes to commit"
-          git push origin HEAD:main  # Укажите ветку, в которую хотите отправить изменения
+          - name: Commit changes
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            cd frontend
+            git config user.name "temirzzz1201"
+            git config user.email "temir1201@mail.ru"
+            git add .
+            git commit -m "chore: format code" || echo "No changes to commit"
+            git push https://x-access-token:${GITHUB_TOKEN}@github.com/temirzzz1201/express-next-app.git HEAD:main
 
 
   build:
