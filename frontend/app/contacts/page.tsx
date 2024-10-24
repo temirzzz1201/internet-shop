@@ -5,7 +5,6 @@ export default function Profile() {
     <Box as="section" px='3'>
       <Container>
         <Box className="mb-6" color="blue.600" fontSize="4xl" as="h1">Контакты</Box>
-
         <Text className="mb-8" fontSize="14">
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores similique eligendi officiis illum ullam veritatis error natus perspiciatis quod iste. Quas natus placeat quos similique accusantium ad omnis recusandae odit?
         </Text>
