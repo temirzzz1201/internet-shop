@@ -16,7 +16,7 @@ import { useAppDispatch } from '@/hooks/useAppDispatch';
 
 import { deleteProduct, updateProduct } from '@/actions/clientActions';
 
-export const AdminTable: React.FC<IAdminTableProps> = memo(({ caption, columns, data, isLoading, deleteFlag, updateFlag }) => {
+const AdminTableComponent: React.FC<IAdminTableProps> = memo(({ caption, columns, data, isLoading, deleteFlag, updateFlag }) => {
   const dispatch = useAppDispatch()
 
   const handleInputChange = (productId: number, key: string, value: string) => {
@@ -82,3 +82,7 @@ export const AdminTable: React.FC<IAdminTableProps> = memo(({ caption, columns, 
   );
 });
 
+const AdminTable = memo(AdminTableComponent);
+AdminTable.displayName = 'AdminTable';
+
+export default AdminTable;

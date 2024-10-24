@@ -16,7 +16,7 @@ import {
   Select,
   Divider
 } from '@chakra-ui/react';
-import { AdminTable } from '@/components/admin-table';
+import AdminTable from '@/components/admin-table';
 import AppContainer from '@/components/app-container';
 import { getGreetingByTime } from '@/utils/dateHelper';
 import { capitalize } from '@/utils/capitalize';
@@ -79,15 +79,15 @@ export default function Admin() {
 
   useEffect(() => {
     dispatch(getUsers());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(getCategory());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(getProducts());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     const name = Cookies.get('user');

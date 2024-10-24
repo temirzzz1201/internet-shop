@@ -4,6 +4,7 @@
     "next/typescript",
     "plugin:prettier/recommended"
   ],
+  "plugins": ["unused-imports"],
   "rules": {
     "react/no-unescaped-entities": "off",
     "prettier/prettier": [
@@ -15,6 +16,11 @@
         "tabWidth": 2,
         "semi": true
       }
+    ],
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      { "vars": "all", "varsIgnorePattern": "^_" }
     ]
   }
 }
