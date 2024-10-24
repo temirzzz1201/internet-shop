@@ -21,9 +21,7 @@ function AppModal({ children, isOpen, onClose, title }: AppModalProps) {
       <ModalContent>
         <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          {children}
-        </ModalBody>
+        <ModalBody>{children}</ModalBody>
       </ModalContent>
     </Modal>
   );

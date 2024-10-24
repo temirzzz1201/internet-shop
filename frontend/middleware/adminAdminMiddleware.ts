@@ -22,7 +22,6 @@ export function adminAdminMiddleware(request: NextRequest) {
 
     // Если роль не admin, перенаправляем на главную страницу
     return NextResponse.redirect(new URL('/', request.url));
-    
   } catch (error) {
     console.error('Ошибка при парсинге куки пользователя:', error);
     // В случае ошибки парсинга куки перенаправляем на страницу логина

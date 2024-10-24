@@ -18,13 +18,10 @@ const usersSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(
-        getUsers.fulfilled,
-        (state, action: PayloadAction<IUser[]>) => {
-          state.isLoading = false;
-          state.users = action.payload;
-        }
-      )
+      .addCase(getUsers.fulfilled, (state, action: PayloadAction<IUser[]>) => {
+        state.isLoading = false;
+        state.users = action.payload;
+      })
       .addCase(getUsers.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload ?? 'Что-то пошло не так';
@@ -33,4 +30,3 @@ const usersSlice = createSlice({
 });
 
 export default usersSlice.reducer;
-

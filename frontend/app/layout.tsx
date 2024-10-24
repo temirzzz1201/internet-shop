@@ -9,12 +9,12 @@ export const metadata: Metadata = {
   description: 'Created by tmzzz',
   openGraph: {
     type: 'website',
-    url: 'https://your-site.com',  // Замените на ваш реальный URL
+    url: 'https://your-site.com', // Замените на ваш реальный URL
     title: 'Electronic Elephant',
     description: 'Created by tmzzz',
     images: [
       {
-        url: 'https://your-site.com/images/preview.jpg',  // Путь к вашему изображению
+        url: 'https://your-site.com/images/preview.jpg', // Путь к вашему изображению
         width: 1200,
         height: 630,
         alt: 'Electronic Elephant Preview',
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Electronic Elephant',
     description: 'Created by tmzzz',
-    images: ['https://your-site.com/images/preview.jpg'],  // Путь к вашему изображению
+    images: ['https://your-site.com/images/preview.jpg'], // Путь к вашему изображению
   },
 };
 
@@ -36,15 +36,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full">
-    <body className="flex flex-col min-h-screen">
-      <Providers>
-        <Header />
-          <main className="flex-grow">
-            {children}
-          </main>
-        <Footer />
-      </Providers>
-    </body>
-  </html>
+      <body className="flex flex-col min-h-screen">
+        <Providers>
+          <Header />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </Providers>
+      </body>
+    </html>
   );
 }

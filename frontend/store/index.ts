@@ -9,7 +9,7 @@ const store = configureStore({
     products: productSlice,
     auth: authSlice,
     users: usersSlice,
-    category: categorySlice
+    category: categorySlice,
   },
 });
 

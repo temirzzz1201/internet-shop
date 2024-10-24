@@ -1,10 +1,10 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 interface Image {
   id: number;
   imageUrl: string;
   productId: number;
-  createdAt: string; 
+  createdAt: string;
   updatedAt: string;
 }
 
@@ -15,8 +15,8 @@ export interface IIProduct {
   price: number;
   stock: number;
   categoryId: number;
-  createdAt: string; 
-  updatedAt: string; 
+  createdAt: string;
+  updatedAt: string;
   category: ICategory;
   images: Image[];
 }
@@ -30,8 +30,8 @@ export interface IIProducts {
 export interface ICategory {
   id: string;
   name: string;
-  createdAt: string; 
-  updatedAt: string; 
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ICategoryMenuProps {

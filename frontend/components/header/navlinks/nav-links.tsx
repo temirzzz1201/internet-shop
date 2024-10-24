@@ -14,12 +14,12 @@ import { useAppSelector } from '@/hooks/useAppSelector';
 export default function NavLinks() {
   const pathname = usePathname();
   const dispatch = useAppDispatch();
-  const {user} = useAppSelector(state => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   const [userName, setUserName] = useState<string | null>(null);
 
   const logoutUser = () => {
     dispatch(logout());
-    setUserName(null); 
+    setUserName(null);
   };
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function NavLinks() {
         setUserName(null);
       }
     }
-  }, [user]); 
+  }, [user]);
 
   const links = [
     { id: 1, title: 'Главная', path: '/' },
@@ -42,7 +42,11 @@ export default function NavLinks() {
     { id: 3, title: 'Контакты', path: '/contacts' },
     {
       id: 4,
-      title: userName ? userName : user?.username ? `Приветствую ${capitalize(user.username)}` : 'Профиль',
+      title: userName
+        ? userName
+        : user?.username
+          ? `Приветствую ${capitalize(user.username)}`
+          : 'Профиль',
       path: '/profile',
       blueImgSrc: profileSrcBlue,
       whiteImgSrc: profileSrcWhite,

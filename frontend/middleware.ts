@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { adminAdminMiddleware } from './middleware/adminAdminMiddleware'
+import { adminAdminMiddleware } from './middleware/adminAdminMiddleware';
 import { profileMiddleware } from './middleware/profileMiddleware';
 
 export function middleware(req: NextRequest) {
