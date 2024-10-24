@@ -17,12 +17,17 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'  # Установите Node.js версии 20
 
       - name: Install dependencies
         run: |
           cd frontend
           npm install
+
+      - name: Display npm logs
+        run: |
+          cd frontend
+          npm install || (cat npm-debug.log && exit 1)
 
       - name: Run ESLint
         run: |
@@ -38,12 +43,17 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'  # Установите Node.js версии 20
 
       - name: Install dependencies
         run: |
           cd frontend
           npm install
+
+      - name: Display npm logs
+        run: |
+          cd frontend
+          npm install || (cat npm-debug.log && exit 1)
 
       - name: Run Prettier
         run: |
@@ -59,12 +69,17 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'  # Установите Node.js версии 20
 
       - name: Install dependencies
         run: |
           cd frontend
           npm install
+
+      - name: Display npm logs
+        run: |
+          cd frontend
+          npm install || (cat npm-debug.log && exit 1)
 
       - name: Build project
         run: |
