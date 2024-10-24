@@ -11,7 +11,7 @@ export default function Header() {
       as="header"
       className="flex justify-center items-center"
       w="100%"
-      h="16"
+      minH="16"
       bg="gray.500"
       mb="5"
     >

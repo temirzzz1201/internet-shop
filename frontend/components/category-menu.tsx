@@ -12,35 +12,33 @@ const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
   };
 
   return (
-    <Box
-      maxW="md"
+    <UnorderedList 
+      // maxW="md"
+      w='100%'
       borderWidth="1px"
       borderRadius="lg"
       overflow="hidden"
       as="aside"
       px={4}
-      maxH={320}
+      listStyleType='none'
+      ml='0'
     >
-      <aside>
-        <UnorderedList>
-          <ListItem
-            onClick={() => handleCategoryClick(null)}
-            style={{ cursor: 'pointer', margin: '5px 0' }}
-          >
-            Все товары
-          </ListItem>
-          {categories.map((cat) => (
-            <ListItem
-              key={cat.id}
-              onClick={() => handleCategoryClick(cat.id)}
-              style={{ cursor: 'pointer', margin: '5px 0' }}
-            >
-              {capitalize(cat.name)}
-            </ListItem>
-          ))}
-        </UnorderedList>
-      </aside>
-    </Box>
+      <ListItem
+        onClick={() => handleCategoryClick(null)}
+        style={{ cursor: 'pointer', margin: '5px 0' }}
+      >
+        Все товары
+      </ListItem>
+      {categories.map((cat) => (
+        <ListItem
+          key={cat.id}
+          onClick={() => handleCategoryClick(cat.id)}
+          style={{ cursor: 'pointer', margin: '5px 0' }}
+        >
+          {capitalize(cat.name)}
+        </ListItem>
+      ))}
+    </UnorderedList>
   );
 };
 
