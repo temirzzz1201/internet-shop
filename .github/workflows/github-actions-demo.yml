@@ -50,7 +50,7 @@ jobs:
       - name: Run Prettier
         run: |
           cd frontend
-          npm run format -- --write  # Автоматически исправляем форматирование
+          npm run format  # Автоматически исправляем форматирование
 
       - name: Run ESLint (fix)
         run: |
