@@ -64,7 +64,8 @@ jobs:
           git config user.email "github-actions@github.com"
           git add .
           git commit -m "chore: format code" || echo "No changes to commit"
-          git push
+          git push origin HEAD:main  # Укажите ветку, в которую хотите отправить изменения
+
 
   build:
     runs-on: ubuntu-latest
