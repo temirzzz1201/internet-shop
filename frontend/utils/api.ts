@@ -69,10 +69,7 @@ export const loginUser = async (userData: IUser): Promise<IUserResponse> => {
   const response = await api.post<IUserResponse>('users/login', userData);
   localStorage.setItem('refreshToken', response.data.refreshToken); 
   Cookies.set('accessToken', response.data.accessToken, { secure: true });
-  Cookies.set('userRole', response.data.user.role ?? '', { secure: true })
-  Cookies.set('userName', response.data.user.username ?? '', { secure: true })
   Cookies.set('user', JSON.stringify(response.data.user), { secure: true });
-
   return response.data;
 };
 
@@ -82,8 +79,7 @@ export const fetchAllUsers = async (): Promise<AxiosResponse<IUser[]>> => {
 
 export const logoutUser = async (): Promise<void> => {
   Cookies.remove('accessToken'); 
-  Cookies.remove('userRole')
-  Cookies.remove('userName')
+  Cookies.remove('user')
   localStorage.removeItem('refreshToken'); 
 };
 

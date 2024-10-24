@@ -1,4 +1,4 @@
-function formatDate(dateString: string): string {
+export function formatDate(dateString: string): string {
   const inputDate = new Date(dateString);
   const currentDate = new Date();
   const timeOptions: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
@@ -37,5 +37,18 @@ function getDayLabel(days: number): string {
   }
 }
 
+export function getGreetingByTime(): string {
+  const currentDate = new Date(); // Получаем текущую дату и время
+  const hour = currentDate.getHours(); // Получаем текущий час
 
-export default formatDate
+  if (hour >= 5 && hour < 12) {
+    return "Доброе утро";
+  } else if (hour >= 12 && hour < 18) {
+    return "Добрый день";
+  } else if (hour >= 18 && hour < 22) {
+    return "Добрый вечер";
+  } else {
+    return "Доброй ночи";
+  }
+}
+
