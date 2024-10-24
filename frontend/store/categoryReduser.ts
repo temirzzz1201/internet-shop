@@ -18,10 +18,13 @@ const categorySlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getCategory.fulfilled, (state, action: PayloadAction<ICategory[]>) => {
-        state.isLoading = false;
-        state.category = action.payload;
-      })
+      .addCase(
+        getCategory.fulfilled,
+        (state, action: PayloadAction<ICategory[]>) => {
+          state.isLoading = false;
+          state.category = action.payload;
+        }
+      )
       .addCase(getCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload ?? 'Не удалось загрузить категории';
@@ -45,4 +48,3 @@ const categorySlice = createSlice({
 });
 
 export default categorySlice.reducer;
-

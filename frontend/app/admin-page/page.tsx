@@ -1,5 +1,11 @@
 'use client';
-import { getUsers, placeProduct, placeCategory, getCategory, getProducts } from '@/actions/clientActions';
+import {
+  getUsers,
+  placeProduct,
+  placeCategory,
+  getCategory,
+  getProducts,
+} from '@/actions/clientActions';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { useEffect, useMemo, useState } from 'react';
@@ -14,7 +20,7 @@ import {
   TabPanels,
   TabPanel,
   Select,
-  Divider
+  Divider,
 } from '@chakra-ui/react';
 import AdminTable from '@/components/admin-table';
 import AppContainer from '@/components/app-container';
@@ -34,7 +40,7 @@ export default function Admin() {
   const [categoryId, setCategoryId] = useState(1);
   const [categoryName, setCategoryName] = useState('');
   const [files, setFiles] = useState<File[]>([]);
-  const [userName, setUserName] = useState('')
+  const [userName, setUserName] = useState('');
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -45,19 +51,18 @@ export default function Admin() {
 
   const handleSubmitProduct = (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     const productData = {
       categoryId,
       name,
       description,
       price,
       stock,
-      images: files, 
+      images: files,
     };
 
-    dispatch(placeProduct(productData)); 
+    dispatch(placeProduct(productData));
   };
-
 
   const handleSubmitCategory = (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,7 +77,7 @@ export default function Admin() {
   const memoizedProducts = useMemo(() => {
     return products;
   }, [products]);
-  
+
   const memoizedCategory = useMemo(() => {
     return category;
   }, [category]);
@@ -93,7 +98,7 @@ export default function Admin() {
     const name = Cookies.get('user');
     if (name) {
       const userNameFromCookie = JSON.parse(name);
-      setUserName(capitalize(userNameFromCookie.username))
+      setUserName(capitalize(userNameFromCookie.username));
     }
   }, []);
 
@@ -103,29 +108,51 @@ export default function Admin() {
     { label: 'Price', key: 'price' },
     { label: 'Stock', key: 'stock' },
     { label: 'Image', key: 'imageUrl' },
-    { label: 'Created At', key: 'createdAt', format: (value: string) => (value ? new Date(value).toLocaleString() : 'N/A') },
-    { label: 'Updated At', key: 'updatedAt', format: (value: string) => (value ? new Date(value).toLocaleString() : 'N/A') },
+    {
+      label: 'Created At',
+      key: 'createdAt',
+      format: (value: string) =>
+        value ? new Date(value).toLocaleString() : 'N/A',
+    },
+    {
+      label: 'Updated At',
+      key: 'updatedAt',
+      format: (value: string) =>
+        value ? new Date(value).toLocaleString() : 'N/A',
+    },
   ];
 
   const userColumns = [
     { label: 'Username', key: 'username' },
     { label: 'Email', key: 'email' },
     { label: 'Password', key: 'password' },
-    { label: 'Created At', key: 'createdAt', format: (value: string) => (value ? new Date(value).toLocaleString() : 'N/A') },
-    { label: 'Updated At', key: 'updatedAt', format: (value: string) => (value ? new Date(value).toLocaleString() : 'N/A') },
+    {
+      label: 'Created At',
+      key: 'createdAt',
+      format: (value: string) =>
+        value ? new Date(value).toLocaleString() : 'N/A',
+    },
+    {
+      label: 'Updated At',
+      key: 'updatedAt',
+      format: (value: string) =>
+        value ? new Date(value).toLocaleString() : 'N/A',
+    },
     { label: 'Role', key: 'role' },
   ];
 
   return (
-    <AppContainer title={` ${getGreetingByTime()}, ${userName} `} myClass='justify-start'>
-
-        <Tabs isLazy>
-          <TabList>
-            <Tab>PRODUCTS</Tab>
-            <Tab>USERS</Tab>
-          </TabList>
-          <TabPanels className="mt-10">
-            <TabPanel>
+    <AppContainer
+      title={` ${getGreetingByTime()}, ${userName} `}
+      myClass="justify-start"
+    >
+      <Tabs isLazy>
+        <TabList>
+          <Tab>PRODUCTS</Tab>
+          <Tab>USERS</Tab>
+        </TabList>
+        <TabPanels className="mt-10">
+          <TabPanel>
             <FormControl className="max-w-[500px] mb-3">
               <FormLabel>Upload new category</FormLabel>
               <Input
@@ -136,16 +163,25 @@ export default function Admin() {
                 value={categoryName}
                 onChange={(e) => setCategoryName(e.target.value)}
               />
-              <Button mt={4} colorScheme="teal" type="submit" onClick={handleSubmitCategory}>
+              <Button
+                mt={4}
+                colorScheme="teal"
+                type="submit"
+                onClick={handleSubmitCategory}
+              >
                 Submit
               </Button>
             </FormControl>
 
-            <Divider my='10' />
+            <Divider my="10" />
 
             <FormControl className="max-w-[500px]">
               <FormLabel>Upload new product</FormLabel>
-              <Select mb='2' placeholder="Choose category" onChange={(e) => setCategoryId(Number(e.target.value))}>
+              <Select
+                mb="2"
+                placeholder="Choose category"
+                onChange={(e) => setCategoryId(Number(e.target.value))}
+              >
                 {memoizedCategory?.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.name}
@@ -185,23 +221,47 @@ export default function Admin() {
                 value={stock}
                 onChange={(e) => setStock(Number(e.target.value))}
               />
-              <Input className="mb-4" size="md" type="file" multiple onChange={handleFileChange} />
-              <Button mt={4} colorScheme="teal" type="submit" onClick={handleSubmitProduct}>
+              <Input
+                className="mb-4"
+                size="md"
+                type="file"
+                multiple
+                onChange={handleFileChange}
+              />
+              <Button
+                mt={4}
+                colorScheme="teal"
+                type="submit"
+                onClick={handleSubmitProduct}
+              >
                 Submit
               </Button>
             </FormControl>
 
-            <Divider my='10' />
+            <Divider my="10" />
 
-              <AdminTable caption="List of products" columns={productColumns} data={memoizedProducts} isLoading={isLoading} deleteFlag="products/delete-product" updateFlag="products/update-product" />
+            <AdminTable
+              caption="List of products"
+              columns={productColumns}
+              data={memoizedProducts}
+              isLoading={isLoading}
+              deleteFlag="products/delete-product"
+              updateFlag="products/update-product"
+            />
+          </TabPanel>
 
-            </TabPanel>
-
-            <TabPanel>
-              <AdminTable caption="List of users" columns={userColumns} data={memoizedUsers} isLoading={isLoading} deleteFlag="users/delete-user" updateFlag="users/update-user" />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+          <TabPanel>
+            <AdminTable
+              caption="List of users"
+              columns={userColumns}
+              data={memoizedUsers}
+              isLoading={isLoading}
+              deleteFlag="users/delete-user"
+              updateFlag="users/update-user"
+            />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </AppContainer>
   );
 }

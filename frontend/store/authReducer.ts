@@ -54,7 +54,7 @@ const authSlice = createSlice({
       .addCase(logout.rejected, (state, action: PayloadAction<unknown>) => {
         state.isLoading = false;
         state.error = (action.payload as string) || 'Ошибка выхода';
-      })
+      });
   },
 });
 

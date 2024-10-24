@@ -8,7 +8,7 @@ import {
   Tbody,
   Td,
   Input,
-  Button
+  Button,
 } from '@chakra-ui/react';
 import { IAdminTableProps } from '@/types';
 import { memo } from 'react';
@@ -22,7 +22,7 @@ const AdminTableComponent: React.FC<IAdminTableProps> = ({
   data,
   isLoading,
   deleteFlag,
-  updateFlag
+  updateFlag,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -57,18 +57,28 @@ const AdminTableComponent: React.FC<IAdminTableProps> = ({
                 {columns.map((col) => (
                   <Td key={col.key}>
                     {col.key === 'createdAt' || col.key === 'updatedAt' ? (
-                      row[col.key] ? new Date(row[col.key]).toLocaleString() : 'N/A'
+                      row[col.key] ? (
+                        new Date(row[col.key]).toLocaleString()
+                      ) : (
+                        'N/A'
+                      )
                     ) : (
                       <Input
                         value={row[col.key]}
-                        onChange={(e) => handleInputChange(row.id, col.key, e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange(row.id, col.key, e.target.value)
+                        }
                         size="sm"
                       />
                     )}
                   </Td>
                 ))}
                 <Td>
-                  <Button colorScheme="red" size="sm" onClick={() => handleDelete(row.id)}>
+                  <Button
+                    colorScheme="red"
+                    size="sm"
+                    onClick={() => handleDelete(row.id)}
+                  >
                     Delete
                   </Button>
                 </Td>

@@ -30,9 +30,11 @@ export default function Register() {
   const { isLoading } = useAppSelector((store) => store.auth);
 
   return (
-    <AppContainer title='Registration page' myClass='justify-center'>
+    <AppContainer title="Registration page" myClass="justify-center">
       <FormControl className="max-w-[500px]">
-        <FormLabel fontSize="24px" mb="5" color="blue.600">Registration</FormLabel>
+        <FormLabel fontSize="24px" mb="5" color="blue.600">
+          Registration
+        </FormLabel>
         <Formik
           initialValues={{ username: '', email: '', password: '' }}
           validationSchema={SignupSchema}
@@ -58,7 +60,9 @@ export default function Register() {
                 className="border rounded-sm mb-2 h-10 p-1"
                 placeholder="name"
               />
-              <small className='text-red-700'>{errors.username && touched.username && errors.username}</small>
+              <small className="text-red-700">
+                {errors.username && touched.username && errors.username}
+              </small>
               <Field
                 type="email"
                 name="email"
@@ -68,7 +72,9 @@ export default function Register() {
                 className="border rounded-sm mb-2 h-10 p-1"
                 placeholder="email"
               />
-              <small className='text-red-700'>{errors.email && touched.email && errors.email}</small>
+              <small className="text-red-700">
+                {errors.email && touched.email && errors.email}
+              </small>
               <Field
                 type="password"
                 name="password"
@@ -78,13 +84,15 @@ export default function Register() {
                 className="border rounded-sm mb-4 h-10 p-1"
                 placeholder="password"
               />
-              <small className='text-red-700'>{errors.password && touched.password && errors.password}</small>
+              <small className="text-red-700">
+                {errors.password && touched.password && errors.password}
+              </small>
               <Button
                 mt={4}
                 isLoading={isLoading}
-                loadingText='Submitting'
-                colorScheme='teal'
-                variant='outline'
+                loadingText="Submitting"
+                colorScheme="teal"
+                variant="outline"
                 type="submit"
               >
                 Registration

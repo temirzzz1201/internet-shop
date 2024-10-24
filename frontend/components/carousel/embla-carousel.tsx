@@ -1,41 +1,47 @@
-'use client'
-import './embla-carousel.css'
-import React, { useCallback } from 'react'
-import { EmblaOptionsType, EmblaCarouselType } from 'embla-carousel'
-import { DotButton, useDotButton } from './embla-carousel-btns'
-import Autoplay from 'embla-carousel-autoplay'
-import useEmblaCarousel from 'embla-carousel-react'
-import { Image, Box } from '@chakra-ui/react'
+'use client';
+import './embla-carousel.css';
+import React, { useCallback } from 'react';
+import { EmblaOptionsType } from 'embla-carousel';
+import { DotButton, useDotButton } from './embla-carousel-btns';
+import Autoplay from 'embla-carousel-autoplay';
+import useEmblaCarousel from 'embla-carousel-react';
+import { Image, Box } from '@chakra-ui/react';
 
 type PropType = {
-  slides: string[]
-  options?: EmblaOptionsType
-  handleOpen?: () => void
-  autoPlayFlag?: boolean
-  imageClass?: string
-}
+  slides: string[];
+  options?: EmblaOptionsType;
+  handleOpen?: () => void;
+  autoPlayFlag?: boolean;
+  imageClass?: string;
+};
 
-const EmblaCarousel: React.FC<PropType> = ({ slides, options, handleOpen, autoPlayFlag, imageClass}) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()])
-  const autoplay = emblaApi?.plugins()?.autoplay
+const EmblaCarousel: React.FC<PropType> = ({
+  slides,
+  options,
+  handleOpen,
+  autoPlayFlag,
+  imageClass,
+}) => {
+  const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
+  const autoplay = emblaApi?.plugins()?.autoplay;
 
-  if (!autoPlayFlag) autoplay?.stop()
+  if (!autoPlayFlag) autoplay?.stop();
 
   const onNavButtonClick = useCallback(() => {
-    if (!autoplay) return
+    if (!autoplay) return;
 
     const resetOrStop =
       autoplay.options.stopOnInteraction === false
         ? autoplay.reset
-        : autoplay.stop
+        : autoplay.stop;
 
-    resetOrStop()
-  }, [autoplay])
+    resetOrStop();
+  }, [autoplay]);
 
   const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(
     emblaApi,
     onNavButtonClick
-  )
+  );
 
   return (
     <Box className="embla">
@@ -43,16 +49,16 @@ const EmblaCarousel: React.FC<PropType> = ({ slides, options, handleOpen, autoPl
         <Box className="embla__container">
           {slides.map((url) => (
             <Box className="embla__slide" key={url}>
-                <Image
-                  onClick={handleOpen}
-                  h={imageClass ? imageClass : '160'} 
-                  objectFit='fill' 
-                  // w="100%" 
-                  w="auto" 
-                  src={url}
-                  alt={url}
-                  cursor='pointer'
-                />
+              <Image
+                onClick={handleOpen}
+                h={imageClass ? imageClass : '160'}
+                objectFit="fill"
+                // w="100%"
+                w="auto"
+                src={url}
+                alt={url}
+                cursor="pointer"
+              />
             </Box>
           ))}
         </Box>
@@ -70,9 +76,9 @@ const EmblaCarousel: React.FC<PropType> = ({ slides, options, handleOpen, autoPl
             />
           ))}
         </Box>
-      </Box> 
+      </Box>
     </Box>
-  )
-}
+  );
+};
 
-export default EmblaCarousel
+export default EmblaCarousel;
