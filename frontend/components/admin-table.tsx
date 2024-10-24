@@ -13,11 +13,18 @@ import {
 import { IAdminTableProps } from '@/types';
 import { memo } from 'react';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-
 import { deleteProduct, updateProduct } from '@/actions/clientActions';
 
-const AdminTable: React.FC<IAdminTableProps> = memo(({ caption, columns, data, isLoading, deleteFlag, updateFlag }) => {
-  const dispatch = useAppDispatch()
+// Определяем функциональный компонент
+const AdminTableComponent: React.FC<IAdminTableProps> = ({
+  caption,
+  columns,
+  data,
+  isLoading,
+  deleteFlag,
+  updateFlag
+}) => {
+  const dispatch = useAppDispatch();
 
   const handleInputChange = (productId: number, key: string, value: string) => {
     const updates = { [key]: value };
@@ -27,11 +34,9 @@ const AdminTable: React.FC<IAdminTableProps> = memo(({ caption, columns, data, i
     dispatch(updateProduct({ productId, updates, updateFlag }));
   };
 
-
   const handleDelete = (id: number) => {
     dispatch(deleteProduct({ productId: id, deleteFlag }));
   };
-
 
   return (
     <TableContainer>
@@ -80,6 +85,10 @@ const AdminTable: React.FC<IAdminTableProps> = memo(({ caption, columns, data, i
       </Table>
     </TableContainer>
   );
-});
+};
+
+// Оборачиваем компонент в memo и задаем displayName
+const AdminTable = memo(AdminTableComponent);
+AdminTable.displayName = 'AdminTable';
 
 export default AdminTable;
