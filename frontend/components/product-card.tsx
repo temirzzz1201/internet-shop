@@ -54,20 +54,21 @@ export default function ProductCard({ product }: IProductCardProps) {
   const handleCloseProduct = () => setIsProductModalOpen(false);
 
   const [userId, setUserId] = useState<string | null>(null);
+  const userCookie = Cookies.get('user');
+
 
   useEffect(() => {
-    const userCookie = Cookies.get('user');
     if (userCookie) {
       const userFromCookie = JSON.parse(userCookie);
       setUserId(userFromCookie.id);
     }
-  }, []);
+  }, [userId]);
 
   const handleOrder = () => {
-    if (!userId) {
+    if (!userCookie) {
+      setUserId(null);
       toast({
-        title: 'Зарегестрируйтесь что бы сделать заказ!',
-        description: '',
+        title: 'Зарегестрируйтесь чтобы сделать заказ!',
         status: 'warning',
         duration: 3000,
         isClosable: true,
@@ -92,11 +93,9 @@ export default function ProductCard({ product }: IProductCardProps) {
     const updates = { stock: stock - orderQuantity };
     const updateFlag = 'products/update-product';
 
-    // Диспатчим экшены
     dispatch(placeOrder(orderData));
     dispatch(updateProduct({ productId: product.id, updates, updateFlag }));
 
-    // Обновляем состояние stock
     setStock((prevStock) => prevStock - orderQuantity);
   };
 
@@ -130,7 +129,7 @@ export default function ProductCard({ product }: IProductCardProps) {
           slides={imageUrls}
           options={OPTIONS}
           autoPlayFlag
-          imageClass="420"
+          imageHeightClass="450"
         />
       </AppModal>
 
@@ -144,7 +143,7 @@ export default function ProductCard({ product }: IProductCardProps) {
             slides={imageUrls}
             options={OPTIONS}
             autoPlayFlag
-            imageClass="420"
+            imageHeightClass="450"
           />
         </Box>
         <Box mb="4">
@@ -186,7 +185,7 @@ export default function ProductCard({ product }: IProductCardProps) {
       </AppModal>
 
       <Box
-        maxW="180"
+        // maxW="150"
         // minW='180'
         p={4}
         bg={stock === 0 ? 'gray.300' : 'gray.200'}

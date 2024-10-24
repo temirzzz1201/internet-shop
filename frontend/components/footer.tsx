@@ -6,7 +6,7 @@ export default function Footer() {
       as="footer"
       px="5"
       bg="gray.500"
-      h="10"
+      minH="10"
       className="flex items-center justify-center border-t-2 border-t-slate-600"
     >
       <Text textColor="white" fontSize="l">

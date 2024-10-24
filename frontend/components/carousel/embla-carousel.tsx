@@ -12,7 +12,8 @@ type PropType = {
   options?: EmblaOptionsType;
   handleOpen?: () => void;
   autoPlayFlag?: boolean;
-  imageClass?: string;
+  imageHeightClass?: string;
+  imageMaxWclass?: string;
 };
 
 const EmblaCarousel: React.FC<PropType> = ({
@@ -20,7 +21,7 @@ const EmblaCarousel: React.FC<PropType> = ({
   options,
   handleOpen,
   autoPlayFlag,
-  imageClass,
+  imageHeightClass,
 }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
   const autoplay = emblaApi?.plugins()?.autoplay;
@@ -51,10 +52,12 @@ const EmblaCarousel: React.FC<PropType> = ({
             <Box className="embla__slide" key={url}>
               <Image
                 onClick={handleOpen}
-                h={imageClass ? imageClass : '160'}
-                objectFit="fill"
-                // w="100%"
-                w="auto"
+                h={imageHeightClass ? imageHeightClass : '300'}
+                // objectFit="fill"
+                objectFit="cover"
+
+                w="100%"
+                // w="auto"
                 src={url}
                 alt={url}
                 cursor="pointer"

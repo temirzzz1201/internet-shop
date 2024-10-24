@@ -3,34 +3,58 @@ import axios from 'axios';
 import { BASE_URL } from '@/utils/baseUrl';
 import { IIProduct, ICategory } from '@/types';
 
-export const fetchAllProducts = async () => {
-  try {
-    const response = await axios.get(`${BASE_URL}/products/all-products`);
+const axiosInstance = axios.create({
+  baseURL: BASE_URL,
+  timeout: 5000, // Установите таймаут в 5 секунд
+});
 
-    if (response.data && Array.isArray(response.data)) {
-      return response.data as IIProduct[];
+export const fetchAllProducts = async ({ page = 1, limit = 30 } = {}) => {
+  try {
+    const response = await axiosInstance.get('/products/all-products', {
+      params: { page, limit },
+    });
+
+    // Проверяем, есть ли данные и являются ли они массивом
+    if (Array.isArray(response.data.products) && typeof response.data.totalPages === 'number') {
+      return {
+        products: response.data.products as IIProduct[],
+        totalPages: response.data.totalPages,
+      };
     }
 
-    console.error('No products field in response');
-    return [];
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    return [];
+    console.error('Unexpected response format for products:', response.data);
+    throw new Error('Неверный формат ответа при получении продуктов');
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error('Error fetching products:', error.message);
+    } else if (error instanceof Error) {
+      console.error('Error fetching products:', error.message);
+    } else {
+      console.error('Unexpected error fetching products:', error);
+    }
+    throw new Error('Ошибка при получении продуктов');
   }
 };
 
 export const fetchCategories = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/products/all-categories`);
+    const response = await axiosInstance.get('/products/all-categories');
 
-    if (response.data && Array.isArray(response.data)) {
+    // Проверяем, есть ли данные и являются ли они массивом
+    if (Array.isArray(response.data)) {
       return response.data as ICategory[];
     }
 
-    console.error('No categories field in response');
+    console.error('Unexpected response format for categories:', response.data);
     return [];
-  } catch (error) {
-    console.error('Error fetching categories:', error);
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error('Error fetching categories:', error.message);
+    } else if (error instanceof Error) {
+      console.error('Error fetching categories:', error.message);
+    } else {
+      console.error('Unexpected error fetching categories:', error);
+    }
     return [];
   }
 };

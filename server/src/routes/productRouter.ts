@@ -7,8 +7,12 @@ import upload from '../middleware/upload';
 const router = Router();
 
 router.get('/all-products', async (req: Request, res: Response) => {
+  const { page = 1, limit = 30 } = req.query;
+
   try {
-    const products = await Product.findAll({
+    const offset = (Number(page) - 1) * Number(limit);
+    
+    const { count, rows: products } = await Product.findAndCountAll({
       include: [
         {
           model: Category,
@@ -19,13 +23,17 @@ router.get('/all-products', async (req: Request, res: Response) => {
           as: 'images',
         },
       ],
+      offset,
+      limit: Number(limit),
     });
 
-    if (products.length > 0) {
-      res.json(products);
-    } else {
-      res.status(404).json({ message: 'Продукты не найдены' });
-    }
+    const totalPages = Math.ceil(count / Number(limit));
+
+    res.json({
+      products,
+      totalPages,
+      currentPage: Number(page),
+    });
   } catch (error) {
     console.error('Ошибка при получении продуктов:', error);
     res.status(500).json({ error: 'Ошибка при получении продуктов' });
