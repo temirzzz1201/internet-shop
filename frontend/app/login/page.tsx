@@ -7,9 +7,7 @@ import {
   FormControl,
   FormLabel,
   Button,
-  Text,
   FormHelperText,
-  Box,
 } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';

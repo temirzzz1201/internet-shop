@@ -1,31 +1,12 @@
-# name: GitHub Actions Demo
-# run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-# on: [push]
-# jobs:
-#   Explore-GitHub-Actions:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-#       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-#       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-#       - name: Check out repository code
-#         uses: actions/checkout@v4
-#       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-#       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-#       - name: List files in the repository
-#         run: |
-#           ls ${{ github.workspace }}
-#       - run: echo "🍏 This job's status is ${{ job.status }}."
-
-
 name: CI/CD Pipeline
+
 on:
   push:
     branches:
-      - main  # Укажите ветку, на которую хотите настраивать действия
+      - main
   pull_request:
     branches:
-      - main  # Укажите ветку, для которой хотите запускать проверку на PR
+      - main
 
 jobs:
   lint:
@@ -37,16 +18,21 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Укажите нужную версию Node.js
+          node-version: '20'  # Установите Node.js версии 20
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd frontend
+          npm install || (cat npm-debug.log && exit 1)
 
       - name: Run ESLint
-        run: npm run lint
+        run: |
+          cd frontend
+          npm run lint
 
   format:
     runs-on: ubuntu-latest
+    needs: lint  # Запускаем после успешного завершения задачи lint
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -54,16 +40,35 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'  # Установите Node.js версии 20
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd frontend
+          npm install || (cat npm-debug.log && exit 1)
 
       - name: Run Prettier
-        run: npm run format -- --check  # Проверка форматирования
+        run: |
+          cd frontend
+          npm run format -- --write  # Автоматически исправляем форматирование
+
+      - name: Run ESLint (fix)
+        run: |
+          cd frontend
+          npm run lint -- --fix  # Автоматически исправляем ошибки линтера
+
+      - name: Commit changes
+        run: |
+          cd frontend
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git commit -m "chore: format code" || echo "No changes to commit"
+          git push
 
   build:
     runs-on: ubuntu-latest
+    needs: format  # Запускаем после успешного завершения задачи format
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -71,10 +76,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'  # Установите Node.js версии 20
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd frontend
+          npm install || (cat npm-debug.log && exit 1)
 
       - name: Build project
-        run: npm run build
+        run: |
+          cd frontend
+          npm run build
