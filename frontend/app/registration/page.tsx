@@ -27,7 +27,7 @@ const SignupSchema = Yup.object().shape({
 
 export default function Register() {
   const dispatch = useAppDispatch();
-  const { isAuthenticated, isLoading } = useAppSelector((store) => store.auth);
+  const { isLoading } = useAppSelector((store) => store.auth);
 
   return (
     <AppContainer title='Registration page' myClass='justify-center'>

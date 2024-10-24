@@ -21,7 +21,7 @@ const EmblaCarousel: React.FC<PropType> = ({ slides, options, handleOpen, autoPl
 
   if (!autoPlayFlag) autoplay?.stop()
 
-  const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
+  const onNavButtonClick = useCallback(() => {
     if (!autoplay) return
 
     const resetOrStop =
@@ -30,7 +30,7 @@ const EmblaCarousel: React.FC<PropType> = ({ slides, options, handleOpen, autoPl
         : autoplay.stop
 
     resetOrStop()
-  }, [])
+  }, [autoplay])
 
   const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(
     emblaApi,
