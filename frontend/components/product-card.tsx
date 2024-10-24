@@ -13,11 +13,12 @@ import {
   Button,
   HStack,
   Input,
-  useNumberInput
+  useNumberInput,
+  useToast
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import formatDate from '@/utils/dateHelper';
+import { formatDate } from '@/utils/dateHelper';
 import AppModal from './app-modal';
 import { EmblaOptionsType } from 'embla-carousel';
 import { capitalize } from '@/utils/capitalize';
@@ -38,6 +39,7 @@ export default function ProductCard({ product }: IProductCardProps) {
   const [stock, setStock] = useState<number>(product.stock); // Состояние для отслеживания stock
   const { images } = product;
   const dispatch = useAppDispatch();
+  const toast = useToast();
   
   const imageUrls = images.map(image => `${process.env.NEXT_PUBLIC_API_URL}/uploads/${image.imageUrl}`);
 
@@ -59,7 +61,14 @@ export default function ProductCard({ product }: IProductCardProps) {
   
   const handleOrder = () => {
     if (!userId) {
-      return; 
+      toast({
+        title: 'Зарегестрируйтесь что бы сделать заказ!',
+        description: "",
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      })
+      return;
     }
 
     const orderQuantity = quantity; 
@@ -88,7 +97,7 @@ export default function ProductCard({ product }: IProductCardProps) {
   };
   
   const handleResetQuantity = () => {
-    setQuantity(1); 
+    setQuantity(0); 
   };
 
   const {
@@ -98,7 +107,7 @@ export default function ProductCard({ product }: IProductCardProps) {
   } = useNumberInput({
     step: 1,
     value: quantity,
-    min: 1,
+    min: 0,
     max: stock,
     onChange: (valueAsString, valueAsNumber) => {
       setQuantity(valueAsNumber);
@@ -127,7 +136,7 @@ export default function ProductCard({ product }: IProductCardProps) {
           </HStack>
         </Box>
         <Box mb='5'>
-          <Button size='sm' colorScheme='green' mr={3} onClick={handleOrder} isDisabled={stock === 0}>В корзину</Button>
+          <Button disabled={quantity === 0 } size='sm' colorScheme='green' mr={3} onClick={handleOrder} isDisabled={stock === 0}>В корзину</Button>
           <Button size='sm' colorScheme="red" onClick={handleResetQuantity} isDisabled={stock === 0}>Удалить</Button> 
         </Box>
       </AppModal>
@@ -144,7 +153,7 @@ export default function ProductCard({ product }: IProductCardProps) {
           <EmblaCarousel slides={imageUrls} options={OPTIONS} handleOpen={handleOpen} />
         </Box>
         <Heading noOfLines={1} size="l" fontWeight="bold"> {capitalize(product.name)} </Heading> 
-        <Badge my='2' borderRadius='full' px='2' colorScheme='teal'> В остатках {stock} </Badge>
+        <Badge my='2' borderRadius='full' px='2' colorScheme={stock === 0 ? 'red' : 'teal'}> В остатках {stock} </Badge>
         <Text mb='2' fontSize='md' noOfLines={1}> {capitalize(product.description)} </Text>
         <Text 
           cursor='pointer' 

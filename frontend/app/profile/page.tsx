@@ -1,13 +1,30 @@
 'use client';
 import { Box, Text } from "@chakra-ui/react";
+import AppContainer from "@/components/app-container";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import { capitalize } from "@/utils/capitalize";
+import { getGreetingByTime } from "@/utils/dateHelper"
 
 function Profile() {
+  const [userName, setUserName] = useState('')
+
+
+  useEffect(() => {
+    const name = Cookies.get('user');
+    if (name) {
+      const userNameFromCookie = JSON.parse(name);
+      setUserName(capitalize(userNameFromCookie.username))
+    }
+  }, []);
+
+
   return (
-    <Box as='section' mb='8' className="flex justify-center items-center">
-      <Box className="flex" maxW='1920' w='100%' px='5'>
-        <Text color="blue.600" fontSize="4xl">Профиль</Text>
+    <AppContainer title={` ${getGreetingByTime()}, ${userName} `} myClass='justify-start'>
+      <Box as='aside' mr='80px'>
+        
       </Box>
-    </Box>
+    </AppContainer>
   );
 }
 

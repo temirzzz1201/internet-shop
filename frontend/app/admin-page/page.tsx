@@ -8,16 +8,19 @@ import {
   FormLabel,
   Input,
   Button,
-  Text,
   Tabs,
   TabList,
   Tab,
   TabPanels,
   TabPanel,
   Select,
-  FormHelperText,
+  Divider
 } from '@chakra-ui/react';
 import { AdminTable } from '@/components/admin-table';
+import AppContainer from '@/components/app-container';
+import { getGreetingByTime } from '@/utils/dateHelper';
+import { capitalize } from '@/utils/capitalize';
+import Cookies from 'js-cookie';
 
 export default function Admin() {
   const dispatch = useAppDispatch();
@@ -31,8 +34,8 @@ export default function Admin() {
   const [categoryId, setCategoryId] = useState(1);
   const [categoryName, setCategoryName] = useState('');
   const [files, setFiles] = useState<File[]>([]);
+  const [userName, setUserName] = useState('')
 
-  
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const selectedFiles = Array.from(event.target.files);
@@ -86,6 +89,14 @@ export default function Admin() {
     dispatch(getProducts());
   }, []);
 
+  useEffect(() => {
+    const name = Cookies.get('user');
+    if (name) {
+      const userNameFromCookie = JSON.parse(name);
+      setUserName(capitalize(userNameFromCookie.username))
+    }
+  }, []);
+
   const productColumns = [
     { label: 'Name', key: 'name' },
     { label: 'Description', key: 'description' },
@@ -106,14 +117,8 @@ export default function Admin() {
   ];
 
   return (
-    <>
-      <section className="p-3 flex mb-10">
-        <Text color="blue.600" fontSize="2xl">
-          Admin page
-        </Text>
-      </section>
+    <AppContainer title={` ${getGreetingByTime()}, ${userName} `} myClass='justify-start'>
 
-      <div className="p-5">
         <Tabs isLazy>
           <TabList>
             <Tab>PRODUCTS</Tab>
@@ -121,77 +126,75 @@ export default function Admin() {
           </TabList>
           <TabPanels className="mt-10">
             <TabPanel>
-              <div className="container min-h-screen">
-                <FormControl className="max-w-[500px]">
-                  <FormLabel>Upload new category</FormLabel>
-                  <Input
-                    placeholder="Category name"
-                    size="md"
-                    className="mb-2"
-                    type="text"
-                    value={categoryName}
-                    onChange={(e) => setCategoryName(e.target.value)}
-                  />
-                  <Button mt={4} colorScheme="teal" type="submit" onClick={handleSubmitCategory}>
-                    Submit
-                  </Button>
-                </FormControl>
+            <FormControl className="max-w-[500px] mb-3">
+              <FormLabel>Upload new category</FormLabel>
+              <Input
+                placeholder="Category name"
+                size="md"
+                className="mb-2"
+                type="text"
+                value={categoryName}
+                onChange={(e) => setCategoryName(e.target.value)}
+              />
+              <Button mt={4} colorScheme="teal" type="submit" onClick={handleSubmitCategory}>
+                Submit
+              </Button>
+            </FormControl>
 
-                <section className="p-3 flex flex-col justify-center items-center">
-                  <FormControl className="max-w-[500px]">
-                    <FormLabel>Upload new product</FormLabel>
-                    <Select placeholder="Choose category" onChange={(e) => setCategoryId(Number(e.target.value))}>
-                      {memoizedCategory?.map((cat) => (
-                        <option key={cat.id} value={cat.id}>
-                          {cat.name}
-                        </option>
-                      ))}
-                    </Select>
-                    <Input
-                      placeholder="Product name"
-                      size="md"
-                      className="mb-2"
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                    <Input
-                      placeholder="Product description"
-                      size="md"
-                      className="mb-2"
-                      type="text"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
-                    <Input
-                      placeholder="Product price"
-                      size="md"
-                      className="mb-2"
-                      min={0}
-                      type="number"
-                      value={price}
-                      onChange={(e) => setPrice(Number(e.target.value))}
-                    />
-                    <Input
-                      placeholder="Stock quantity"
-                      size="md"
-                      className="mb-2"
-                      type="number"
-                      value={stock}
-                      onChange={(e) => setStock(Number(e.target.value))}
-                    />
-                    <Input className="mb-4" size="md" type="file" multiple onChange={handleFileChange} />
-                    {/* <MultipleImageUploader /> */}
-                    <Button mt={4} colorScheme="teal" type="submit" onClick={handleSubmitProduct}>
-                      Submit
-                    </Button>
+            <Divider my='10' />
 
-                    <FormHelperText>We will never share your email.</FormHelperText>
-                  </FormControl>
-                </section>
-              </div>
+            <FormControl className="max-w-[500px]">
+              <FormLabel>Upload new product</FormLabel>
+              <Select mb='2' placeholder="Choose category" onChange={(e) => setCategoryId(Number(e.target.value))}>
+                {memoizedCategory?.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </Select>
+              <Input
+                placeholder="Product name"
+                size="md"
+                className="mb-2"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <Input
+                placeholder="Product description"
+                size="md"
+                className="mb-2"
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              <Input
+                placeholder="Product price"
+                size="md"
+                className="mb-2"
+                min={0}
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(Number(e.target.value))}
+              />
+              <Input
+                placeholder="Stock quantity"
+                size="md"
+                className="mb-2"
+                type="number"
+                value={stock}
+                onChange={(e) => setStock(Number(e.target.value))}
+              />
+              <Input className="mb-4" size="md" type="file" multiple onChange={handleFileChange} />
+              <Button mt={4} colorScheme="teal" type="submit" onClick={handleSubmitProduct}>
+                Submit
+              </Button>
+            </FormControl>
+
+            <Divider my='10' />
 
               <AdminTable caption="List of products" columns={productColumns} data={memoizedProducts} isLoading={isLoading} deleteFlag="products/delete-product" updateFlag="products/update-product" />
+
             </TabPanel>
 
             <TabPanel>
@@ -199,7 +202,6 @@ export default function Admin() {
             </TabPanel>
           </TabPanels>
         </Tabs>
-      </div>
-    </>
+    </AppContainer>
   );
 }
