@@ -55,7 +55,7 @@ jobs:
       - name: Run ESLint (fix)
         run: |
           cd frontend
-          npm run lint --fix  # Автоматически исправляем ошибки линтера
+          npm run lint # Автоматически исправляем ошибки линтера
 
           - name: Commit changes
           env:
