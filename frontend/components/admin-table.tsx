@@ -51,7 +51,7 @@ const AdminTable: React.FC<IAdminTableProps> = ({
 
   return (
     <TableContainer>
-      <Table variant="striped" size="sm" colorScheme="teal">
+      <Table size='sm' variant="striped" colorScheme="teal">
         <TableCaption>{caption}</TableCaption>
         <Thead>
           <Tr>
