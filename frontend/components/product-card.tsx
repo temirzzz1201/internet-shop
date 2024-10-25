@@ -15,7 +15,7 @@ import {
   Input,
   useNumberInput,
   useToast,
-  Tooltip
+  Tooltip,
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
@@ -190,19 +190,19 @@ export default function ProductCard({ product }: IProductCardProps) {
         bg={stock === 0 ? 'gray.100' : 'white'}
         borderRadius={10}
         as="article"
-        border='1px solid #DCDCDC'
-        boxShadow="md" 
+        border="1px solid #DCDCDC"
+        boxShadow="md"
       >
         <Box mb="3">
           <EmblaCarousel
             slides={imageUrls}
             options={OPTIONS}
             handleOpen={handleOpen}
-            imageMaxHeightClass='200'
+            imageMaxHeightClass="200"
             // imageMaxWidthClass='250'
           />
         </Box>
-        <Tooltip label={product.name} aria-label='A tooltip'>
+        <Tooltip label={product.name} aria-label="A tooltip">
           <Heading noOfLines={1} size="l" fontWeight="bold">
             {' '}
             {capitalize(product.name)}{' '}
@@ -217,7 +217,7 @@ export default function ProductCard({ product }: IProductCardProps) {
           {' '}
           В остатках {stock}{' '}
         </Badge>
-        <Tooltip label={product.description} aria-label='A tooltip'>
+        <Tooltip label={product.description} aria-label="A tooltip">
           <Text mb="2" fontSize="md" noOfLines={1}>
             {' '}
             {capitalize(product.description)}{' '}

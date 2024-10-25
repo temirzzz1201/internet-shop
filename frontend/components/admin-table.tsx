@@ -28,7 +28,9 @@ const AdminTable: React.FC<IAdminTableProps> = ({
 
   const tableData = Array.isArray(data) ? data : [];
 
-  const [editValues, setEditValues] = useState<{ [key: number]: { [key: string]: string } }>({});
+  const [editValues, setEditValues] = useState<{
+    [key: number]: { [key: string]: string };
+  }>({});
 
   const handleInputChange = (productId: number, key: string, value: string) => {
     setEditValues((prev) => ({
@@ -75,7 +77,9 @@ const AdminTable: React.FC<IAdminTableProps> = ({
                       )
                     ) : (
                       <Input
-                        value={editValues[row.id]?.[col.key] || row[col.key] || ''}
+                        value={
+                          editValues[row.id]?.[col.key] || row[col.key] || ''
+                        }
                         onChange={(e) =>
                           handleInputChange(row.id, col.key, e.target.value)
                         }
@@ -88,8 +92,8 @@ const AdminTable: React.FC<IAdminTableProps> = ({
                   <Button
                     colorScheme="green"
                     size="sm"
-                    onClick={() => handleSave(row.id)} 
-                    mr='3'
+                    onClick={() => handleSave(row.id)}
+                    mr="3"
                   >
                     Сохранить
                   </Button>
@@ -116,6 +120,4 @@ const AdminTable: React.FC<IAdminTableProps> = ({
   );
 };
 
-
 export default AdminTable;
-

@@ -13,7 +13,13 @@ import {
   updateChoosenProduct,
   createOrder,
 } from '@/utils/api';
-import { IUser, IIProduct, ICategory, IOrder, IIProductResponse } from '@/types';
+import {
+  IUser,
+  IIProduct,
+  ICategory,
+  IOrder,
+  IIProductResponse,
+} from '@/types';
 import { getErrorMessage } from '@/utils/errorMessage';
 
 export const placeProduct = createAsyncThunk<
@@ -38,7 +44,7 @@ export const placeProduct = createAsyncThunk<
 
     if (product.images) {
       product.images.forEach((image) => {
-        formData.append('images', image); 
+        formData.append('images', image);
       });
     }
 
@@ -221,7 +227,6 @@ export const placeOrder = createAsyncThunk<
 >('orders/createOrder', async (orderData, { rejectWithValue }) => {
   try {
     const response = await createOrder(orderData);
-
 
     return response.data;
   } catch (error) {

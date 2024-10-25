@@ -24,7 +24,7 @@ const EmblaCarousel: React.FC<PropType> = ({
   autoPlayFlag,
   imageHeightClass,
   imageMaxHeightClass,
-  imageMaxWidthClass
+  imageMaxWidthClass,
 }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
   const autoplay = emblaApi?.plugins()?.autoplay;
@@ -58,9 +58,8 @@ const EmblaCarousel: React.FC<PropType> = ({
                 h={imageHeightClass ? imageHeightClass : '100%'}
                 maxH={imageMaxHeightClass ? imageMaxHeightClass : '100%'}
                 maxW={imageMaxWidthClass ? imageMaxWidthClass : '100%'}
-
                 objectFit="contain"
-                objectPosition='center center'
+                objectPosition="center center"
                 w="100%"
                 src={url}
                 alt={url}
