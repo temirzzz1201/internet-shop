@@ -21,6 +21,7 @@ import {
   TabPanel,
   Select,
   Divider,
+  Heading,
 } from '@chakra-ui/react';
 import AdminTable from '@/components/admin-table';
 import AppContainer from '@/components/app-container';
@@ -35,9 +36,9 @@ export default function Admin() {
   const { products, isLoading } = useAppSelector((state) => state.products);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [price, setPrice] = useState(0);
-  const [stock, setStock] = useState(0);
-  const [categoryId, setCategoryId] = useState(1);
+  const [price, setPrice] = useState<number | ''>('');
+  const [stock, setStock] = useState<number | ''>('');
+  const [categoryId, setCategoryId] = useState(0);
   const [categoryName, setCategoryName] = useState('');
   const [files, setFiles] = useState<File[]>([]);
   const [userName, setUserName] = useState('');
@@ -56,12 +57,18 @@ export default function Admin() {
       categoryId,
       name,
       description,
-      price,
-      stock,
+      price: Number(price),
+      stock: Number(stock), 
       images: files,
     };
 
     dispatch(placeProduct(productData));
+    setName('');
+    setCategoryId(0);
+    setDescription('');
+    setPrice('');
+    setStock('');
+    setFiles([]);
   };
 
   const handleSubmitCategory = (e: React.FormEvent) => {
@@ -75,7 +82,7 @@ export default function Admin() {
   }, [users]);
 
   const memoizedProducts = useMemo(() => {
-    return products;
+    return products.products;
   }, [products]);
 
   const memoizedCategory = useMemo(() => {
@@ -103,19 +110,19 @@ export default function Admin() {
   }, []);
 
   const productColumns = [
-    { label: 'Name', key: 'name' },
-    { label: 'Description', key: 'description' },
-    { label: 'Price', key: 'price' },
-    { label: 'Stock', key: 'stock' },
-    { label: 'Image', key: 'imageUrl' },
+    { label: 'Название', key: 'name' },
+    { label: 'Описание', key: 'description' },
+    { label: 'Цена', key: 'price' },
+    { label: 'Остатки', key: 'stock' },
+    // { label: 'Изображение', key: 'images' },
     {
-      label: 'Created At',
+      label: 'Создано',
       key: 'createdAt',
       format: (value: string) =>
         value ? new Date(value).toLocaleString() : 'N/A',
     },
     {
-      label: 'Updated At',
+      label: 'Обновлено',
       key: 'updatedAt',
       format: (value: string) =>
         value ? new Date(value).toLocaleString() : 'N/A',
@@ -123,22 +130,22 @@ export default function Admin() {
   ];
 
   const userColumns = [
-    { label: 'Username', key: 'username' },
-    { label: 'Email', key: 'email' },
-    { label: 'Password', key: 'password' },
+    { label: 'Имя', key: 'username' },
+    { label: 'Эл.почта', key: 'email' },
+    { label: 'Пароль', key: 'password' },
     {
-      label: 'Created At',
+      label: 'Создано',
       key: 'createdAt',
       format: (value: string) =>
         value ? new Date(value).toLocaleString() : 'N/A',
     },
     {
-      label: 'Updated At',
+      label: 'Обновлено',
       key: 'updatedAt',
       format: (value: string) =>
         value ? new Date(value).toLocaleString() : 'N/A',
     },
-    { label: 'Role', key: 'role' },
+    { label: 'Роль пользователя', key: 'role' },
   ];
 
   return (
@@ -148,15 +155,15 @@ export default function Admin() {
     >
       <Tabs isLazy>
         <TabList>
-          <Tab>PRODUCTS</Tab>
-          <Tab>USERS</Tab>
+          <Tab>Продукты</Tab>
+          <Tab>Пользователи</Tab>
         </TabList>
         <TabPanels className="mt-10">
           <TabPanel>
             <FormControl className="max-w-[500px] mb-3">
-              <FormLabel>Upload new category</FormLabel>
+              <Heading size='md' mb='5'>Создать категорию</Heading>
               <Input
-                placeholder="Category name"
+                placeholder="Название категории"
                 size="md"
                 className="mb-2"
                 type="text"
@@ -169,17 +176,18 @@ export default function Admin() {
                 type="submit"
                 onClick={handleSubmitCategory}
               >
-                Submit
+                Создать
               </Button>
             </FormControl>
 
             <Divider my="10" />
 
             <FormControl className="max-w-[500px]">
-              <FormLabel>Upload new product</FormLabel>
+              <Heading size='md' mb='5'>Создать продукт</Heading>
+              <FormLabel fontSize='12'>Выбрать категорию</FormLabel>
               <Select
                 mb="2"
-                placeholder="Choose category"
+                placeholder="Выбрать категорию"
                 onChange={(e) => setCategoryId(Number(e.target.value))}
               >
                 {memoizedCategory?.map((cat) => (
@@ -188,37 +196,41 @@ export default function Admin() {
                   </option>
                 ))}
               </Select>
+              <FormLabel fontSize='12'>Название продукта</FormLabel>
               <Input
-                placeholder="Product name"
+                placeholder="Название продукта"
                 size="md"
                 className="mb-2"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
+              <FormLabel fontSize='12'>Описание продукта</FormLabel>
               <Input
-                placeholder="Product description"
+                placeholder="Описание продукта"
                 size="md"
                 className="mb-2"
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
+              <FormLabel fontSize='12'>Цена</FormLabel>
               <Input
-                placeholder="Product price"
+                placeholder="Цена"
                 size="md"
                 className="mb-2"
                 min={0}
                 type="number"
-                value={price}
+                value={price === 0 ? '' : price} // Удаляем начальное значение
                 onChange={(e) => setPrice(Number(e.target.value))}
               />
+              <FormLabel fontSize='12'>Остатки</FormLabel>
               <Input
-                placeholder="Stock quantity"
+                placeholder="Остатки"
                 size="md"
                 className="mb-2"
                 type="number"
-                value={stock}
+                value={stock === 0 ? '' : stock} // Удаляем начальное значение
                 onChange={(e) => setStock(Number(e.target.value))}
               />
               <Input
@@ -234,7 +246,7 @@ export default function Admin() {
                 type="submit"
                 onClick={handleSubmitProduct}
               >
-                Submit
+                Создать
               </Button>
             </FormControl>
 

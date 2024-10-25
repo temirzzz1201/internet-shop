@@ -11,12 +11,12 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { IAdminTableProps } from '@/types';
-import { memo } from 'react';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { deleteProduct, updateProduct } from '@/actions/clientActions';
 
-// Определяем функциональный компонент
-const AdminTableComponent: React.FC<IAdminTableProps> = ({
+import React, { useState } from 'react';
+
+const AdminTable: React.FC<IAdminTableProps> = ({
   caption,
   columns,
   data,
@@ -26,11 +26,22 @@ const AdminTableComponent: React.FC<IAdminTableProps> = ({
 }) => {
   const dispatch = useAppDispatch();
 
+  const tableData = Array.isArray(data) ? data : [];
+
+  const [editValues, setEditValues] = useState<{ [key: number]: { [key: string]: string } }>({});
+
   const handleInputChange = (productId: number, key: string, value: string) => {
-    const updates = { [key]: value };
+    setEditValues((prev) => ({
+      ...prev,
+      [productId]: {
+        ...prev[productId],
+        [key]: value,
+      },
+    }));
+  };
 
-    console.log('updates ', updates);
-
+  const handleSave = (productId: number) => {
+    const updates = editValues[productId] || {};
     dispatch(updateProduct({ productId, updates, updateFlag }));
   };
 
@@ -47,16 +58,16 @@ const AdminTableComponent: React.FC<IAdminTableProps> = ({
             {columns.map((col) => (
               <Th key={col.key}>{col.label}</Th>
             ))}
-            <Th>Actions</Th>
+            <Th>Управление</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {!isLoading && data.length > 0 ? (
-            data.map((row, rowIndex) => (
-              <Tr key={rowIndex}>
+          {!isLoading && tableData.length > 0 ? (
+            tableData.map((row) => (
+              <Tr key={row.id}>
                 {columns.map((col) => (
                   <Td key={col.key}>
-                    {col.key === 'createdAt' || col.key === 'updatedAt' ? (
+                    {['createdAt', 'updatedAt'].includes(col.key) ? (
                       row[col.key] ? (
                         new Date(row[col.key]).toLocaleString()
                       ) : (
@@ -64,7 +75,7 @@ const AdminTableComponent: React.FC<IAdminTableProps> = ({
                       )
                     ) : (
                       <Input
-                        value={row[col.key]}
+                        value={editValues[row.id]?.[col.key] || row[col.key] || ''}
                         onChange={(e) =>
                           handleInputChange(row.id, col.key, e.target.value)
                         }
@@ -75,11 +86,19 @@ const AdminTableComponent: React.FC<IAdminTableProps> = ({
                 ))}
                 <Td>
                   <Button
+                    colorScheme="green"
+                    size="sm"
+                    onClick={() => handleSave(row.id)} 
+                    mr='3'
+                  >
+                    Сохранить
+                  </Button>
+                  <Button
                     colorScheme="red"
                     size="sm"
                     onClick={() => handleDelete(row.id)}
                   >
-                    Delete
+                    Удалить
                   </Button>
                 </Td>
               </Tr>
@@ -97,8 +116,6 @@ const AdminTableComponent: React.FC<IAdminTableProps> = ({
   );
 };
 
-// Оборачиваем компонент в memo и задаем displayName
-const AdminTable = memo(AdminTableComponent);
-AdminTable.displayName = 'AdminTable';
 
 export default AdminTable;
+

@@ -5,7 +5,7 @@ import { IIProduct, ICategory } from '@/types';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
-  timeout: 5000, // Установите таймаут в 5 секунд
+  timeout: 5000,
 });
 
 export const fetchAllProducts = async ({ page = 1, limit = 30 } = {}) => {
@@ -14,7 +14,6 @@ export const fetchAllProducts = async ({ page = 1, limit = 30 } = {}) => {
       params: { page, limit },
     });
 
-    // Проверяем, есть ли данные и являются ли они массивом
     if (
       Array.isArray(response.data.products) &&
       typeof response.data.totalPages === 'number'
@@ -43,7 +42,6 @@ export const fetchCategories = async () => {
   try {
     const response = await axiosInstance.get('/products/all-categories');
 
-    // Проверяем, есть ли данные и являются ли они массивом
     if (Array.isArray(response.data)) {
       return response.data as ICategory[];
     }

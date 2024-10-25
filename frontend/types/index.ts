@@ -12,13 +12,22 @@ export interface IIProduct {
   id: number;
   name: string;
   description: string;
-  price: number;
+  price: number; 
   stock: number;
   categoryId: number;
   createdAt: string;
   updatedAt: string;
-  category: ICategory;
-  images: Image[];
+  category?: ICategory; 
+  images?: Image[];   
+}
+
+export interface IIProductResponse {
+  data: {
+    message: string;
+    product: IIProduct;
+  };
+  status: number;
+  statusText: string;
 }
 
 export interface IIProducts {

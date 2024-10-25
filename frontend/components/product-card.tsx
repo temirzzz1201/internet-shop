@@ -15,6 +15,7 @@ import {
   Input,
   useNumberInput,
   useToast,
+  Tooltip
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
@@ -43,7 +44,7 @@ export default function ProductCard({ product }: IProductCardProps) {
   const dispatch = useAppDispatch();
   const toast = useToast();
 
-  const imageUrls = images.map(
+  const imageUrls = images!.map(
     (image) => `${process.env.NEXT_PUBLIC_API_URL}/uploads/${image.imageUrl}`
   );
 
@@ -122,20 +123,21 @@ export default function ProductCard({ product }: IProductCardProps) {
       <AppModal
         isOpen={isModalOpen}
         onClose={handleClose}
-        title={product.category.name}
+        title={product.category?.name || ''}
       >
         <EmblaCarousel
           slides={imageUrls}
           options={OPTIONS}
           autoPlayFlag
           imageHeightClass="450"
+          // imageMaxHeightClass='200'
         />
       </AppModal>
 
       <AppModal
         isOpen={isProductModalOpen}
         onClose={handleCloseProduct}
-        title={product.category.name}
+        title={product.category?.name || ''}
       >
         <Box mb="4">
           <EmblaCarousel
@@ -184,24 +186,28 @@ export default function ProductCard({ product }: IProductCardProps) {
       </AppModal>
 
       <Box
-        // maxW="150"
-        // minW='180'
         p={4}
-        bg={stock === 0 ? 'gray.300' : 'gray.200'}
+        bg={stock === 0 ? 'gray.100' : 'white'}
         borderRadius={10}
         as="article"
+        border='1px solid #DCDCDC'
+        boxShadow="md" 
       >
         <Box mb="3">
           <EmblaCarousel
             slides={imageUrls}
             options={OPTIONS}
             handleOpen={handleOpen}
+            imageMaxHeightClass='200'
+            // imageMaxWidthClass='250'
           />
         </Box>
-        <Heading noOfLines={1} size="l" fontWeight="bold">
-          {' '}
-          {capitalize(product.name)}{' '}
-        </Heading>
+        <Tooltip label={product.name} aria-label='A tooltip'>
+          <Heading noOfLines={1} size="l" fontWeight="bold">
+            {' '}
+            {capitalize(product.name)}{' '}
+          </Heading>
+        </Tooltip>
         <Badge
           my="2"
           borderRadius="full"
@@ -211,10 +217,12 @@ export default function ProductCard({ product }: IProductCardProps) {
           {' '}
           В остатках {stock}{' '}
         </Badge>
-        <Text mb="2" fontSize="md" noOfLines={1}>
-          {' '}
-          {capitalize(product.description)}{' '}
-        </Text>
+        <Tooltip label={product.description} aria-label='A tooltip'>
+          <Text mb="2" fontSize="md" noOfLines={1}>
+            {' '}
+            {capitalize(product.description)}{' '}
+          </Text>
+        </Tooltip>
         <Text
           cursor="pointer"
           mb="2"
