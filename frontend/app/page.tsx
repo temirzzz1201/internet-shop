@@ -35,7 +35,7 @@ const Home = async ({ searchParams }: IHomeProps) => {
   return (
     <>
       <AppContainer
-        title={`Все продукты ${filteredProducts.length}`}
+        title={`Все товары: ${filteredProducts.length}`}
         myClass="justify-start"
       >
         <Box
