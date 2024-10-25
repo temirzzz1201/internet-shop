@@ -99,7 +99,6 @@
 //   );
 // }
 
-
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -162,12 +161,9 @@ export default function NavLinks() {
       {/* Мобильная версия */}
       <Box display={{ base: 'block', md: 'none' }}>
         <MobileNav>
-          <Box
-            className="flex-col bg-white text-slate-600"
-            as='ul'
-          >
+          <Box className="flex-col bg-white text-slate-600" as="ul">
             {links.map((link) => (
-              <Box key={link.id} className="mb-4 flex items-center" as='li'>
+              <Box key={link.id} className="mb-4 flex items-center" as="li">
                 <Link
                   href={link.path}
                   passHref
@@ -184,7 +180,9 @@ export default function NavLinks() {
                         pathname === link.path ? 'h-6 w-6 pl-2' : 'w-6 h-6 pl-2'
                       }
                       src={
-                        pathname === link.path ? link.blueImgSrc : link.whiteImgSrc
+                        pathname === link.path
+                          ? link.blueImgSrc
+                          : link.whiteImgSrc
                       }
                       alt={link.title}
                     />
@@ -193,13 +191,17 @@ export default function NavLinks() {
               </Box>
             ))}
             {userName || user ? (
-              <Box className="flex items-center" as='li'>
-                <Link href="/" onClick={logoutUser} className="text-blue-500 font-semibold">
+              <Box className="flex items-center" as="li">
+                <Link
+                  href="/"
+                  onClick={logoutUser}
+                  className="text-blue-500 font-semibold"
+                >
                   Выйти
                 </Link>
               </Box>
             ) : (
-              <Box className="flex items-center" as='li'>
+              <Box className="flex items-center" as="li">
                 <Link href="/login" className="text-blue-50 font-semibold">
                   Войти
                 </Link>
@@ -210,9 +212,9 @@ export default function NavLinks() {
       </Box>
 
       {/* Десктопная версия */}
-      <Box display={{ base: 'none', md: 'flex' }} as='ul' className="flex">
+      <Box display={{ base: 'none', md: 'flex' }} as="ul" className="flex">
         {links.map((link) => (
-          <Box key={link.id} className="mr-5 flex items-center" as='li'>
+          <Box key={link.id} className="mr-5 flex items-center" as="li">
             <Link
               href={link.path}
               passHref
@@ -238,13 +240,13 @@ export default function NavLinks() {
           </Box>
         ))}
         {userName || user ? (
-          <Box className="mr-5 flex items-center" as='li'>
+          <Box className="mr-5 flex items-center" as="li">
             <Link href="/" onClick={logoutUser} className="text-white flex">
               Выйти
             </Link>
           </Box>
         ) : (
-          <Box className="mr-5 flex items-center" as='li'>
+          <Box className="mr-5 flex items-center" as="li">
             <Link href="/login" className="text-white flex">
               Войти
             </Link>

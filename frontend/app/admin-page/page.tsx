@@ -237,7 +237,9 @@ export default function Admin() {
                 value={stock === 0 ? '' : stock} // Удаляем начальное значение
                 onChange={(e) => setStock(Number(e.target.value))}
               />
-              <FormLabel fontSize='12'>Загрузить изображения (до 5ти штук)</FormLabel>
+              <FormLabel fontSize="12">
+                Загрузить изображения (до 5ти штук)
+              </FormLabel>
               <Input
                 className="mb-4"
                 size="md"

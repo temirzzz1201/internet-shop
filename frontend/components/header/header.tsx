@@ -20,7 +20,7 @@ export default function Header() {
         px="5"
         maxW="1920"
         w="100%"
-        flexDirection={{ base: "row-reverse", md: "row" }}
+        flexDirection={{ base: 'row-reverse', md: 'row' }}
       >
         <Link href="/">
           <Image className="w-9 h-9" src={logoSrc} alt="logo" />
