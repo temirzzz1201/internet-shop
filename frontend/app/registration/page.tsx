@@ -30,10 +30,10 @@ export default function Register() {
   const { isLoading } = useAppSelector((store) => store.auth);
 
   return (
-    <AppContainer title="Registration page" myClass="justify-center">
+    <AppContainer title="Страница регистрации" myClass="justify-center">
       <FormControl className="max-w-[500px]">
         <FormLabel fontSize="24px" mb="5" color="blue.600">
-          Registration
+          Пожалуйста зарегестрируйтесь
         </FormLabel>
         <Formik
           initialValues={{ username: '', email: '', password: '' }}
@@ -58,7 +58,7 @@ export default function Register() {
                 onBlur={handleBlur}
                 value={values.username}
                 className="border rounded-sm mb-2 h-10 p-1"
-                placeholder="name"
+                placeholder="Имя"
               />
               <small className="text-red-700">
                 {errors.username && touched.username && errors.username}
@@ -70,7 +70,7 @@ export default function Register() {
                 onBlur={handleBlur}
                 value={values.email}
                 className="border rounded-sm mb-2 h-10 p-1"
-                placeholder="email"
+                placeholder="Эл.почта"
               />
               <small className="text-red-700">
                 {errors.email && touched.email && errors.email}
@@ -82,7 +82,7 @@ export default function Register() {
                 onBlur={handleBlur}
                 value={values.password}
                 className="border rounded-sm mb-4 h-10 p-1"
-                placeholder="password"
+                placeholder="Пароль"
               />
               <small className="text-red-700">
                 {errors.password && touched.password && errors.password}
@@ -95,12 +95,12 @@ export default function Register() {
                 variant="outline"
                 type="submit"
               >
-                Registration
+                Зарегестрироваться
               </Button>
               <FormHelperText>
-                Have an account?{' '}
+                Есть аккаунт?{' '}
                 <Link className="underline" href="/login">
-                  Login
+                  авторизация
                 </Link>
               </FormHelperText>
             </Form>

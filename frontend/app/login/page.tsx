@@ -26,10 +26,10 @@ export default function Login() {
   const { isLoading } = useAppSelector((store) => store.auth);
 
   return (
-    <AppContainer title="Login page" myClass="justify-center">
+    <AppContainer title="Страница авторизации" myClass="justify-center">
       <FormControl className="max-w-[500px]">
         <FormLabel fontSize="24px" mb="5" color="blue.600">
-          Please login
+          Пожалуйста авторизуйтесь
         </FormLabel>
         <Formik<IFormValues>
           initialValues={{ email: '', password: '' }}
@@ -54,7 +54,7 @@ export default function Login() {
                 onBlur={handleBlur}
                 value={values.email}
                 className="border rounded-sm mb-2 h-10 p-1"
-                placeholder="email"
+                placeholder="Эл.почта"
               />
               <small className="text-red-700">
                 {errors.email && touched.email && errors.email}
@@ -66,7 +66,7 @@ export default function Login() {
                 onBlur={handleBlur}
                 value={values.password}
                 className="border rounded-sm mb-4 h-10 p-1"
-                placeholder="password"
+                placeholder="Пароль"
               />
               <small className="text-red-700">
                 {errors.password && touched.password && errors.password}
@@ -79,12 +79,12 @@ export default function Login() {
                 variant="outline"
                 type="submit"
               >
-                Login
+                Войти
               </Button>
               <FormHelperText>
-                Don't registered yet?{' '}
+                Еще не зарегестрированы?{' '}
                 <Link className="underline" href="/registration">
-                  Registration
+                  Регистрация
                 </Link>
               </FormHelperText>
             </Form>

@@ -73,6 +73,7 @@ const Home = async ({ searchParams }: IHomeProps) => {
         </Box>
       </AppContainer>
       <Box mb="80px">
+        {/* {products.length > 0 ? <Pagination currentPage={currentPage} totalPages={totalPages} /> : null} */}
         <Pagination currentPage={currentPage} totalPages={totalPages} />
       </Box>
     </>
