@@ -3,10 +3,15 @@ import './globals.css';
 import Header from '../components/header/header';
 import Footer from '../components/footer';
 import Providers from '@/providers/providers';
+import Head from 'next/head';
+import elephant from './elephant1.ico'
 
 export const metadata: Metadata = {
   title: 'Electronic Elephant',
   description: 'Created by tmzzz',
+  icons: {
+    icon: [{ rel: 'icon', url: elephant.src }],
+  },
   openGraph: {
     type: 'website',
     url: 'https://your-site.com', // Замените на ваш реальный URL
@@ -36,10 +41,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full">
+      <Head>
+        <link rel="icon" type="image/x-icon" href="./elephant.ico" />
+      </Head>
       <body className="flex flex-col min-h-screen">
         <Providers>
           <Header />
-          <main className="flex-grow">{children}</main>
+          <main className="flex-grow mt-28">{children}</main>
           <Footer />
         </Providers>
       </body>

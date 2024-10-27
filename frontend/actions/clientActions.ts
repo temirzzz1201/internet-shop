@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AxiosResponse } from 'axios';
 import {
   loginUser,
   registerUser,
@@ -12,6 +11,7 @@ import {
   deleteChoosenProduct,
   updateChoosenProduct,
   createOrder,
+  setBusket
 } from '@/utils/api';
 import {
   IUser,
@@ -233,3 +233,5 @@ export const placeOrder = createAsyncThunk<
     return rejectWithValue(getErrorMessage(error));
   }
 });
+
+

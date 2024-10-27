@@ -57,9 +57,6 @@ const productSlice = createSlice({
         deleteProduct.fulfilled,
         (state, action: PayloadAction<number>) => {
           state.isLoading = false;
-          // state.products = state.products.filter(
-          //   (product) => Number(product.id) !== action.payload
-          // );
           if (Array.isArray(state.products)) {
             state.products = state.products.filter(
               (product) => Number(product.id) !== action.payload
@@ -75,13 +72,6 @@ const productSlice = createSlice({
         updateProduct.fulfilled,
         (state, action: PayloadAction<IIProduct>) => {
           state.isLoading = false;
-          // const index = state.products.findIndex(
-          //   (product) => product.id === action.payload.id
-          // );
-          // if (index !== -1) {
-          //   state.products[index] = action.payload;
-          // }
-
           if (Array.isArray(state.products)) {
             const index = state.products.findIndex(
               (product) => product.id === action.payload.id

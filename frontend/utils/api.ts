@@ -126,7 +126,6 @@ export const updateChoosenProduct = async (
   return await axios.put(`${BASE_URL}/${updateFlag}/${productId}`, updates);
 };
 
-// Функция для создания заказа
 export const createOrder = async (orderData: {
   quantity: number;
   total_price: number;
@@ -137,5 +136,10 @@ export const createOrder = async (orderData: {
     headers: { 'Content-Type': 'application/json' },
   });
 };
+
+export const setBusket = async (quantity: { quantity: string }) => {
+  localStorage.setItem("quantity", JSON.stringify(quantity));
+};
+
 
 export default api;

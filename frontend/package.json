@@ -10,6 +10,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.2.4",
     "@chakra-ui/next-js": "^2.3.2",
     "@chakra-ui/react": "^2.9.3",
     "@emotion/react": "^11.13.3",
