@@ -15,17 +15,18 @@ import {
   Input,
   useNumberInput,
   useToast,
-  Tooltip
+  Tooltip,
 } from '@chakra-ui/react';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { formatDate } from '@/utils/dateHelper';
 import AppModal from './app-modal';
 import { EmblaOptionsType } from 'embla-carousel';
 import { capitalize } from '@/utils/capitalize';
-import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { placeOrder, updateProduct } from '@/actions/clientActions';
 import Cookies from 'js-cookie';
+import busketSrcOrange from '../app/images/purchase_orange.svg'
 
 // Динамический импорт карусели без SSR
 const EmblaCarousel = dynamic(() => import('./carousel/embla-carousel'), {
@@ -41,8 +42,9 @@ export default function ProductCard({ product }: IProductCardProps) {
   const [quantity, setQuantity] = useState<number>(1);
   const [stock, setStock] = useState<number>(product.stock); // Состояние для отслеживания stock
   const { images } = product;
-  const dispatch = useAppDispatch();
   const toast = useToast();
+
+  const router= useRouter()
 
   const imageUrls = images!.map(
     (image) => `${process.env.NEXT_PUBLIC_API_URL}/uploads/${image.imageUrl}`
@@ -68,36 +70,28 @@ export default function ProductCard({ product }: IProductCardProps) {
     if (!userCookie) {
       setUserId(null);
       toast({
-        title: 'Зарегестрируйтесь чтобы сделать заказ!',
+        title: 'Авторизуйтесь, чтобы сделать заказ!',
         status: 'warning',
         duration: 3000,
         isClosable: true,
       });
       return;
     }
+  
+    const busket = JSON.parse(localStorage.getItem('busket') || '[]');
+    const newItem = { product, quantity }; 
 
-    const orderQuantity = quantity;
-
-    if (orderQuantity > stock) {
-      alert('Недостаточно товара на складе.');
-      return;
-    }
-
-    const orderData = {
-      quantity: orderQuantity,
-      total_price: product.price * orderQuantity,
-      userId: Number(userId),
-      productId: product.id,
-    };
-
-    const updates = { stock: stock - orderQuantity };
-    const updateFlag = 'products/update-product';
-
-    dispatch(placeOrder(orderData));
-    dispatch(updateProduct({ productId: product.id, updates, updateFlag }));
-
-    setStock((prevStock) => prevStock - orderQuantity);
+    console.log('newItem ', newItem);
+    
+    
+    busket.push(newItem);
+    localStorage.setItem('busket', JSON.stringify(busket));
   };
+
+  const goToBusket = () => {
+    router.push('/busket');
+  }
+  
 
   const handleResetQuantity = () => {
     setQuantity(0);
@@ -129,7 +123,8 @@ export default function ProductCard({ product }: IProductCardProps) {
           slides={imageUrls}
           options={OPTIONS}
           autoPlayFlag
-          imageHeightClass="450"
+          imageHeightClass="300"
+          product={product}
           // imageMaxHeightClass='200'
         />
       </AppModal>
@@ -144,7 +139,7 @@ export default function ProductCard({ product }: IProductCardProps) {
             slides={imageUrls}
             options={OPTIONS}
             autoPlayFlag
-            imageHeightClass="450"
+            imageHeightClass="300"
           />
         </Box>
         <Box mb="4">
@@ -163,6 +158,8 @@ export default function ProductCard({ product }: IProductCardProps) {
             </Button>
           </HStack>
         </Box>
+        <Box as='p' mt='5' mb='5'>{ product?.name }</Box>
+
         <Box mb="5">
           <Button
             disabled={quantity === 0}
@@ -181,6 +178,13 @@ export default function ProductCard({ product }: IProductCardProps) {
             isDisabled={stock === 0}
           >
             Удалить
+          </Button>
+          <Button
+            size="sm"
+            colorScheme="blue"
+            onClick={goToBusket}
+          >
+            Перейти в корзину
           </Button>
         </Box>
       </AppModal>
@@ -215,7 +219,7 @@ export default function ProductCard({ product }: IProductCardProps) {
           colorScheme={stock === 0 ? 'red' : 'teal'}
         >
           {' '}
-          В остатках {stock}{' '}
+          Осталось {stock}{' '} шт.
         </Badge>
         <Tooltip label={product.description} aria-label='A tooltip'>
           <Text mb="2" fontSize="md" noOfLines={1}>
@@ -224,6 +228,8 @@ export default function ProductCard({ product }: IProductCardProps) {
           </Text>
         </Tooltip>
         <Text
+          display='flex'
+          justifyContent='space-between'
           cursor="pointer"
           mb="2"
           fontWeight="bold"
@@ -238,6 +244,7 @@ export default function ProductCard({ product }: IProductCardProps) {
         >
           {' '}
           {product.price} руб.{' '}
+          <Image className='max-w-[20px] hover:fill-orange-400' src={busketSrcOrange} alt={busketSrcOrange} />
         </Text>
         <Text mb="3" fontSize="xs">
           {' '}

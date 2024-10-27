@@ -14,6 +14,8 @@ export default function Header() {
       minH="16"
       bg="gray.500"
       mb="5"
+      position='fixed'
+      zIndex='99'
     >
       <Box
         className="flex justify-between items-center"
