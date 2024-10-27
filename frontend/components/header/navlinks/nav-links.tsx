@@ -97,7 +97,7 @@ export default function NavLinks() {
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
-  }, []);
+  }, [productQuantity]);
 
   const links = [
     { id: 1, title: 'Главная', path: '/' },

@@ -5,6 +5,7 @@ import { useAppDispatch } from '@/hooks/useAppDispatch';
 import AppContainer from '@/components/app-container';
 import { placeOrder, updateProduct } from '@/actions/clientActions';
 import Cookies from 'js-cookie';
+import AppModal from '@/components/app-modal';
 
 interface IProduct {
   id: number;
@@ -25,6 +26,10 @@ const Busket = () => {
   const [busketProduct, setBusketProduct] = useState<IBusketProduct[]>([]);
   const dispatch = useAppDispatch();
   const toast = useToast();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpen = () => setIsModalOpen(true);
+  const handleClose = () => setIsModalOpen(false);
 
   useEffect(() => {
     const products = localStorage.getItem('busket');
@@ -47,14 +52,6 @@ const Busket = () => {
 
   const updateLocalStorage = (products: IBusketProduct[]) => {
     localStorage.setItem('busket', JSON.stringify(products));
-  };
-
-  const handleQuantityChange = (index: number, value: number) => {
-    setBusketProduct((prev) => {
-      const updatedProducts = prev.map((item, i) => (i === index ? { ...item, quantity: value } : item));
-      updateLocalStorage(updatedProducts);
-      return updatedProducts;
-    });
   };
 
   const handleIncrement = (index: number, stock: number) => {
@@ -122,6 +119,7 @@ const Busket = () => {
           updates: { stock: product.stock - quantity },
           updateFlag: 'products/update-product',
         }));
+        handleOpen()
       }
     });
   };
@@ -137,6 +135,24 @@ const Busket = () => {
 
   return (
     <AppContainer title='Корзина' myClass="justify-start">
+      <AppModal 
+       isOpen={isModalOpen} // Исправлено
+       onClose={handleClose} // Исправлено
+       title={'Заказ оформлен'}
+      >
+      {busketProduct.length && busketProduct.map((item) => {
+            const { product, quantity } = item;
+
+            return (
+              <Box key={product.id} mb='2' mr='7' maxW='750px' p='10px'>
+                <Box as='h3' mb='3' fontSize='md' fontWeight='semibold'>Товар: {product.name}</Box>
+                <Box as='p' mb='2'>Количество: {quantity}</Box>
+                <Box as='p' mb='5' fontWeight='semibold'>Цена: {product.price} руб.</Box>
+              </Box>
+            );
+          })
+        }
+      </AppModal>
       <Box display='flex' justifyContent='space-between' w='100%'>
         <Box>
           {busketProduct.length > 0 ? (
@@ -144,10 +160,10 @@ const Busket = () => {
               const { product, quantity } = item;
 
               return (
-                <div key={product.id}>
-                  <p>Товар: {product.name}</p>
-                  <p>Количество: {quantity}</p>
-                  <p>Цена: {product.price} руб.</p>
+                <Box key={product.id} mb='12' mr='7' maxW='750px' border='1px solid blue' borderRadius='20px' p='10px'>
+                  <Box as='h3' mb='3' fontSize='xl' fontWeight='semibold'>Товар: {product.name}</Box>
+                  <Box as='p' mb='2'>Количество: {quantity}</Box>
+                  <Box as='p' mb='5' fontWeight='semibold'>Цена: {product.price} руб.</Box>
 
                   <Box mb="4">
                     <HStack>
@@ -163,23 +179,23 @@ const Busket = () => {
                       <Button size="sm" onClick={() => handleIncrement(index, product.stock)} isDisabled={quantity >= product.stock}>
                         +
                       </Button>
-                      <Button size="sm" colorScheme="red" onClick={() => handleRemoveProduct(index)}>
+                      <Button minW='120px' ml='5' size="sm" colorScheme="red" onClick={() => handleRemoveProduct(index)}>
                         Удалить
                       </Button>
                     </HStack>
                   </Box>
-                </div>
+                </Box>
               );
             })
           ) : (
-            <div>В корзине пусто</div>
+            <Box as='h2'>В корзине пусто</Box>
           )}
         </Box>
-        <Box bg='orange.300' p='5' borderRadius='20px'>
-          <Box>Перейти к оформлению</Box>
+        <Box bg='orange.100' p='5' borderRadius='20px'>
+          <Box as='h3' mb='3' fontSize='2xl' fontWeight='semibold'>Перейти к оформлению</Box>
           <Box>
-            <p>Общее количество товаров: {totalQuantity}</p>
-            <p>Общая сумма: {totalPrice} руб.</p>
+            <Box as='p' mb='5'>Общее количество товаров: {totalQuantity}</Box>
+            <Box as='p' mb='5' fontWeight='semibold'>Общая сумма: {totalPrice} руб.</Box>
           </Box>
           <Box mb="5">
             <Button
