@@ -179,11 +179,14 @@ export default function ProductCard({ product }: IProductCardProps) {
           >
             Удалить
           </Button>
+        </Box>
+        <Box>
           <Button
-            size="sm"
-            colorScheme="blue"
-            onClick={goToBusket}
-          >
+              size="sm"
+              colorScheme="blue"
+              variant='ghost'
+              onClick={goToBusket}
+            >
             Перейти в корзину
           </Button>
         </Box>
