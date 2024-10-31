@@ -16,7 +16,7 @@ if (!database || !user || !password || !host) {
 export const sequelize = new Sequelize(database, user, password, {
   host: host,
   dialect: 'mysql',
-  logging: false,
+  logging:  console.log,
 });
 
 

@@ -3,7 +3,7 @@ import { sequelize } from '../config/config';
 import Category from './CategoryModel';
 
 class Product extends Model {
-  public id!: number; // Убедитесь, что поле id указано как public
+  public id!: number;
   public name!: string;
   public description!: string;
   public price!: number;
@@ -11,6 +11,7 @@ class Product extends Model {
   public categoryId!: number;
 }
 
+// Инициализация модели
 Product.init({
   id: {
     type: DataTypes.INTEGER,
@@ -26,7 +27,7 @@ Product.init({
     allowNull: true,
   },
   price: {
-    type: DataTypes.FLOAT,
+    type: DataTypes.DECIMAL(10, 2), // Изменено на DECIMAL для большей точности
     allowNull: false,
   },
   stock: {
@@ -36,11 +37,11 @@ Product.init({
   },
   categoryId: {
     type: DataTypes.INTEGER,
+    allowNull: false,
     references: {
-      model: 'categories',
+      model: Category, // Используйте модель Category напрямую
       key: 'id',
     },
-    allowNull: false, 
   },
 }, {
   sequelize,
@@ -49,7 +50,6 @@ Product.init({
   timestamps: true,
 });
 
-Product.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
-Category.hasMany(Product, { foreignKey: 'categoryId', as: 'products' });
+
 
 export default Product;

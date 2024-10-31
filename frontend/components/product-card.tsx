@@ -26,7 +26,10 @@ import AppModal from './app-modal';
 import { EmblaOptionsType } from 'embla-carousel';
 import { capitalize } from '@/utils/capitalize';
 import Cookies from 'js-cookie';
-import busketSrcOrange from '../app/images/purchase_orange.svg'
+import busketSrcOrange from '@/assets/images/purchase_orange.svg';
+import { addToCart } from '@/actions/clientActions';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { removeFromCart } from '@/actions/clientActions';
 
 // Динамический импорт карусели без SSR
 const EmblaCarousel = dynamic(() => import('./carousel/embla-carousel'), {
@@ -40,11 +43,12 @@ export default function ProductCard({ product }: IProductCardProps) {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
 
   const [quantity, setQuantity] = useState<number>(1);
-  const [stock, setStock] = useState<number>(product.stock); // Состояние для отслеживания stock
+  const [stock, setStock] = useState<number>(product.stock); 
   const { images } = product;
   const toast = useToast();
 
-  const router= useRouter()
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const imageUrls = images!.map(
     (image) => `${process.env.NEXT_PUBLIC_API_URL}/uploads/${image.imageUrl}`
@@ -68,7 +72,6 @@ export default function ProductCard({ product }: IProductCardProps) {
 
   const handleOrder = () => {
     if (!userCookie) {
-      setUserId(null);
       toast({
         title: 'Авторизуйтесь, чтобы сделать заказ!',
         status: 'warning',
@@ -77,24 +80,48 @@ export default function ProductCard({ product }: IProductCardProps) {
       });
       return;
     }
-  
-    const busket = JSON.parse(localStorage.getItem('busket') || '[]');
-    const newItem = { product, quantity }; 
 
+    if (userId === null) {
+      toast({
+        title: 'Ошибка: не удалось получить идентификатор пользователя.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    const newItem = { userId, productId: product.id.toString(), quantity };
     console.log('newItem ', newItem);
-    
-    
-    busket.push(newItem);
-    localStorage.setItem('busket', JSON.stringify(busket));
+
+    dispatch(addToCart(newItem))
+      .unwrap()
+      .then(() => {
+        toast({
+          title: 'Товар добавлен в корзину!',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: 'Не удалось добавить товар в корзину',
+          description: error.message || 'Ошибка сети',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      });
   };
 
   const goToBusket = () => {
     router.push('/busket');
-  }
-  
+  };
 
   const handleResetQuantity = () => {
     setQuantity(0);
+    dispatch(removeFromCart({ id: product.id.toString() }));
   };
 
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
@@ -158,7 +185,9 @@ export default function ProductCard({ product }: IProductCardProps) {
             </Button>
           </HStack>
         </Box>
-        <Box as='p' mt='5' mb='5'>{ product?.name }</Box>
+        <Box as="p" mt="5" mb="5">
+          {product?.name}
+        </Box>
 
         <Box mb="5">
           <Button
@@ -182,11 +211,11 @@ export default function ProductCard({ product }: IProductCardProps) {
         </Box>
         <Box>
           <Button
-              size="sm"
-              colorScheme="blue"
-              variant='ghost'
-              onClick={goToBusket}
-            >
+            size="sm"
+            colorScheme="blue"
+            variant="ghost"
+            onClick={goToBusket}
+          >
             Перейти в корзину
           </Button>
         </Box>
@@ -222,7 +251,7 @@ export default function ProductCard({ product }: IProductCardProps) {
           colorScheme={stock === 0 ? 'red' : 'teal'}
         >
           {' '}
-          Осталось {stock}{' '} шт.
+          Осталось {stock} шт.
         </Badge>
         <Tooltip label={product.description} aria-label="A tooltip">
           <Text mb="2" fontSize="md" noOfLines={1}>
@@ -231,8 +260,8 @@ export default function ProductCard({ product }: IProductCardProps) {
           </Text>
         </Tooltip>
         <Text
-          display='flex'
-          justifyContent='space-between'
+          display="flex"
+          justifyContent="space-between"
           cursor="pointer"
           mb="2"
           fontWeight="bold"
@@ -247,7 +276,11 @@ export default function ProductCard({ product }: IProductCardProps) {
         >
           {' '}
           {product.price} руб.{' '}
-          <Image className='max-w-[20px] hover:fill-orange-400' src={busketSrcOrange} alt={busketSrcOrange} />
+          <Image
+            className="max-w-[20px] hover:fill-orange-400"
+            src={busketSrcOrange}
+            alt={busketSrcOrange}
+          />
         </Text>
         <Text mb="3" fontSize="xs">
           {' '}

@@ -4,16 +4,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { logout } from '@/actions/clientActions';
-import profileSrcBlue from '../../../app/images/profile_blue.svg';
-import profileSrcWhite from '../../../app/images/profile_white.svg';
-import busketSrc from '../../../app/images/purchase.svg';
-import busketSrcBlue from '../../../app/images/purchase_blue.svg';
+import profileSrcBlue from '@/assets/images/profile_blue.svg';
+import profileSrcWhite from '@/assets/images/profile_white.svg';
+import busketSrc from '@/assets/images/purchase.svg';
+import busketSrcBlue from '@/assets/images/purchase_blue.svg';
 import { usePathname } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { capitalize } from '../../../utils/capitalize';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { Box } from '@chakra-ui/react';
 import MobileNav from '@/components/header/mobile-nav';
+import { useRouter } from 'next/navigation';
 
 interface Product {
   product: {
@@ -48,10 +49,12 @@ export default function NavLinks() {
   const { user } = useAppSelector((state) => state.auth);
   const [userName, setUserName] = useState<string | null>(null);
   const [productQuantity, setProductQuantity] = useState<number>(0);
+  const { replace } = useRouter();
 
   const logoutUser = () => {
     dispatch(logout());
     setUserName(null);
+    replace('/');
   };
 
   useEffect(() => {
@@ -68,36 +71,7 @@ export default function NavLinks() {
     }
   }, [user]);
 
-  const calculateProductQuantity = () => {
-    const products = localStorage.getItem('busket');
-    if (products) {
-      try {
-        const parsedProducts: Product[] = JSON.parse(products);
-        const productSum = parsedProducts.reduce((accumulator, currentValue) => {
-          return accumulator + currentValue.quantity;
-        }, 0);
-        setProductQuantity(productSum);
-      } catch (error) {
-        console.error('Ошибка при парсинге JSON:', error);
-      }
-    }
-  };
 
-  useEffect(() => {
-    calculateProductQuantity();
-    
-    const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === 'busket') {
-        calculateProductQuantity();
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, [productQuantity]);
 
   const links = [
     { id: 1, title: 'Главная', path: '/' },
@@ -117,7 +91,7 @@ export default function NavLinks() {
       {/* Мобильная версия */}
       <Box display={{ base: 'block', md: 'none' }}>
         <MobileNav>
-          <Box className="flex-col bg-white text-slate-600" as='ul'>
+          <Box className="flex-col bg-white text-slate-600" as="ul">
             {links.map((link) => (
               <Box key={link.id} className="mb-4 flex items-center" as="li">
                 <Link
@@ -148,26 +122,54 @@ export default function NavLinks() {
             ))}
             {userName || user ? (
               <>
-                <Box position='relative' className="flex items-center mr-3 mb-4" as='li'>
+                <Box
+                  position="relative"
+                  className="flex items-center mr-3 mb-4"
+                  as="li"
+                >
                   <Link href="/busket" className="text-white flex">
                     {productQuantity > 0 && (
-                      <Box w='15px' h='15px' position='absolute' top='-9px' right='230px' borderRadius='50%' bg='red' display='flex' justifyContent='center' alignItems='center'>
-                        <Box position='absolute' color='white' fontWeight='extrabold' fontSize='12px'>
+                      <Box
+                        w="15px"
+                        h="15px"
+                        position="absolute"
+                        top="-9px"
+                        right="230px"
+                        borderRadius="50%"
+                        bg="red"
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <Box
+                          position="absolute"
+                          color="white"
+                          fontWeight="extrabold"
+                          fontSize="12px"
+                        >
                           {productQuantity}
                         </Box>
                       </Box>
                     )}
-                    <Image className='max-w-[20px]' src={busketSrcBlue} alt={busketSrcBlue} />
+                    <Image
+                      className="max-w-[20px]"
+                      src={busketSrcBlue}
+                      alt={busketSrcBlue}
+                    />
                   </Link>
                 </Box>
-                <Box className="flex items-center" as='li'>
-                  <Link href="/" onClick={logoutUser} className="text-blue-600 font-semibold">
+                <Box className="flex items-center" as="li">
+                  <Link
+                    href="/"
+                    onClick={logoutUser}
+                    className="text-blue-600 font-semibold"
+                  >
                     Выйти
                   </Link>
                 </Box>
               </>
             ) : (
-              <Box className="flex items-center" as='li'>
+              <Box className="flex items-center" as="li">
                 <Link href="/login" className="text-blue-600 font-semibold">
                   Войти
                 </Link>
@@ -207,19 +209,39 @@ export default function NavLinks() {
         ))}
         {userName || user ? (
           <>
-            <Box position='relative' className="flex items-center mr-5" as='li'>
+            <Box position="relative" className="flex items-center mr-5" as="li">
               <Link href="/busket" className="text-white flex">
                 {productQuantity > 0 && (
-                  <Box w='15px' h='15px' position='absolute' top='-9px' right='-11px' borderRadius='50%' bg='red' display='flex' justifyContent='center' alignItems='center'>
-                    <Box position='absolute' color='white' fontWeight='extrabold' fontSize='12px'>
+                  <Box
+                    w="15px"
+                    h="15px"
+                    position="absolute"
+                    top="-9px"
+                    right="-11px"
+                    borderRadius="50%"
+                    bg="red"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Box
+                      position="absolute"
+                      color="white"
+                      fontWeight="extrabold"
+                      fontSize="12px"
+                    >
                       {productQuantity}
                     </Box>
                   </Box>
                 )}
-                <Image className='max-w-[20px]' src={busketSrc} alt={busketSrc} />
+                <Image
+                  className="max-w-[20px]"
+                  src={busketSrc}
+                  alt={busketSrc}
+                />
               </Link>
             </Box>
-            <Box className="mr-5 flex items-center" as='li'>
+            <Box className="mr-5 flex items-center" as="li">
               <Link href="/" onClick={logoutUser} className="text-white flex">
                 Выйти
               </Link>

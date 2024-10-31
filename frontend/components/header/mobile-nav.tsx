@@ -1,8 +1,16 @@
-'use client'
-import { ReactNode } from "react";
-import { useDisclosure, Button, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, Box } from "@chakra-ui/react";
-import { CloseIcon } from '@chakra-ui/icons'
-import { motion } from "framer-motion";
+'use client';
+import { ReactNode } from 'react';
+import {
+  useDisclosure,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
+  Box,
+} from '@chakra-ui/react';
+import { CloseIcon } from '@chakra-ui/icons';
+import { motion } from 'framer-motion';
 
 interface MobileNavProps {
   children: ReactNode;
@@ -49,13 +57,20 @@ export default function MobileNav({ children }: MobileNavProps) {
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
         <DrawerContent>
-          <Box display='flex' justifyContent='space-between'>
-            <DrawerHeader color='slategray' whiteSpace='nowrap' borderBottomWidth='1px'>Electronic Elephant</DrawerHeader>
-            <CloseIcon className="mr-4 mt-5" onClick={isOpen ? onClose : onOpen} />
+          <Box display="flex" justifyContent="space-between">
+            <DrawerHeader
+              color="slategray"
+              whiteSpace="nowrap"
+              borderBottomWidth="1px"
+            >
+              Electronic Elephant
+            </DrawerHeader>
+            <CloseIcon
+              className="mr-4 mt-5"
+              onClick={isOpen ? onClose : onOpen}
+            />
           </Box>
-          <DrawerBody>
-            {children}
-          </DrawerBody>
+          <DrawerBody>{children}</DrawerBody>
         </DrawerContent>
       </Drawer>
     </Box>

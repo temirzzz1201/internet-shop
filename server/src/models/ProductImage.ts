@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/config';
-import Product from './ProductModel';
+// import Product from './ProductModel';
 
 class ProductImage extends Model {}
 
@@ -29,7 +29,7 @@ ProductImage.init({
   timestamps: true,
 });
 
-Product.hasMany(ProductImage, { foreignKey: 'productId', as: 'images' });
-ProductImage.belongsTo(Product, { foreignKey: 'productId' });
+// Product.hasMany(ProductImage, { foreignKey: 'productId', as: 'images' });
+// ProductImage.belongsTo(Product, { foreignKey: 'productId' });
 
 export default ProductImage;

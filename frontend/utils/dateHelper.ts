@@ -47,8 +47,8 @@ function getDayLabel(days: number): string {
 }
 
 export function getGreetingByTime(): string {
-  const currentDate = new Date(); // Получаем текущую дату и время
-  const hour = currentDate.getHours(); // Получаем текущий час
+  const currentDate = new Date();
+  const hour = currentDate.getHours();
 
   if (hour >= 5 && hour < 12) {
     return 'Доброе утро';

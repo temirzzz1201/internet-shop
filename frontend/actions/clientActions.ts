@@ -11,7 +11,12 @@ import {
   deleteChoosenProduct,
   updateChoosenProduct,
   createOrder,
-  setBusket
+  fetchUserOrder,
+  createCartProduct,
+  deleteCartProduct,
+  updateCartProduct,
+  getCartProducts,
+  deleteAllfromCart
 } from '@/utils/api';
 import {
   IUser,
@@ -50,7 +55,7 @@ export const placeProduct = createAsyncThunk<
 
     const response = await createProduct(formData);
 
-    if (response.status === 201 || response.status === 200) {
+    if (response?.status === 201 || response?.status === 200) {
       return response.data;
     } else {
       return rejectWithValue('Не удалось загрузить продукт');
@@ -68,7 +73,7 @@ export const getProducts = createAsyncThunk<
   try {
     const response = await fetchAllProducts();
 
-    if (response.status === 200) {
+    if (response?.status === 200) {
       return response.data;
     } else {
       return rejectWithValue('Не удалось получить категории');
@@ -88,8 +93,8 @@ export const placeCategory = createAsyncThunk<
       categoryName: category.categoryName,
     });
 
-    if (response.status === 201 || response.status === 200) {
-      return response.data as ICategory;
+    if (response?.status === 201 || response?.status === 200) {
+      return response?.data as ICategory;
     } else {
       return rejectWithValue('Не удалось создать категорию');
     }
@@ -106,7 +111,7 @@ export const getCategory = createAsyncThunk<
   try {
     const response = await fetchCategories();
 
-    if (response.status === 200) {
+    if (response?.status === 200) {
       return response.data;
     } else {
       return rejectWithValue('Не удалось получить категории');
@@ -160,7 +165,7 @@ export const getUsers = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetchAllUsers();
-      const usersData = response.data || [];
+      const usersData = response?.data || [];
 
       return usersData;
     } catch (error) {
@@ -179,7 +184,7 @@ export const deleteProduct = createAsyncThunk<
     try {
       const response = await deleteChoosenProduct(productId, deleteFlag);
 
-      if (response.status === 200) {
+      if (response?.status === 200) {
         return productId;
       } else {
         return rejectWithValue('Не удалось удалить продукт');
@@ -204,7 +209,7 @@ export const updateProduct = createAsyncThunk<
         updateFlag
       );
 
-      if (response.status === 200) {
+      if (response?.status === 200) {
         return response.data;
       } else {
         return rejectWithValue('Не удалось обновить продукт');
@@ -228,6 +233,23 @@ export const placeOrder = createAsyncThunk<
   try {
     const response = await createOrder(orderData);
 
+    if (!response) {
+      return rejectWithValue('Ошибка: пустой ответ от сервера.');
+    }
+
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
+  }
+});
+
+export const getUserOrders = createAsyncThunk<
+  IOrder[],
+  string,
+  { rejectValue: string }
+>('orders/getUserOrders', async (userId, { rejectWithValue }) => {
+  try {
+    const response = await fetchUserOrder(userId);
     return response.data;
   } catch (error) {
     return rejectWithValue(getErrorMessage(error));
@@ -235,3 +257,77 @@ export const placeOrder = createAsyncThunk<
 });
 
 
+export const addToCart = createAsyncThunk(
+  'cart/addToCart',
+  async (
+    {
+      userId,
+      productId,
+      quantity,
+    }: { userId: string; productId: string; quantity: number },
+    { rejectWithValue }
+  ) => {
+    try {
+      console.log(userId, productId, quantity );
+      
+      const response = await createCartProduct({ userId, productId, quantity });
+      console.log(response);
+      
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
+export const removeFromCart = createAsyncThunk(
+  'cart/removeFromCart',
+  async ({ id }: { id: string }, { rejectWithValue }) => {
+    try {
+      await deleteCartProduct(id);
+      return id;
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
+
+export const clearCart = createAsyncThunk(
+  'cart/removeFromCart',
+  async (_, { rejectWithValue }) => {
+    try {
+      await deleteAllfromCart()
+      return; 
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
+export const updateCartItem = createAsyncThunk<
+  { id: string; quantity: number },
+  { id: string; quantity: number },
+  { rejectValue: string | null } 
+>('cart/updateCartItem', async ({ id, quantity }, { rejectWithValue }) => {
+  try {
+    await updateCartProduct(id, { quantity }); 
+    return { id, quantity }; 
+  } catch (error) {
+    return rejectWithValue(
+      getErrorMessage(error)
+    ); 
+  }
+});
+
+export const fetchCartItems = createAsyncThunk(
+  'cart/fetchCartItems',
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const response = await getCartProducts(userId); 
+      return response?.data; 
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
