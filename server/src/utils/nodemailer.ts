@@ -1,14 +1,6 @@
 import 'dotenv/config'
 import nodemailer from 'nodemailer';
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
-
 interface IOrderDetails {
   quantity: number, 
   total_price: number, 
@@ -21,6 +13,13 @@ interface IUserOrder {
   userEmail: string
 }
 
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
 
 const sendOrderEmails = ({userEmail, orderDetails }: IUserOrder) => {
 
@@ -35,8 +34,8 @@ const sendOrderEmails = ({userEmail, orderDetails }: IUserOrder) => {
   `;
 
   const adminMailOptions = {
-    from: 'your-email@gmail.com',
-    to: 'your-email@gmail.com',
+    from: 'your-shop-email@gmail.com',
+    to: 'temir1201@gmail.com',
     subject: 'Новый заказ',
     text: formattedOrderDetails
   };

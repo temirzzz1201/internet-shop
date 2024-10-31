@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IOrdersState, IOrder } from '../types';
-import { placeOrder } from '@/actions/clientActions';
+import { getUserOrders, placeOrder } from '@/actions/clientActions';
 
 const initialState: IOrdersState = {
   orders: [],
@@ -25,6 +25,22 @@ const ordersSlice = createSlice({
       .addCase(placeOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Ошибка при создании заказа';
+      })
+      .addCase(getUserOrders.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        getUserOrders.fulfilled,
+        (state, action: PayloadAction<IOrder[]>) => {
+          state.orders = action.payload;
+          state.loading = false;
+        }
+      )
+      .addCase(getUserOrders.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload ?? 'Ошибка при получении заказов пользователя';
       });
   },
 });

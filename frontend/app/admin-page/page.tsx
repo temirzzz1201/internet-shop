@@ -58,7 +58,7 @@ export default function Admin() {
       name,
       description,
       price: Number(price),
-      stock: Number(stock), 
+      stock: Number(stock),
       images: files,
     };
 
@@ -161,7 +161,9 @@ export default function Admin() {
         <TabPanels className="mt-10">
           <TabPanel>
             <FormControl className="max-w-[500px] mb-3">
-              <Heading size='md' mb='5'>Создать категорию</Heading>
+              <Heading size="md" mb="5">
+                Создать категорию
+              </Heading>
               <Input
                 placeholder="Название категории"
                 size="md"
@@ -183,8 +185,10 @@ export default function Admin() {
             <Divider my="10" />
 
             <FormControl className="max-w-[500px]">
-              <Heading size='md' mb='5'>Создать продукт</Heading>
-              <FormLabel fontSize='12'>Выбрать категорию</FormLabel>
+              <Heading size="md" mb="5">
+                Создать продукт
+              </Heading>
+              <FormLabel fontSize="12">Выбрать категорию</FormLabel>
               <Select
                 mb="2"
                 placeholder="Выбрать категорию"
@@ -196,7 +200,7 @@ export default function Admin() {
                   </option>
                 ))}
               </Select>
-              <FormLabel fontSize='12'>Название продукта</FormLabel>
+              <FormLabel fontSize="12">Название продукта</FormLabel>
               <Input
                 placeholder="Название продукта"
                 size="md"
@@ -205,7 +209,7 @@ export default function Admin() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
-              <FormLabel fontSize='12'>Описание продукта</FormLabel>
+              <FormLabel fontSize="12">Описание продукта</FormLabel>
               <Input
                 placeholder="Описание продукта"
                 size="md"
@@ -214,7 +218,7 @@ export default function Admin() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
-              <FormLabel fontSize='12'>Цена</FormLabel>
+              <FormLabel fontSize="12">Цена</FormLabel>
               <Input
                 placeholder="Цена"
                 size="md"
@@ -224,7 +228,7 @@ export default function Admin() {
                 value={price === 0 ? '' : price} // Удаляем начальное значение
                 onChange={(e) => setPrice(Number(e.target.value))}
               />
-              <FormLabel fontSize='12'>Остатки</FormLabel>
+              <FormLabel fontSize="12">Остатки</FormLabel>
               <Input
                 placeholder="Остатки"
                 size="md"
@@ -233,7 +237,9 @@ export default function Admin() {
                 value={stock === 0 ? '' : stock} // Удаляем начальное значение
                 onChange={(e) => setStock(Number(e.target.value))}
               />
-              <FormLabel fontSize='12'>Загрузить изображения (до 5ти штук)</FormLabel>
+              <FormLabel fontSize="12">
+                Загрузить изображения (до 5ти штук)
+              </FormLabel>
               <Input
                 className="mb-4"
                 size="md"

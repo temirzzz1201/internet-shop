@@ -6,13 +6,9 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react';
-import { IModalProps } from '@/types';
+import { AppModalProps } from '@/types';
 
-interface AppModalProps extends IModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-}
+
 
 function AppModal({ children, isOpen, onClose, title }: AppModalProps) {
   return (

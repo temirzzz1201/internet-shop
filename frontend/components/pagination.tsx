@@ -41,7 +41,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage }) => {
           variant={i === page ? 'solid' : 'outline'}
           colorScheme={i === page ? 'teal' : 'gray'}
           mr={2}
-          size='sm'
+          size="sm"
         >
           {i}
         </Button>
@@ -56,7 +56,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage }) => {
         onClick={() => handlePageChange(page - 1)}
         isDisabled={page === 1}
         mr={2}
-        size='sm'
+        size="sm"
       >
         Пред
       </Button>
@@ -64,7 +64,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage }) => {
       <Button
         onClick={() => handlePageChange(page + 1)}
         isDisabled={page === totalPages}
-        size='sm'
+        size="sm"
       >
         След
       </Button>

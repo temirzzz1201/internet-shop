@@ -1,11 +1,11 @@
 'use client';
 import './embla-carousel.css';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { EmblaOptionsType } from 'embla-carousel';
 import { DotButton, useDotButton } from './embla-carousel-btns';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
-import { Image, Box } from '@chakra-ui/react';
+import { Image, Box, Skeleton } from '@chakra-ui/react';
 import { IIProduct } from '@/types';
 
 type PropType = {
@@ -16,7 +16,7 @@ type PropType = {
   imageHeightClass?: string;
   imageMaxHeightClass?: string;
   imageMaxWidthClass?: string;
-  product?: IIProduct
+  product?: IIProduct;
 };
 
 const EmblaCarousel: React.FC<PropType> = ({
@@ -27,7 +27,7 @@ const EmblaCarousel: React.FC<PropType> = ({
   imageHeightClass,
   imageMaxHeightClass,
   imageMaxWidthClass,
-  product
+  product,
 }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
   const autoplay = emblaApi?.plugins()?.autoplay;
@@ -50,26 +50,45 @@ const EmblaCarousel: React.FC<PropType> = ({
     onNavButtonClick
   );
 
+  const [imageLoaded, setImageLoaded] = useState<boolean[]>(
+    Array(slides.length).fill(false)
+  );
+
+  const handleImageLoad = (index: number) => {
+    setImageLoaded((prev) => {
+      const newLoaded = [...prev];
+      newLoaded[index] = true;
+      return newLoaded;
+    });
+  };
+
   return (
     <Box>
       <Box className="embla">
         <Box className="embla__viewport" ref={emblaRef}>
           <Box className="embla__container">
-            {slides.map((url) => (
+            {slides.map((url, index) => (
               <Box className="embla__slide" key={url}>
-                <Image
-                  onClick={handleOpen}
-                  h={imageHeightClass ? imageHeightClass : '100%'}
-                  maxH={imageMaxHeightClass ? imageMaxHeightClass : '100%'}
-                  maxW={imageMaxWidthClass ? imageMaxWidthClass : '100%'}
-
-                  objectFit="contain"
-                  objectPosition='center center'
+                <Skeleton
+                  isLoaded={imageLoaded[index]}
                   w="100%"
-                  src={url}
-                  alt={url}
-                  cursor="pointer"
-                />
+                  h={imageHeightClass || '100%'}
+                >
+                  <Image
+                    onClick={handleOpen}
+                    h={imageHeightClass ? imageHeightClass : '100%'}
+                    maxH={imageMaxHeightClass ? imageMaxHeightClass : '100%'}
+                    maxW={imageMaxWidthClass ? imageMaxWidthClass : '100%'}
+                    objectFit="contain"
+                    objectPosition="center center"
+                    w="100%"
+                    src={url}
+                    alt={url}
+                    cursor="pointer"
+                    loading="lazy"
+                    onLoad={() => handleImageLoad(index)} 
+                  />
+                </Skeleton>
               </Box>
             ))}
           </Box>
@@ -88,10 +107,10 @@ const EmblaCarousel: React.FC<PropType> = ({
             ))}
           </Box>
         </Box>
-
       </Box>
-      <Box as='p' mt='5' mb='5'>{ product?.name }</Box>
-
+      <Box as="p" mt="5" mb="5">
+        {product?.name}
+      </Box>
     </Box>
   );
 };

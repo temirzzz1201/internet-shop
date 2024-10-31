@@ -1,11 +1,6 @@
-import { ReactNode } from 'react';
 import { Text, Box } from '@chakra-ui/react';
+import { IContainerProps } from '@/types';
 
-interface IContainerProps {
-  title: string;
-  children: ReactNode;
-  myClass: string;
-}
 
 export default function AppContainer({
   title,
@@ -32,6 +27,7 @@ export default function AppContainer({
         px="5"
         maxW="1920"
         w="100%"
+        pb='10'
       >
         {children}
       </Box>

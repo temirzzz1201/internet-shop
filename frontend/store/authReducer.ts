@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { register, login, logout } from '../actions/clientActions';
 import { IAuthState } from '../types';
-import Cookies from 'js-cookie';
 
 export const initialState: IAuthState = {
   user: null,
@@ -21,9 +20,15 @@ const authSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload.user;
-        state.isAuthenticated = true;
-        state.error = null;
+        if (action.payload) {
+          state.user = action.payload.user;
+          state.isAuthenticated = true;
+          state.error = null;
+        } else {
+          state.user = null; 
+          state.isAuthenticated = false;
+          state.error = 'Ошибка регистрации'; 
+        }
       })
       .addCase(register.rejected, (state, action: PayloadAction<unknown>) => {
         state.isLoading = false;

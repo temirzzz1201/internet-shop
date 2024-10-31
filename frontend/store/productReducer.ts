@@ -23,14 +23,16 @@ const productSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(placeProduct.fulfilled,
+      .addCase(
+        placeProduct.fulfilled,
         (state, action: PayloadAction<IIProduct>) => {
           state.isLoading = false;
 
           if (!Array.isArray(state.products)) {
             state.products = [];
           }
-      })
+        }
+      )
       .addCase(placeProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload ?? 'Что-то пошло не так';

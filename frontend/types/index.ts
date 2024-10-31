@@ -12,13 +12,35 @@ export interface IIProduct {
   id: number;
   name: string;
   description: string;
-  price: number; 
+  price: number;
   stock: number;
   categoryId: number;
   createdAt: string;
   updatedAt: string;
-  category?: ICategory; 
-  images?: Image[];   
+  category?: ICategory;
+  images: { imageUrl: string }[];
+  product: IIProduct;
+}
+
+interface IProductImage {
+  imageUrl: string;
+}
+
+export interface IOrder {
+  id: number;
+  userId: number;
+  createdAt: string;
+  total_price: number;
+  quantity: number;
+  productId: number;
+  Product: IIProduct | null;
+  description: string;
+}
+
+export interface IBusketProduct {
+  id: number;
+  product: IIProduct;
+  quantity: number;
 }
 
 export interface IIProductResponse {
@@ -129,15 +151,35 @@ export interface IProductCardProps {
   product: IIProduct;
 }
 
-export interface IOrder {
-  quantity: number;
-  total_price: number;
-  userId: number;
-  productId: number;
-}
-
 export interface IOrdersState {
   orders: IOrder[];
   loading: boolean;
   error: string | null;
+}
+
+export interface ICartItem {
+  productId: string;
+  quantity: number;
+  price: number;
+}
+
+export interface ICart {
+  id: string;
+  userId: string;
+  items: ICartItem[];
+  totalAmount: number;
+  quantity: number;
+}
+
+export interface IContainerProps {
+  title: string;
+  children: ReactNode;
+  myClass: string;
+}
+
+
+export interface AppModalProps extends IModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
 }

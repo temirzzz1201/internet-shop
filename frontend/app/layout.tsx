@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
-import './globals.css';
+import '../assets/styles/globals.css';
 import Header from '../components/header/header';
 import Footer from '../components/footer';
 import Providers from '@/providers/providers';
-import Head from 'next/head';
-import elephant from './elephant1.ico'
+import elephant from '@/assets/elephant.ico';
 
 export const metadata: Metadata = {
   title: 'Electronic Elephant',
@@ -41,9 +40,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full">
-      <Head>
-        <link rel="icon" type="image/x-icon" href="./elephant.ico" />
-      </Head>
       <body className="flex flex-col min-h-screen">
         <Providers>
           <Header />
