@@ -16,14 +16,14 @@ import {
   deleteCartProduct,
   updateCartProduct,
   getCartProducts,
-  deleteAllfromCart
+  deleteAllfromCart,
+  getOneProduct
 } from '@/utils/api';
 import {
   IUser,
   IIProduct,
   ICategory,
   IOrder,
-  IIProductResponse,
 } from '@/types';
 import { getErrorMessage } from '@/utils/errorMessage';
 
@@ -82,6 +82,28 @@ export const getProducts = createAsyncThunk<
     return rejectWithValue(getErrorMessage(error));
   }
 });
+
+
+export const getProductDetail = createAsyncThunk<IIProduct, string, { rejectValue: string }>(
+  'products/getProductDetail',
+  async (id, { rejectWithValue }) => {
+    try {
+      const product = await getOneProduct(id);
+
+      // Проверяем, успешно ли получены данные продукта
+      if (product) {
+        return product; // Возвращаем продукт, если он существует
+      } else {
+        return rejectWithValue('Продукт не найден'); // Сообщение о неудаче
+      }
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error)); // Обработка ошибок
+    }
+  }
+);
+
+
+
 
 export const placeCategory = createAsyncThunk<
   ICategory,

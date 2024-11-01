@@ -38,6 +38,20 @@ export const fetchAllProducts = async ({ page = 1, limit = 30 } = {}) => {
   }
 };
 
+
+// export const fetchOneProducts = async (id: string) => {
+//   try {
+//     const response = await axiosInstance.get(`/products/find-one`, {
+//       params: { id },
+//     });
+
+//     if (response) return response.data
+
+//   } catch (error: unknown) {
+//     console.error(`Ошибка получения продукта: ${error}`);
+//   }
+// };
+
 export const fetchCategories = async () => {
   try {
     const response = await axiosInstance.get('/products/all-categories');
