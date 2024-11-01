@@ -10,9 +10,9 @@ import { AppModalProps } from '@/types';
 
 
 
-function AppModal({ children, isOpen, onClose, title }: AppModalProps) {
+function AppModal({ children, isOpen, onClose, title, modalSize }: AppModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="xs">
+    <Modal isCentered isOpen={isOpen} onClose={onClose} size={modalSize}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{title}</ModalHeader>
@@ -24,3 +24,5 @@ function AppModal({ children, isOpen, onClose, title }: AppModalProps) {
 }
 
 export default AppModal;
+
+

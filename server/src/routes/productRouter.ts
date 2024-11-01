@@ -40,6 +40,36 @@ router.get('/all-products', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/find-one', async (req: Request, res: Response) => {
+  const id = parseInt(req.query.id as string, 10);
+
+  try {
+    const  product  = await Product.findOne({
+      where: { id },
+      include: [
+        {
+          model: Category,
+          as: 'category',
+        },
+        {
+          model: Image,
+          as: 'images',
+        },
+      ],
+    
+    });
+
+
+    res.json({
+      product,
+     
+    });
+  } catch (error) {
+    console.error('Ошибка при получении продуктов:', error);
+    res.status(500).json({ error: 'Ошибка при получении продуктов' });
+  }
+});
+
 
 router.post('/create-product', upload.array('images', 5), async (req: Request, res: Response) => {
   try {

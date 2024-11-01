@@ -30,6 +30,7 @@ import busketSrcOrange from '@/assets/images/purchase_orange.svg';
 import { addToCart } from '@/actions/clientActions';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { removeFromCart } from '@/actions/clientActions';
+import Link from 'next/link';
 
 // Динамический импорт карусели без SSR
 const EmblaCarousel = dynamic(() => import('./carousel/embla-carousel'), {
@@ -42,7 +43,7 @@ export default function ProductCard({ product }: IProductCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
 
-  const [quantity, setQuantity] = useState<number>(1);
+  const [quantity, setQuantity] = useState<number>(0);
   const [stock, setStock] = useState<number>(product.stock); 
   const { images } = product;
   const toast = useToast();
@@ -140,23 +141,9 @@ export default function ProductCard({ product }: IProductCardProps) {
   const input = getInputProps();
 
   return (
-    <Box className={stock === 0 ? 'pointer-events-none' : ''}>
+    <Box maxH='430px' className={stock === 0 ? 'pointer-events-none' : ''}>
       <AppModal
-        isOpen={isModalOpen}
-        onClose={handleClose}
-        title={product.category?.name || ''}
-      >
-        <EmblaCarousel
-          slides={imageUrls}
-          options={OPTIONS}
-          autoPlayFlag
-          imageHeightClass="300"
-          product={product}
-          // imageMaxHeightClass='200'
-        />
-      </AppModal>
-
-      <AppModal
+        modalSize='sm'
         isOpen={isProductModalOpen}
         onClose={handleCloseProduct}
         title={product.category?.name || ''}
@@ -230,13 +217,14 @@ export default function ProductCard({ product }: IProductCardProps) {
         boxShadow="md"
       >
         <Box mb="3">
-          <EmblaCarousel
-            slides={imageUrls}
-            options={OPTIONS}
-            handleOpen={handleOpen}
-            imageMaxHeightClass="200"
-            // imageMaxWidthClass='250'
-          />
+          <Link href={`/detail/${product.id}`}>
+            <EmblaCarousel
+              slides={imageUrls}
+              options={OPTIONS}
+              handleOpen={handleOpen}
+              imageMaxHeightClass="200"
+            />
+          </Link>
         </Box>
         <Tooltip label={product.name} aria-label="A tooltip">
           <Heading noOfLines={1} size="l" fontWeight="bold">
@@ -259,29 +247,32 @@ export default function ProductCard({ product }: IProductCardProps) {
             {capitalize(product.description)}{' '}
           </Text>
         </Tooltip>
-        <Text
-          display="flex"
-          justifyContent="space-between"
-          cursor="pointer"
-          mb="2"
-          fontWeight="bold"
-          onClick={handleOpenProduct}
-          sx={{
-            transition: 'color 0.3s ease',
-            _hover: {
-              color: 'orange',
-              fontWeight: 'bold',
-            },
-          }}
-        >
-          {' '}
-          {product.price} руб.{' '}
-          <Image
-            className="max-w-[20px] hover:fill-orange-400"
-            src={busketSrcOrange}
-            alt={busketSrcOrange}
-          />
-        </Text>
+        <Tooltip label="Добавить в корзину" aria-label="A tooltip">
+          <Text
+            display="flex"
+            justifyContent="space-between"
+            cursor="pointer"
+            mb="2"
+            fontWeight="bold"
+            onClick={handleOpenProduct}
+            sx={{
+              transition: 'color 0.3s ease',
+              _hover: {
+                color: 'orange',
+                fontWeight: 'bold',
+              },
+            }}
+          >
+            {' '}
+            {product.price} руб.{' '}
+            <Image
+              className="max-w-[20px] hover:fill-orange-400"
+              src={busketSrcOrange}
+              alt={busketSrcOrange}
+            />
+          </Text>
+        </Tooltip>
+        
         <Text mb="3" fontSize="xs">
           {' '}
           {formatDate(product.createdAt)}{' '}

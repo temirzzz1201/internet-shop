@@ -53,6 +53,7 @@ export interface IIProductResponse {
 }
 
 export interface IIProducts {
+  currentProduct: IIProduct | null;
   products: IIProduct[];
   isLoading: boolean;
   error: string | null;
@@ -179,6 +180,7 @@ export interface IContainerProps {
 
 
 export interface AppModalProps extends IModalProps {
+  modalSize: string;
   isOpen: boolean;
   onClose: () => void;
   title: string;

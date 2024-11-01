@@ -76,7 +76,7 @@ const EmblaCarousel: React.FC<PropType> = ({
                 >
                   <Image
                     onClick={handleOpen}
-                    h={imageHeightClass ? imageHeightClass : '100%'}
+                    h={imageHeightClass ? imageHeightClass : '200px'}
                     maxH={imageMaxHeightClass ? imageMaxHeightClass : '100%'}
                     maxW={imageMaxWidthClass ? imageMaxWidthClass : '100%'}
                     objectFit="contain"

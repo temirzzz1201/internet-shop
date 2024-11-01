@@ -60,6 +60,7 @@ const Home = async ({ searchParams }: IHomeProps) => {
                 xl: 'repeat(5, 1fr)',
               }}
               gap={{ base: 6, md: 3 }}
+              alignItems="stretch"
             >
               {filteredProducts.length > 0 ? (
                 filteredProducts.map((product: IIProduct) => (
@@ -73,7 +74,6 @@ const Home = async ({ searchParams }: IHomeProps) => {
         </Box>
       </AppContainer>
       <Box mb="80px">
-        {/* {products.length > 0 ? <Pagination currentPage={currentPage} totalPages={totalPages} /> : null} */}
         <Pagination currentPage={currentPage} totalPages={totalPages} />
       </Box>
     </>

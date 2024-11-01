@@ -282,4 +282,18 @@ export const getCartProducts = async (
   }
 };
 
+export const getOneProduct = async (id: string): Promise<IIProduct | undefined> => {
+  try {
+    const response: AxiosResponse<IIProduct> = await api.get(`/products/find-one`, {
+      params: { id },
+    });
+
+    // Возвращаем только данные продукта, если они есть
+    return response.data;
+  } catch (error) {
+    console.error(`Ошибка получения продукта: ${error}`);
+    return undefined; 
+  }
+};
+
 export default api;

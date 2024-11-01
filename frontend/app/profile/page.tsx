@@ -47,8 +47,9 @@ function Profile() {
   return (
     <AppContainer
       title={` ${getGreetingByTime()}, ${userName} `}
-      myClass="justify-start"
+      myClass="flex-col"
     >
+      <Heading mb='35px' size='lg'>История заказов</Heading>
       <Box as="aside" mr="80px" p="4">
         <VStack spacing={4} align="stretch">
           {userOrders.length === 0 ? (

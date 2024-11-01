@@ -156,7 +156,7 @@ const Busket = () => {
   }, 0);
 
   return (
-    <AppContainer title="Корзина" myClass="justify-start">
+    <AppContainer title="Оформление заказа" myClass="justify-start">
       <AppModal isOpen={isModalOpen} onClose={handleClose} title="Заказ оформлен">
         {busketProduct.map((item, index) => (
           <Box key={`${item.product.id}-${index}`} mb="2" mr="7" maxW="750px" p="10px">
