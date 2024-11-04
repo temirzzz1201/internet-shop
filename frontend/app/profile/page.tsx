@@ -9,7 +9,6 @@ import { getUserOrders } from '@/actions/clientActions';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { IOrder } from '@/types';
 
-
 function Profile() {
   const [userName, setUserName] = useState('');
   const [userOrders, setUserOrders] = useState<IOrder[]>([]);
@@ -34,6 +33,7 @@ function Profile() {
     }
   };
 
+  /* eslint-disable */
   useEffect(() => {
     const name = Cookies.get('user');
     if (name) {
@@ -49,7 +49,9 @@ function Profile() {
       title={` ${getGreetingByTime()}, ${userName} `}
       myClass="flex-col"
     >
-      <Heading mb='35px' size='lg'>История заказов</Heading>
+      <Heading mb="35px" size="lg">
+        История заказов
+      </Heading>
       <Box as="aside" mr="80px" p="4">
         <VStack spacing={4} align="stretch">
           {userOrders.length === 0 ? (

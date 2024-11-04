@@ -34,6 +34,7 @@ export default function Admin() {
   const { users } = useAppSelector((state) => state.users);
   const { category } = useAppSelector((state) => state.category);
   const { products, isLoading } = useAppSelector((state) => state.products);
+
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState<number | ''>('');
@@ -114,7 +115,6 @@ export default function Admin() {
     { label: 'Описание', key: 'description' },
     { label: 'Цена', key: 'price' },
     { label: 'Остатки', key: 'stock' },
-    // { label: 'Изображение', key: 'images' },
     {
       label: 'Создано',
       key: 'createdAt',
@@ -225,7 +225,7 @@ export default function Admin() {
                 className="mb-2"
                 min={0}
                 type="number"
-                value={price === 0 ? '' : price} // Удаляем начальное значение
+                value={price === 0 ? '' : price}
                 onChange={(e) => setPrice(Number(e.target.value))}
               />
               <FormLabel fontSize="12">Остатки</FormLabel>
@@ -234,7 +234,7 @@ export default function Admin() {
                 size="md"
                 className="mb-2"
                 type="number"
-                value={stock === 0 ? '' : stock} // Удаляем начальное значение
+                value={stock === 0 ? '' : stock}
                 onChange={(e) => setStock(Number(e.target.value))}
               />
               <FormLabel fontSize="12">

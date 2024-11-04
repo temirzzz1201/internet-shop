@@ -17,14 +17,9 @@ import {
   updateCartProduct,
   getCartProducts,
   deleteAllfromCart,
-  getOneProduct
+  getOneProduct,
 } from '@/utils/api';
-import {
-  IUser,
-  IIProduct,
-  ICategory,
-  IOrder,
-} from '@/types';
+import { IUser, IIProduct, ICategory, IOrder } from '@/types';
 import { getErrorMessage } from '@/utils/errorMessage';
 
 export const placeProduct = createAsyncThunk<
@@ -83,27 +78,24 @@ export const getProducts = createAsyncThunk<
   }
 });
 
+export const getProductDetail = createAsyncThunk<
+  IIProduct,
+  string,
+  { rejectValue: string }
+>('products/getProductDetail', async (id, { rejectWithValue }) => {
+  try {
+    const product = await getOneProduct(id);
 
-export const getProductDetail = createAsyncThunk<IIProduct, string, { rejectValue: string }>(
-  'products/getProductDetail',
-  async (id, { rejectWithValue }) => {
-    try {
-      const product = await getOneProduct(id);
-
-      // Проверяем, успешно ли получены данные продукта
-      if (product) {
-        return product; // Возвращаем продукт, если он существует
-      } else {
-        return rejectWithValue('Продукт не найден'); // Сообщение о неудаче
-      }
-    } catch (error) {
-      return rejectWithValue(getErrorMessage(error)); // Обработка ошибок
+    // Проверяем, успешно ли получены данные продукта
+    if (product) {
+      return product; // Возвращаем продукт, если он существует
+    } else {
+      return rejectWithValue('Продукт не найден'); // Сообщение о неудаче
     }
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error)); // Обработка ошибок
   }
-);
-
-
-
+});
 
 export const placeCategory = createAsyncThunk<
   ICategory,
@@ -278,7 +270,6 @@ export const getUserOrders = createAsyncThunk<
   }
 });
 
-
 export const addToCart = createAsyncThunk(
   'cart/addToCart',
   async (
@@ -290,11 +281,11 @@ export const addToCart = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      console.log(userId, productId, quantity );
-      
+      console.log(userId, productId, quantity);
+
       const response = await createCartProduct({ userId, productId, quantity });
       console.log(response);
-      
+
       return response?.data;
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
@@ -314,13 +305,12 @@ export const removeFromCart = createAsyncThunk(
   }
 );
 
-
 export const clearCart = createAsyncThunk(
   'cart/removeFromCart',
   async (_, { rejectWithValue }) => {
     try {
-      await deleteAllfromCart()
-      return; 
+      await deleteAllfromCart();
+      return;
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
     }
@@ -330,15 +320,13 @@ export const clearCart = createAsyncThunk(
 export const updateCartItem = createAsyncThunk<
   { id: string; quantity: number },
   { id: string; quantity: number },
-  { rejectValue: string | null } 
+  { rejectValue: string | null }
 >('cart/updateCartItem', async ({ id, quantity }, { rejectWithValue }) => {
   try {
-    await updateCartProduct(id, { quantity }); 
-    return { id, quantity }; 
+    await updateCartProduct(id, { quantity });
+    return { id, quantity };
   } catch (error) {
-    return rejectWithValue(
-      getErrorMessage(error)
-    ); 
+    return rejectWithValue(getErrorMessage(error));
   }
 });
 
@@ -346,8 +334,8 @@ export const fetchCartItems = createAsyncThunk(
   'cart/fetchCartItems',
   async (userId: string, { rejectWithValue }) => {
     try {
-      const response = await getCartProducts(userId); 
-      return response?.data; 
+      const response = await getCartProducts(userId);
+      return response?.data;
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
     }

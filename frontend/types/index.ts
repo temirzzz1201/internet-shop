@@ -19,7 +19,7 @@ export interface IIProduct {
   updatedAt: string;
   category?: ICategory;
   images: { imageUrl: string }[];
-  product: IIProduct;
+  // product: IIProduct;
 }
 
 interface IProductImage {
@@ -53,8 +53,8 @@ export interface IIProductResponse {
 }
 
 export interface IIProducts {
-  currentProduct: IIProduct | null;
   products: IIProduct[];
+  currentProduct: IIProduct | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -177,7 +177,6 @@ export interface IContainerProps {
   children: ReactNode;
   myClass: string;
 }
-
 
 export interface AppModalProps extends IModalProps {
   modalSize: string;

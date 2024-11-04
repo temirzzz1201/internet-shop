@@ -38,7 +38,6 @@ export const fetchAllProducts = async ({ page = 1, limit = 30 } = {}) => {
   }
 };
 
-
 // export const fetchOneProducts = async (id: string) => {
 //   try {
 //     const response = await axiosInstance.get(`/products/find-one`, {

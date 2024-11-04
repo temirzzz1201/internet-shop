@@ -40,11 +40,13 @@ const EmblaCarousel = dynamic(() => import('./carousel/embla-carousel'), {
 const OPTIONS: EmblaOptionsType = { loop: true };
 
 export default function ProductCard({ product }: IProductCardProps) {
+  /* eslint-disable */
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
 
   const [quantity, setQuantity] = useState<number>(0);
-  const [stock, setStock] = useState<number>(product.stock); 
+  /* eslint-disable */
+  const [stock, setStock] = useState<number>(product.stock);
   const { images } = product;
   const toast = useToast();
 
@@ -55,8 +57,13 @@ export default function ProductCard({ product }: IProductCardProps) {
     (image) => `${process.env.NEXT_PUBLIC_API_URL}/uploads/${image.imageUrl}`
   );
 
+  console.log(
+    'process.env.NEXT_PUBLIC_API_URL ',
+    process.env.NEXT_PUBLIC_API_URL
+  );
+
   const handleOpen = () => setIsModalOpen(true);
-  const handleClose = () => setIsModalOpen(false);
+  // const handleClose = () => setIsModalOpen(false);
 
   const handleOpenProduct = () => setIsProductModalOpen(true);
   const handleCloseProduct = () => setIsProductModalOpen(false);
@@ -141,9 +148,9 @@ export default function ProductCard({ product }: IProductCardProps) {
   const input = getInputProps();
 
   return (
-    <Box maxH='430px' className={stock === 0 ? 'pointer-events-none' : ''}>
+    <Box maxH="430px" className={stock === 0 ? 'pointer-events-none' : ''}>
       <AppModal
-        modalSize='sm'
+        modalSize="sm"
         isOpen={isProductModalOpen}
         onClose={handleCloseProduct}
         title={product.category?.name || ''}
@@ -272,7 +279,7 @@ export default function ProductCard({ product }: IProductCardProps) {
             />
           </Text>
         </Tooltip>
-        
+
         <Text mb="3" fontSize="xs">
           {' '}
           {formatDate(product.createdAt)}{' '}
