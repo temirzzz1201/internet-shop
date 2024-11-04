@@ -25,9 +25,9 @@ const authSlice = createSlice({
           state.isAuthenticated = true;
           state.error = null;
         } else {
-          state.user = null; 
+          state.user = null;
           state.isAuthenticated = false;
-          state.error = 'Ошибка регистрации'; 
+          state.error = 'Ошибка регистрации';
         }
       })
       .addCase(register.rejected, (state, action: PayloadAction<unknown>) => {

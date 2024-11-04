@@ -11,7 +11,7 @@ router.get('/all-products', async (req: Request, res: Response) => {
 
   try {
     const offset = (Number(page) - 1) * Number(limit);
-    
+
     const { count, rows: products } = await Product.findAndCountAll({
       include: [
         {
@@ -44,7 +44,7 @@ router.get('/find-one', async (req: Request, res: Response) => {
   const id = parseInt(req.query.id as string, 10);
 
   try {
-    const  product  = await Product.findOne({
+    const product = await Product.findOne({
       where: { id },
       include: [
         {
@@ -56,13 +56,10 @@ router.get('/find-one', async (req: Request, res: Response) => {
           as: 'images',
         },
       ],
-    
     });
-
 
     res.json({
       product,
-     
     });
   } catch (error) {
     console.error('Ошибка при получении продуктов:', error);
@@ -70,54 +67,59 @@ router.get('/find-one', async (req: Request, res: Response) => {
   }
 });
 
+router.post(
+  '/create-product',
+  upload.array('images', 5),
+  async (req: Request, res: Response) => {
+    try {
+      const { name, description, price, stock, categoryId } = req.body;
 
-router.post('/create-product', upload.array('images', 5), async (req: Request, res: Response) => {
-  try {
-    const { name, description, price, stock, categoryId } = req.body;
+      const newProduct = await Product.create({
+        name,
+        description,
+        price,
+        stock,
+        categoryId,
+      });
 
-    const newProduct = await Product.create({
-      name,
-      description,
-      price,
-      stock,
-      categoryId,
-    });
+      if (req.files && Array.isArray(req.files)) {
+        const imageUrls = (req.files as Express.Multer.File[]).map(
+          (file) => file.filename
+        );
 
-    if (req.files && Array.isArray(req.files)) {
-      const imageUrls = (req.files as Express.Multer.File[]).map(file => file.filename);
+        await Image.bulkCreate(
+          imageUrls.map((url) => ({
+            productId: newProduct.id,
+            imageUrl: url,
+          }))
+        );
+      }
 
-      await Image.bulkCreate(
-        imageUrls.map(url => ({
-          productId: newProduct.id, 
-          imageUrl: url,
-        }))
-      );
+      res
+        .status(201)
+        .json({ message: 'Product created successfully', product: newProduct });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error creating product' });
     }
-
-    res.status(201).json({ message: 'Product created successfully', product: newProduct });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error creating product' });
   }
-});
-
+);
 
 router.get('/all-images', async (req: Request, res: Response) => {
   try {
     const images = await Image.findAll();
     res.json(images);
-    return
+    return;
   } catch (error) {
     res.status(500).json({ error: 'Ошибка при получении категорий' });
   }
 });
 
-
 router.get('/all-categories', async (req: Request, res: Response) => {
   try {
     const categories = await Category.findAll();
     res.json(categories);
-    return
+    return;
   } catch (error) {
     res.status(500).json({ error: 'Ошибка при получении категорий' });
   }
@@ -126,10 +128,10 @@ router.get('/all-categories', async (req: Request, res: Response) => {
 router.post('/create-category', async (req: Request, res: Response) => {
   const { categoryName } = req.body;
   try {
-    const category = await Category.create( {name: categoryName} );
+    const category = await Category.create({ name: categoryName });
 
     res.json(category);
-    return
+    return;
   } catch (error) {
     res.status(500).json({ error: 'Ошибка при создании категории' });
   }

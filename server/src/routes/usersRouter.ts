@@ -22,7 +22,12 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ username, email, password: hashedPassword, role });
+    const newUser = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+      role,
+    });
 
     const accessToken = generateAccessToken(newUser);
     const refreshToken = generateRefreshToken(newUser);
@@ -34,7 +39,9 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
       refreshToken,
     });
   } catch (error: any) {
-    res.status(500).json({ message: 'Error registering user', error: error.message });
+    res
+      .status(500)
+      .json({ message: 'Error registering user', error: error.message });
   }
 });
 
@@ -75,25 +82,33 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
   }
 });
 
-router.post('/refresh-token', async (req: Request, res: Response): Promise<void> => {
-  const { token: refreshToken } = req.body;
+router.post(
+  '/refresh-token',
+  async (req: Request, res: Response): Promise<void> => {
+    const { token: refreshToken } = req.body;
 
-  if (!refreshToken) {
-    res.status(400).json({ message: 'Refresh token is required' });
-    return;
+    if (!refreshToken) {
+      res.status(400).json({ message: 'Refresh token is required' });
+      return;
+    }
+
+    try {
+      const decoded = jwt.verify(
+        refreshToken,
+        process.env.JWT_REFRESH_SECRET!
+      ) as { userId: number };
+
+      const newAccessToken = generateAccessToken({ id: decoded.userId });
+
+      res.json({ accessToken: newAccessToken });
+    } catch (error: any) {
+      console.error('Error verifying refresh token:', error);
+      res
+        .status(403)
+        .json({ message: 'Invalid refresh token', error: error.message });
+    }
   }
-
-  try {
-    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET!) as { userId: number };
-
-    const newAccessToken = generateAccessToken({ id: decoded.userId });
-
-    res.json({ accessToken: newAccessToken });
-  } catch (error: any) {
-    console.error('Error verifying refresh token:', error);
-    res.status(403).json({ message: 'Invalid refresh token', error: error.message });
-  }
-});
+);
 
 router.delete('/delete-user/:id', async (req: Request, res: Response) => {
   try {
@@ -124,12 +139,11 @@ router.put('/update-user/:id', async (req: Request, res: Response) => {
 
 router.get('/get-users', async (req: Request, res: Response) => {
   try {
-  const users = await User.findAll()
-  res.status(200).json(users);
-  }
-  catch (error) {
+    const users = await User.findAll();
+    res.status(200).json(users);
+  } catch (error) {
     res.status(500).json({ error: 'Error can not upload users' });
   }
-})
+});
 
 export default router;

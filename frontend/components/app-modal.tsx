@@ -8,9 +8,13 @@ import {
 } from '@chakra-ui/react';
 import { AppModalProps } from '@/types';
 
-
-
-function AppModal({ children, isOpen, onClose, title, modalSize }: AppModalProps) {
+function AppModal({
+  children,
+  isOpen,
+  onClose,
+  title,
+  modalSize,
+}: AppModalProps) {
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose} size={modalSize}>
       <ModalOverlay />
@@ -24,5 +28,3 @@ function AppModal({ children, isOpen, onClose, title, modalSize }: AppModalProps
 }
 
 export default AppModal;
-
-

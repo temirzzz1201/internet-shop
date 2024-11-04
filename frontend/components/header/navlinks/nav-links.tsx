@@ -16,7 +16,8 @@ import { Box } from '@chakra-ui/react';
 import MobileNav from '@/components/header/mobile-nav';
 import { useRouter } from 'next/navigation';
 
-interface Product {
+/* eslint-disable */
+interface IProduct {
   product: {
     id: number;
     name: string;
@@ -48,6 +49,7 @@ export default function NavLinks() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const [userName, setUserName] = useState<string | null>(null);
+  /* eslint-disable */
   const [productQuantity, setProductQuantity] = useState<number>(0);
   const { replace } = useRouter();
 
@@ -70,8 +72,6 @@ export default function NavLinks() {
       }
     }
   }, [user]);
-
-
 
   const links = [
     { id: 1, title: 'Главная', path: '/' },

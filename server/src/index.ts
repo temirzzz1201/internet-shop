@@ -7,9 +7,11 @@ import router from './routes';
 const app = express();
 const PORT = process.env.PORT || 3600;
 
-app.use(cors({
-  origin: 'http://localhost:3000',
-}));
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+  })
+);
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/', router);

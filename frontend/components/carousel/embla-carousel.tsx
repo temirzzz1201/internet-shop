@@ -86,7 +86,7 @@ const EmblaCarousel: React.FC<PropType> = ({
                     alt={url}
                     cursor="pointer"
                     loading="lazy"
-                    onLoad={() => handleImageLoad(index)} 
+                    onLoad={() => handleImageLoad(index)}
                   />
                 </Skeleton>
               </Box>

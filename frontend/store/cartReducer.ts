@@ -5,7 +5,7 @@ import {
   removeFromCart,
   fetchCartItems,
   updateCartItem,
-  clearCart
+  clearCart,
 } from '@/actions/clientActions';
 
 interface CartState {
@@ -29,12 +29,15 @@ const cartSlice = createSlice({
       .addCase(addToCart.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(addToCart.fulfilled, (state, action: PayloadAction<ICart | undefined>) => {
-        state.status = 'succeeded';
-        if (action.payload) {
-          state.items.push(action.payload);
+      .addCase(
+        addToCart.fulfilled,
+        (state, action: PayloadAction<ICart | undefined>) => {
+          state.status = 'succeeded';
+          if (action.payload) {
+            state.items.push(action.payload);
+          }
         }
-      })
+      )
       .addCase(addToCart.rejected, (state, action: PayloadAction<unknown>) => {
         state.status = 'failed';
         state.error = (action.payload as string) || 'Неизвестная ошибка';
@@ -62,20 +65,14 @@ const cartSlice = createSlice({
       .addCase(clearCart.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(
-        clearCart.fulfilled,
-        (state) => {
-          state.status = 'succeeded';
-          state.items = []
-        }
-      )
-      .addCase(
-        clearCart.rejected,
-        (state, action: PayloadAction<unknown>) => {
-          state.status = 'failed';
-          state.error = (action.payload as string) || 'Неизвестная ошибка';
-        }
-      )
+      .addCase(clearCart.fulfilled, (state) => {
+        state.status = 'succeeded';
+        state.items = [];
+      })
+      .addCase(clearCart.rejected, (state, action: PayloadAction<unknown>) => {
+        state.status = 'failed';
+        state.error = (action.payload as string) || 'Неизвестная ошибка';
+      })
       .addCase(updateCartItem.pending, (state) => {
         state.status = 'loading';
       })

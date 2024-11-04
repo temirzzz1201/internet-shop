@@ -64,7 +64,9 @@ api.interceptors.response.use(
   }
 );
 
-export const registerUser = async (userData: IUser): Promise<IUserResponse | undefined> => {
+export const registerUser = async (
+  userData: IUser
+): Promise<IUserResponse | undefined> => {
   try {
     const response = await api.post<IUserResponse>('users/register', userData);
     localStorage.setItem('refreshToken', response.data.refreshToken);
@@ -77,7 +79,9 @@ export const registerUser = async (userData: IUser): Promise<IUserResponse | und
   }
 };
 
-export const loginUser = async (userData: IUser): Promise<IUserResponse | undefined> => {
+export const loginUser = async (
+  userData: IUser
+): Promise<IUserResponse | undefined> => {
   try {
     const response = await api.post<IUserResponse>('users/login', userData);
     localStorage.setItem('refreshToken', response.data.refreshToken);
@@ -90,7 +94,9 @@ export const loginUser = async (userData: IUser): Promise<IUserResponse | undefi
   }
 };
 
-export const fetchAllUsers = async (): Promise<AxiosResponse<IUser[]> | undefined> => {
+export const fetchAllUsers = async (): Promise<
+  AxiosResponse<IUser[]> | undefined
+> => {
   try {
     return await api.get<IUser[]>('/users/get-users');
   } catch (error) {
@@ -215,28 +221,25 @@ export const fetchUserOrder = async (
   }
 };
 
-export const createCartProduct = async (
-  productData: {
-    userId: string;
-    productId: string;
-    quantity: number;
-  }
-): Promise<AxiosResponse<ICart> | undefined> => { 
+export const createCartProduct = async (productData: {
+  userId: string;
+  productId: string;
+  quantity: number;
+}): Promise<AxiosResponse<ICart> | undefined> => {
   try {
     return await api.post<ICart>('cart/add', productData, {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
     console.error(`Ошибка добавления в корзину: ${error}`);
-    return undefined; 
+    return undefined;
   }
 };
-
 
 export const deleteCartProduct = async (id: string): Promise<void> => {
   try {
     console.log('deleteCartProduct ', id);
-    
+
     await api.delete(`cart/remove/${id}`, {
       headers: { 'Content-Type': 'application/json' },
     });
@@ -244,7 +247,6 @@ export const deleteCartProduct = async (id: string): Promise<void> => {
     console.error(`Ошибка удаления из корзины: ${error}`);
   }
 };
-
 
 export const deleteAllfromCart = async (): Promise<void> => {
   try {
@@ -278,21 +280,26 @@ export const getCartProducts = async (
     });
   } catch (error) {
     console.error(`Ошибка получения заказов корзины: ${error}`);
-    return undefined; 
+    return undefined;
   }
 };
 
-export const getOneProduct = async (id: string): Promise<IIProduct | undefined> => {
+export const getOneProduct = async (
+  id: string
+): Promise<IIProduct | undefined> => {
   try {
-    const response: AxiosResponse<IIProduct> = await api.get(`/products/find-one`, {
-      params: { id },
-    });
+    const response: AxiosResponse<IIProduct> = await api.get(
+      `/products/find-one`,
+      {
+        params: { id },
+      }
+    );
 
     // Возвращаем только данные продукта, если они есть
     return response.data;
   } catch (error) {
     console.error(`Ошибка получения продукта: ${error}`);
-    return undefined; 
+    return undefined;
   }
 };
 

@@ -1,33 +1,21 @@
-import 'dotenv/config'
+import 'dotenv/config';
 import nodemailer from 'nodemailer';
-
-interface IOrderDetails {
-  quantity: number, 
-  total_price: number, 
-  userId: number,
-  productId: number,
-}
-
-interface IUserOrder {
-  orderDetails: IOrderDetails
-  userEmail: string
-}
+import { IUserOrderForEmail } from '../types';
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
+    pass: process.env.EMAIL_PASS,
+  },
 });
 
-const sendOrderEmails = ({userEmail, orderDetails }: IUserOrder) => {
-
+const sendOrderEmails = ({ userEmail, orderDetails }: IUserOrderForEmail) => {
   const formattedOrderDetails = `
     Заказ от пользователя: ${userEmail}
 
     Подробности заказа:
-    - Количество: ${orderDetails.quantity}
+    - Количество: ${orderDetails.quantity} шт.
     - Общая сумма: ${orderDetails.total_price} руб.
     - ID пользователя: ${orderDetails.userId}
     - ID продукта: ${orderDetails.productId}
@@ -37,7 +25,7 @@ const sendOrderEmails = ({userEmail, orderDetails }: IUserOrder) => {
     from: 'your-shop-email@gmail.com',
     to: 'temir1201@gmail.com',
     subject: 'Новый заказ',
-    text: formattedOrderDetails
+    text: formattedOrderDetails,
   };
 
   const userMailOptions = {
@@ -55,7 +43,7 @@ const sendOrderEmails = ({userEmail, orderDetails }: IUserOrder) => {
       - ID продукта: ${orderDetails.productId}
       
       Мы свяжемся с вами для подтверждения заказа.
-    `
+    `,
   };
 
   transporter.sendMail(adminMailOptions, (error, info) => {
@@ -74,6 +62,5 @@ const sendOrderEmails = ({userEmail, orderDetails }: IUserOrder) => {
     }
   });
 };
-
 
 export default sendOrderEmails;
