@@ -10,55 +10,81 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendOrderEmails = ({ userEmail, orderDetails }: IUserOrderForEmail) => {
-  const formattedOrderDetails = `
-    Заказ от пользователя: ${userEmail}
+const sendOrderEmails = ({
+  userEmail,
+  name,
+  orders,
+}: {
+  userEmail: string;
+  name: string;
+  orders: IUserOrderForEmail[];
+}) => {
+  if (!Array.isArray(orders)) {
+    console.error('Error: orders is not an array', orders);
+    return;
+  }
 
-    Подробности заказа:
-    - Количество: ${orderDetails.quantity} шт.
-    - Общая сумма: ${orderDetails.total_price} руб.
-    - ID пользователя: ${orderDetails.userId}
-    - ID продукта: ${orderDetails.productId}
-  `;
+  const orderDetailsHtml = orders
+    .map((order) => {
+      const imageTags = order.images
+        .map((url) => `<img src="${url}" alt="Product Image" width="200"/>`)
+        .join('<br>');
+
+      return `
+        <h3>Товар: ${order.productName}</h3>
+        <ul>
+          <li>Цена за единицу: ${order.productPrice} руб.</li>
+          <li>Количество: ${order.quantity} шт.</li>
+          <li>Общая сумма: ${order.total_price} руб.</li>
+          <li>ID продукта: ${order.productId}</li>
+        </ul>
+        <h4>Изображения товара:</h4>
+        ${imageTags}
+        <hr/>
+      `;
+    })
+    .join('');
+
+  const totalAmount = orders.reduce((sum, order) => sum + order.total_price, 0);
 
   const adminMailOptions = {
-    from: 'your-shop-email@gmail.com',
-    to: 'temir1201@gmail.com',
+    from: process.env.EMAIL_USER,
+    to: process.env.ADMIN_EMAIL || 'defaultAdmin@example.com', // Configurable admin email
     subject: 'Новый заказ',
-    text: formattedOrderDetails,
+    html: `
+      <h2>Заказ от пользователя: ${userEmail} - ${name.toUpperCase()}</h2>
+      <p><strong>Суммарные подробности заказа:</strong></p>
+      ${orderDetailsHtml}
+      <p><strong>Итоговая сумма всех заказов:</strong> ${totalAmount} руб.</p>
+    `,
   };
 
   const userMailOptions = {
-    from: 'your-email@gmail.com',
+    from: process.env.EMAIL_USER,
     to: userEmail,
     subject: 'Ваш заказ принят',
-    text: `
-      Electronic Elephant:)
-      
-      Спасибо за ваш заказ!
-
-      Подробности заказа:
-      - Количество: ${orderDetails.quantity}
-      - Общая сумма: ${orderDetails.total_price} руб.
-      - ID продукта: ${orderDetails.productId}
-      
-      Мы свяжемся с вами для подтверждения заказа.
+    html: `
+      <h1>Electronic Elephant :)</h1>
+      <p>Спасибо за ваш заказ, ${name.toUpperCase()}!</p>
+      ${orderDetailsHtml}
+      <p><strong>Итоговая сумма всех заказов:</strong> ${totalAmount} руб.</p>
+      <p>Мы свяжемся с вами для подтверждения заказа.</p>
     `,
   };
 
   transporter.sendMail(adminMailOptions, (error, info) => {
     if (error) {
-      console.error(`Error sending email to admin: ${error}`);
+      console.error(`Ошибка отправки письма админу: ${error}`);
     } else {
-      console.log(`Admin email sent: ${info.response}`);
+      console.log(`Письмо админу отправлено: ${info.response}`);
     }
   });
 
   transporter.sendMail(userMailOptions, (error, info) => {
     if (error) {
-      console.error(`Error sending email to user: ${error}`);
+      console.error(`Ошибка отправки письма пользователю: ${error}`);
     } else {
-      console.log(`User email sent: ${info.response}`);
+      console.log(`Письмо пользователю отправлено: ${info.response}`);
     }
   });
 };

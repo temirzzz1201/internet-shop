@@ -86,14 +86,13 @@ export const getProductDetail = createAsyncThunk<
   try {
     const product = await getOneProduct(id);
 
-    // Проверяем, успешно ли получены данные продукта
     if (product) {
-      return product; // Возвращаем продукт, если он существует
+      return product;
     } else {
-      return rejectWithValue('Продукт не найден'); // Сообщение о неудаче
+      return rejectWithValue('Продукт не найден');
     }
   } catch (error) {
-    return rejectWithValue(getErrorMessage(error)); // Обработка ошибок
+    return rejectWithValue(getErrorMessage(error));
   }
 });
 
@@ -247,6 +246,9 @@ export const placeOrder = createAsyncThunk<
   try {
     const response = await createOrder(orderData);
 
+    console.log('placeOrder response ', response);
+    console.log('placeOrder orderData ', orderData);
+
     if (!response) {
       return rejectWithValue('Ошибка: пустой ответ от сервера.');
     }
@@ -297,6 +299,8 @@ export const removeFromCart = createAsyncThunk(
   'cart/removeFromCart',
   async ({ id }: { id: string }, { rejectWithValue }) => {
     try {
+      console.log('removeFromCart ID ', id);
+
       await deleteCartProduct(id);
       return id;
     } catch (error) {

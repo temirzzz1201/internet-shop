@@ -8,6 +8,7 @@ import {
   FormLabel,
   Button,
   FormHelperText,
+  useToast,
 } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -23,7 +24,8 @@ const SignupSchema = Yup.object().shape({
 
 export default function Login() {
   const dispatch = useAppDispatch();
-  const { isLoading } = useAppSelector((store) => store.auth);
+  const { isLoading, isAuthenticated } = useAppSelector((store) => store.auth);
+  const toast = useToast();
 
   return (
     <AppContainer title="Страница авторизации" myClass="justify-center">
@@ -35,7 +37,23 @@ export default function Login() {
           initialValues={{ email: '', password: '' }}
           validationSchema={SignupSchema}
           onSubmit={(values) => {
-            dispatch(login(values));
+            dispatch(login(values))
+              .then(() => {
+                toast({
+                  title: 'Вы успешно авторизовались!',
+                  status: 'success',
+                  duration: 3000,
+                  isClosable: false,
+                });
+              })
+              .catch((error) => {
+                toast({
+                  title: 'Упс... Что то пошло не так!',
+                  status: 'error',
+                  duration: 3000,
+                  isClosable: false,
+                });
+              });
           }}
         >
           {({

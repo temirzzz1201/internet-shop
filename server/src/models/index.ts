@@ -13,7 +13,7 @@ const initModels = async () => {
 
     User.hasMany(Cart, { foreignKey: 'userId', as: 'cartItems' });
     Cart.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-    
+
     Product.hasMany(Cart, { foreignKey: 'productId', as: 'cartItems' });
     Cart.belongsTo(Product, { foreignKey: 'productId', as: 'product' });
 
@@ -29,9 +29,7 @@ const initModels = async () => {
     Product.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
     Category.hasMany(Product, { foreignKey: 'categoryId', as: 'products' });
 
-    
-
-    await sequelize.sync({ alter: true });
+    await sequelize.sync({ alter: false });
     // await sequelize.sync({ force: true });
     console.log('All models were synchronized successfully.');
   } catch (error) {

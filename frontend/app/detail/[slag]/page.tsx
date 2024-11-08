@@ -50,7 +50,12 @@ export default function DetailPage({ params }: DetailPageProps) {
 
   const getProduct = async () => {
     const { payload } = await dispatch(getProductDetail(slag));
-    setProduct(payload?.product);
+
+    if (payload && typeof payload === 'object' && 'product' in payload) {
+      setProduct(payload.product as IIProduct);
+    } else {
+      console.error('Ошибка: payload не содержит корректного объекта product');
+    }
   };
 
   /* eslint-disable */
@@ -68,8 +73,6 @@ export default function DetailPage({ params }: DetailPageProps) {
   const imageUrls = product?.images.map(
     (image) => `${process.env.NEXT_PUBLIC_API_URL}/uploads/${image.imageUrl}`
   );
-
-  console.log('imageUrls ', imageUrls);
 
   const openModal = (imageUrl: string) => {
     setSelectedImage(imageUrl);
@@ -140,7 +143,7 @@ export default function DetailPage({ params }: DetailPageProps) {
 
   const handleResetQuantity = () => {
     setQuantity(0);
-    dispatch(removeFromCart({ id: product.id.toString() }));
+    dispatch(removeFromCart({ id: product!.id.toString() }));
   };
 
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
@@ -171,7 +174,7 @@ export default function DetailPage({ params }: DetailPageProps) {
       <Breadcrumb
         spacing="8px"
         separator={<ChevronRightIcon color="gray.500" />}
-        mb={4}
+        mb={10}
       >
         <BreadcrumbItem>
           <BreadcrumbLink href="/">Главная</BreadcrumbLink>

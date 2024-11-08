@@ -13,7 +13,6 @@ const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
 
   return (
     <UnorderedList
-      // maxW="md"
       w="100%"
       borderWidth="1px"
       borderRadius="lg"
@@ -25,7 +24,7 @@ const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
     >
       <ListItem
         onClick={() => handleCategoryClick(null)}
-        style={{ cursor: 'pointer', margin: '5px 0' }}
+        className="flex cursor-pointer mx-0 my-5"
       >
         Все товары
       </ListItem>
@@ -33,7 +32,7 @@ const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
         <ListItem
           key={cat.id}
           onClick={() => handleCategoryClick(cat.id)}
-          style={{ cursor: 'pointer', margin: '5px 0' }}
+          className="flex cursor-pointer mx-0 my-5"
         >
           {capitalize(cat.name)}
         </ListItem>
