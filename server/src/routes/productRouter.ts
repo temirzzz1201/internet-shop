@@ -105,38 +105,6 @@ router.post(
   }
 );
 
-router.get('/all-images', async (req: Request, res: Response) => {
-  try {
-    const images = await Image.findAll();
-    res.json(images);
-    return;
-  } catch (error) {
-    res.status(500).json({ error: 'Ошибка при получении категорий' });
-  }
-});
-
-router.get('/all-categories', async (req: Request, res: Response) => {
-  try {
-    const categories = await Category.findAll();
-    res.json(categories);
-    return;
-  } catch (error) {
-    res.status(500).json({ error: 'Ошибка при получении категорий' });
-  }
-});
-
-router.post('/create-category', async (req: Request, res: Response) => {
-  const { categoryName } = req.body;
-  try {
-    const category = await Category.create({ name: categoryName });
-
-    res.json(category);
-    return;
-  } catch (error) {
-    res.status(500).json({ error: 'Ошибка при создании категории' });
-  }
-});
-
 router.delete('/delete-product/:id', async (req: Request, res: Response) => {
   try {
     const productId = req.params.id;

@@ -19,7 +19,6 @@ export interface IIProduct {
   updatedAt: string;
   category?: ICategory;
   images: { imageUrl: string }[];
-  // product: IIProduct;
 }
 
 interface IProductImage {
@@ -159,13 +158,13 @@ export interface IOrdersState {
 }
 
 export interface ICartItem {
-  productId: string;
+  productId: number;
   quantity: number;
   price: number;
 }
 
 export interface ICart {
-  id: string;
+  id: number;
   userId: string;
   items: ICartItem[];
   totalAmount: number;

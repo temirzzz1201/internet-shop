@@ -84,9 +84,20 @@ export const loginUser = async (
 ): Promise<IUserResponse | undefined> => {
   try {
     const response = await api.post<IUserResponse>('users/login', userData);
+    const { id, username, role, email } = response.data.user;
+
+    const safeUserData = {
+      id: id,
+      email: email,
+      username: username,
+      role: role,
+    };
+
+    console.log(id, username, role, email);
+
     localStorage.setItem('refreshToken', response.data.refreshToken);
     Cookies.set('accessToken', response.data.accessToken, { secure: true });
-    Cookies.set('user', JSON.stringify(response.data.user), { secure: true });
+    Cookies.set('user', JSON.stringify(safeUserData), { secure: true });
     return response.data;
   } catch (error) {
     console.error(`Ошибка авторизации пользователя: ${error}`);
@@ -120,9 +131,22 @@ export const fetchCategories = async (): Promise<
   AxiosResponse<ICategory[]> | undefined
 > => {
   try {
-    return (await api.get<ICategory[]>('products/all-categories')) || [];
+    return (await api.get<ICategory[]>('category/all-categories')) || [];
   } catch (error) {
     console.error(`Ошибка получения категорий: ${error}`);
+    return undefined;
+  }
+};
+
+export const createCategory = async (categoryData: {
+  categoryName: string;
+}): Promise<AxiosResponse<ICategory> | undefined> => {
+  try {
+    return await api.post<ICategory>('category/create-category', categoryData, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error(`Ошибка создания категории: ${error}`);
     return undefined;
   }
 };
@@ -147,19 +171,6 @@ export const createProduct = async (
     });
   } catch (error) {
     console.error(`Ошибка создания продукта: ${error}`);
-    return undefined;
-  }
-};
-
-export const createCategory = async (categoryData: {
-  categoryName: string;
-}): Promise<AxiosResponse<ICategory> | undefined> => {
-  try {
-    return await api.post<ICategory>('products/create-category', categoryData, {
-      headers: { 'Content-Type': 'application/json' },
-    });
-  } catch (error) {
-    console.error(`Ошибка создания категории: ${error}`);
     return undefined;
   }
 };
@@ -196,9 +207,13 @@ export const createOrder = async (orderData: {
   productId: number;
 }): Promise<AxiosResponse<IOrder> | undefined> => {
   try {
-    return await api.post<IOrder>('orders/create-order', orderData, {
+    const response = await api.post<IOrder>('orders/create-order', orderData, {
       headers: { 'Content-Type': 'application/json' },
     });
+
+    console.log('response ', response);
+
+    if (response) return response || [];
   } catch (error) {
     console.error(`Ошибка создания заказа: ${error}`);
     return undefined;
@@ -295,7 +310,6 @@ export const getOneProduct = async (
       }
     );
 
-    // Возвращаем только данные продукта, если они есть
     return response.data;
   } catch (error) {
     console.error(`Ошибка получения продукта: ${error}`);

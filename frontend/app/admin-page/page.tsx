@@ -3,8 +3,8 @@ import {
   getUsers,
   placeProduct,
   placeCategory,
-  getCategory,
   getProducts,
+  getCategory,
 } from '@/actions/clientActions';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
@@ -83,6 +83,7 @@ export default function Admin() {
   }, [users]);
 
   const memoizedProducts = useMemo(() => {
+    // @ts-ignore:next-line
     return products.products;
   }, [products]);
 

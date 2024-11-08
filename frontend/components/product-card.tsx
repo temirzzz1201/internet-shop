@@ -57,11 +57,6 @@ export default function ProductCard({ product }: IProductCardProps) {
     (image) => `${process.env.NEXT_PUBLIC_API_URL}/uploads/${image.imageUrl}`
   );
 
-  console.log(
-    'process.env.NEXT_PUBLIC_API_URL ',
-    process.env.NEXT_PUBLIC_API_URL
-  );
-
   const handleOpen = () => setIsModalOpen(true);
   // const handleClose = () => setIsModalOpen(false);
 
@@ -100,7 +95,6 @@ export default function ProductCard({ product }: IProductCardProps) {
     }
 
     const newItem = { userId, productId: product.id.toString(), quantity };
-    console.log('newItem ', newItem);
 
     dispatch(addToCart(newItem))
       .unwrap()
@@ -148,7 +142,7 @@ export default function ProductCard({ product }: IProductCardProps) {
   const input = getInputProps();
 
   return (
-    <Box maxH="430px" className={stock === 0 ? 'pointer-events-none' : ''}>
+    <Box className={stock === 0 ? 'pointer-events-none' : ''}>
       <AppModal
         modalSize="sm"
         isOpen={isProductModalOpen}
