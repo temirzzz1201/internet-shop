@@ -1,5 +1,5 @@
 'use client';
-import { Box, Button, HStack, Stack, useToast } from '@chakra-ui/react';
+import { Box, Button, HStack, Stack } from '@chakra-ui/react';
 import { useState } from 'react';
 import AppContainer from '@/components/app-container';
 import AppModal from '@/components/app-modal';
@@ -16,13 +16,14 @@ const Busket = () => {
   } = useCart();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleIncrement = (item: any) => {
+  // @ts-ignore: should type products
+  const handleIncrement = (item) => {
     if (item.quantity < item.product.stock) {
       updateQuantity(item.id, item.quantity + 1);
     }
   };
-
-  const handleDecrement = (item: any) => {
+  // @ts-ignore: should type products
+  const handleDecrement = (item) => {
     if (item.quantity > 0) {
       updateQuantity(item.id, item.quantity - 1);
     }
@@ -78,10 +79,9 @@ const Busket = () => {
 
         <Box flex="1">
           {cartItems.length > 0 ? (
-            cartItems.map((item, index) => (
-              <Box mb="5">
+            cartItems.map((item) => (
+              <Box mb="5" key={item.id}>
                 <CartItem
-                  key={item.id}
                   item={item}
                   onIncrement={() => handleIncrement(item)}
                   onDecrement={() => handleDecrement(item)}

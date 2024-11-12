@@ -34,12 +34,12 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
 
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      secure: true, 
+      // secure: true, Только когда https
       sameSite: 'none', 
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: true, 
+      // secure: true, Только когда https
       sameSite: 'none', 
     });
 
@@ -84,12 +84,12 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      secure: true, 
+      // secure: true, Только когда https
       sameSite: 'none',
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: true, 
+      // secure: true, Только когда https
       sameSite: 'none', 
     });
 
@@ -123,7 +123,7 @@ router.post(
       const newAccessToken = generateAccessToken({ id: decoded.userId });
       res.cookie('accessToken', newAccessToken, {
         httpOnly: true,
-        secure: true,
+        // secure: true, Только когда https
         sameSite: 'none',
       });
 

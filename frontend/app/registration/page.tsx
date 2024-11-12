@@ -28,9 +28,7 @@ const SignupSchema = Yup.object().shape({
 
 export default function Register() {
   const dispatch = useAppDispatch();
-  const { isLoading, isAuthenticated, user } = useAppSelector(
-    (store) => store.auth
-  );
+  const { isLoading } = useAppSelector((store) => store.auth);
   const toast = useToast();
 
   return (
@@ -52,7 +50,7 @@ export default function Register() {
                   isClosable: false,
                 });
               })
-              .catch((error) => {
+              .catch(() => {
                 toast({
                   title: 'Упс... Что то пошло не так!',
                   status: 'error',

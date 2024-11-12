@@ -51,7 +51,7 @@ const cartSlice = createSlice({
           state.status = 'succeeded';
           console.log('Удаляемый id:', action.payload);
           state.items = state.items.filter(
-            (item) => item.id !== action.payload
+            (item) => item.id.toString() !== action.payload
           );
         }
       )
@@ -81,7 +81,7 @@ const cartSlice = createSlice({
         (state, action: PayloadAction<{ id: string; quantity: number }>) => {
           state.status = 'succeeded';
           const index = state.items.findIndex(
-            (item) => item.id === action.payload.id
+            (item) => item.id.toString() === action.payload.id
           );
           if (index !== -1) {
             state.items[index].quantity = action.payload.quantity;
