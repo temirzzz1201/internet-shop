@@ -8,13 +8,11 @@ const app = express();
 const PORT = process.env.PORT || 3600;
 
 app.use(
-  cors({
-    origin: 'http://localhost:3000',
-  })
+  cors()
 );
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/', router);
+app.use('/api', router);
 
 const start = async () => {
   try {

@@ -58,7 +58,6 @@ export default function ProductCard({ product }: IProductCardProps) {
   );
 
   const handleOpen = () => setIsModalOpen(true);
-  // const handleClose = () => setIsModalOpen(false);
 
   const handleOpenProduct = () => setIsProductModalOpen(true);
   const handleCloseProduct = () => setIsProductModalOpen(false);

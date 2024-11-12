@@ -32,6 +32,17 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
     const accessToken = generateAccessToken(newUser);
     const refreshToken = generateRefreshToken(newUser);
 
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: true, 
+      sameSite: 'none', 
+    });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true, 
+      sameSite: 'none', 
+    });
+
     res.status(201).json({
       message: 'User registered successfully',
       user: newUser,
@@ -71,6 +82,17 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: true, 
+      sameSite: 'none',
+    });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true, 
+      sameSite: 'none', 
+    });
+
     res.json({
       message: 'Logged in successfully',
       accessToken,
@@ -99,6 +121,11 @@ router.post(
       ) as { userId: number };
 
       const newAccessToken = generateAccessToken({ id: decoded.userId });
+      res.cookie('accessToken', newAccessToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      });
 
       res.json({ accessToken: newAccessToken });
     } catch (error: any) {
@@ -147,3 +174,4 @@ router.get('/get-users', async (req: Request, res: Response) => {
 });
 
 export default router;
+
