@@ -83,7 +83,7 @@ export default function Admin() {
   }, [users]);
 
   const memoizedProducts = useMemo(() => {
-    // @ts-ignore:next-line
+    // @ts-ignore: should type products
     return products.products;
   }, [products]);
 

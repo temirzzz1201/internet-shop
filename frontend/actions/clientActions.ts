@@ -138,7 +138,10 @@ export const register = createAsyncThunk(
   'auth/register',
   async (userData: IUser, { rejectWithValue }) => {
     try {
-      return await registerUser(userData);
+      const response = await registerUser(userData);
+      console.log('response ', response);
+      
+      return response
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
     }
