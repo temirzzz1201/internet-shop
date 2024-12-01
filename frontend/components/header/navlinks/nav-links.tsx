@@ -12,37 +12,11 @@ import { usePathname } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { capitalize } from '../../../utils/capitalize';
 import { useAppSelector } from '@/hooks/useAppSelector';
-import { Box } from '@chakra-ui/react';
+import { Box, UseDisclosureReturn, useDisclosure } from '@chakra-ui/react';
 import MobileNav from '@/components/header/mobile-nav';
 import { useRouter } from 'next/navigation';
 
-/* eslint-disable */
-interface IProduct {
-  product: {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    stock: number;
-    categoryId: number;
-    createdAt: string;
-    updatedAt: string;
-    category: {
-      id: number;
-      name: string;
-      createdAt: string;
-      updatedAt: string;
-    };
-    images: Array<{
-      id: number;
-      imageUrl: string;
-      productId: number;
-      createdAt: string;
-      updatedAt: string;
-    }>;
-  };
-  quantity: number;
-}
+
 
 export default function NavLinks() {
   const pathname = usePathname();
@@ -52,6 +26,8 @@ export default function NavLinks() {
   /* eslint-disable */
   const [productQuantity, setProductQuantity] = useState<number>(0);
   const { replace } = useRouter();
+
+  const { isOpen, onOpen, onClose }: UseDisclosureReturn = useDisclosure();
 
   const logoutUser = () => {
     dispatch(logout());
@@ -95,12 +71,13 @@ export default function NavLinks() {
             {links.map((link) => (
               <Box key={link.id} className="mb-4 flex items-center" as="li">
                 <Link
+                  onClick={onClose}
                   href={link.path}
                   passHref
                   className={
                     pathname === link.path
-                      ? 'text-blue-600 underline flex items-center'
-                      : 'text-blue-400 flex'
+                      ? 'text-blue-600 underline flex items-center cursor-pointer'
+                      : 'text-blue-400 flex cursor-pointer'
                   }
                 >
                   {link.title}
@@ -127,7 +104,7 @@ export default function NavLinks() {
                   className="flex items-center mr-3 mb-4"
                   as="li"
                 >
-                  <Link href="/busket" className="text-white flex">
+                  <Link href="/busket" className="text-white flex" onClick={onClose}>
                     {productQuantity > 0 && (
                       <Box
                         w="15px"
@@ -170,7 +147,7 @@ export default function NavLinks() {
               </>
             ) : (
               <Box className="flex items-center" as="li">
-                <Link href="/login" className="text-blue-600 font-semibold">
+                <Link href="/login" className="text-blue-600 font-semibold" onClick={onClose}>
                   Войти
                 </Link>
               </Box>
@@ -258,3 +235,4 @@ export default function NavLinks() {
     </>
   );
 }
+

@@ -9,7 +9,6 @@ import { sequelize } from '../config/config';
 const initModels = async () => {
   try {
     await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
 
     User.hasMany(Cart, { foreignKey: 'userId', as: 'cartItems' });
     Cart.belongsTo(User, { foreignKey: 'userId', as: 'user' });

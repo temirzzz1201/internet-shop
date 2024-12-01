@@ -28,7 +28,7 @@ const SignupSchema = Yup.object().shape({
 
 export default function Register() {
   const dispatch = useAppDispatch();
-  const { isLoading } = useAppSelector((store) => store.auth);
+  const { isLoading, error } = useAppSelector((store) => store.auth);
   const toast = useToast();
 
   return (
@@ -42,17 +42,30 @@ export default function Register() {
           validationSchema={SignupSchema}
           onSubmit={(values: IFormValues) => {
             dispatch(register(values))
-              .then(() => {
-                toast({
-                  title: 'Вы успешно зарегестировались!',
-                  status: 'success',
-                  duration: 3000,
-                  isClosable: false,
-                });
+              .then((val) => {
+                // @ts-ignore: can be undefined
+                const username = val?.payload?.user?.username;
+                if(username) {
+                  toast({
+                    title: `Вы успешно зарегестрировались, ${username}`,
+                    status: 'success',
+                    duration: 3000,
+                    isClosable: false,
+                  });
+                }
+                else {
+                  toast({
+                    // @ts-ignore: error oblect problem
+                    title: error,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: false,
+                  });
+                }
               })
-              .catch(() => {
+              .catch((error) => {
                 toast({
-                  title: 'Упс... Что то пошло не так!',
+                  title: error.payload || 'Упс... Что-то пошло не так!',
                   status: 'error',
                   duration: 3000,
                   isClosable: false,

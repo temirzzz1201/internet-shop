@@ -14,11 +14,6 @@ export const fetchAllProducts = async ({ page = 1, limit = 30 } = {}) => {
       params: { page, limit },
     });
 
-    console.log('axiosInstance ', axiosInstance);
-    console.log('axiosInstance response ', response);
-
-    
-
     if (
       Array.isArray(response.data.products) &&
       typeof response.data.totalPages === 'number'

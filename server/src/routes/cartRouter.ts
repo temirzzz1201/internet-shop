@@ -80,8 +80,6 @@ router.delete('/remove/:id', async (req: any, res: any, next: NextFunction) => {
 
     const productId = id;
 
-    console.log('delete productId ', productId);
-
     const result = await Cart.destroy({
       where: { productId },
     });

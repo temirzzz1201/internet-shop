@@ -71,11 +71,11 @@ export const registerUser = async (
     const response = await api.post<IUserResponse>('users/register', userData);
     localStorage.setItem('refreshToken', response.data.refreshToken);
     Cookies.set('accessToken', response.data.accessToken, { secure: true });
-
+    
     return response.data;
   } catch (error) {
-    console.error(`Ошибка регистрации пользователя: ${error}`);
-    return undefined;
+    // @ts-ignore: can be undefined
+    throw error.response?.data?.message || 'Ошибка регистрации';
   }
 };
 
@@ -92,8 +92,6 @@ export const loginUser = async (
       username: username,
       role: role,
     };
-
-    console.log(id, username, role, email);
 
     localStorage.setItem('refreshToken', response.data.refreshToken);
     Cookies.set('accessToken', response.data.accessToken, { secure: true });
@@ -122,6 +120,7 @@ export const logoutUser = async (): Promise<void> => {
     Cookies.remove('user');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('busket');
+    await api.post('/users/logout');
   } catch (error) {
     console.error(`Ошибка выхода пользователя: ${error}`);
   }
@@ -211,7 +210,6 @@ export const createOrder = async (orderData: {
       headers: { 'Content-Type': 'application/json' },
     });
 
-    console.log('response ', response);
 
     if (response) return response || [];
   } catch (error) {
@@ -227,7 +225,6 @@ export const fetchUserOrder = async (
     const response = await api.get(`orders/get-user-order`, {
       params: { userId },
     });
-    console.log('fetchUserOrder ', response);
 
     return response;
   } catch (error) {
@@ -253,8 +250,6 @@ export const createCartProduct = async (productData: {
 
 export const deleteCartProduct = async (id: string): Promise<void> => {
   try {
-    console.log('deleteCartProduct ', id);
-
     await api.delete(`cart/remove/${id}`, {
       headers: { 'Content-Type': 'application/json' },
     });

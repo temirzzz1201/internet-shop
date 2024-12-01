@@ -3,6 +3,8 @@ import Product from '../models/ProductModel';
 import Image from '../models/ProductImage';
 import Category from '../models/CategoryModel';
 import upload from '../middleware/upload';
+import fs from 'fs';
+import path from 'path';
 
 const router = Router();
 
@@ -82,11 +84,37 @@ router.post(
         categoryId,
       });
 
-      if (req.files && Array.isArray(req.files)) {
-        const imageUrls = (req.files as Express.Multer.File[]).map(
-          (file) => file.filename
-        );
+      // if (req.files && Array.isArray(req.files)) {
+      //   const imageUrls = (req.files as Express.Multer.File[]).map(
+      //     (file) => file.filename
+      //   );
 
+      //   await Image.bulkCreate(
+      //     imageUrls.map((url) => ({
+      //       productId: newProduct.id,
+      //       imageUrl: url,
+      //     }))
+      //   );
+      // }
+
+      if (req.files && Array.isArray(req.files)) {
+        const imageUrls = (req.files as Express.Multer.File[]).map((file) => {
+          const tempPath = path.join(__dirname, '..', 'uploads', file.filename); 
+          const finalPath = path.join('/var/www/uploads', file.filename); 
+
+          // Перемещаем файл в /var/www/uploads
+          fs.renameSync(tempPath, finalPath);
+
+          // Удаляем файл из временной директории
+          if (fs.existsSync(tempPath)) {
+            fs.unlinkSync(tempPath);
+          }
+
+          // Путь, который будет использоваться для доступа к изображению
+          return `${file.filename}`;
+        });
+
+        // Сохраняем записи о картинках в таблице Image
         await Image.bulkCreate(
           imageUrls.map((url) => ({
             productId: newProduct.id,

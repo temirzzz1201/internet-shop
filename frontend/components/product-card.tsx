@@ -16,13 +16,13 @@ import {
   useNumberInput,
   useToast,
   Tooltip,
+  Image as CImage
 } from '@chakra-ui/react';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { formatDate } from '@/utils/dateHelper';
-import AppModal from './app-modal';
 import { EmblaOptionsType } from 'embla-carousel';
 import { capitalize } from '@/utils/capitalize';
 import Cookies from 'js-cookie';
@@ -31,6 +31,9 @@ import { addToCart } from '@/actions/clientActions';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { removeFromCart } from '@/actions/clientActions';
 import Link from 'next/link';
+
+const AppModal = lazy(() => import('@/components/app-modal'));
+
 
 // Динамический импорт карусели без SSR
 const EmblaCarousel = dynamic(() => import('./carousel/embla-carousel'), {
@@ -69,6 +72,7 @@ export default function ProductCard({ product }: IProductCardProps) {
     if (userCookie) {
       const userFromCookie = JSON.parse(userCookie);
       setUserId(userFromCookie.id);
+
     }
   }, [userId, userCookie]);
 
@@ -142,71 +146,73 @@ export default function ProductCard({ product }: IProductCardProps) {
 
   return (
     <Box className={stock === 0 ? 'pointer-events-none' : ''}>
-      <AppModal
-        modalSize="sm"
-        isOpen={isProductModalOpen}
-        onClose={handleCloseProduct}
-        title={product.category?.name || ''}
-      >
-        <Box mb="4">
-          <EmblaCarousel
-            slides={imageUrls}
-            options={OPTIONS}
-            autoPlayFlag
-            imageHeightClass="300"
-          />
-        </Box>
-        <Box mb="4">
-          <HStack>
-            <Button size="sm" {...dec} isDisabled={stock === 0}>
-              -
-            </Button>
-            <Input
-              size="sm"
-              {...input}
-              textAlign="center"
-              isDisabled={stock === 0}
+      <Suspense fallback={<Box as="div">Загрузка...</Box >}>
+        <AppModal
+          modalSize="sm"
+          isOpen={isProductModalOpen}
+          onClose={handleCloseProduct}
+          title={product.category?.name || ''}
+        >
+          <Box mb="4">
+            <EmblaCarousel
+              slides={imageUrls}
+              options={OPTIONS}
+              autoPlayFlag
+              imageHeightClass="300"
             />
-            <Button size="sm" {...inc} isDisabled={stock === 0}>
-              +
-            </Button>
-          </HStack>
-        </Box>
-        <Box as="p" mt="5" mb="5">
-          {product?.name}
-        </Box>
+          </Box>
+          <Box mb="4">
+            <HStack>
+              <Button size="sm" {...dec} isDisabled={stock === 0}>
+                -
+              </Button>
+              <Input
+                size="sm"
+                {...input}
+                textAlign="center"
+                isDisabled={stock === 0}
+              />
+              <Button size="sm" {...inc} isDisabled={stock === 0}>
+                +
+              </Button>
+            </HStack>
+          </Box>
+          <Box as="p" mt="5" mb="5">
+            {product?.name}
+          </Box>
 
-        <Box mb="5">
-          <Button
-            disabled={quantity === 0}
-            size="sm"
-            colorScheme="green"
-            mr={3}
-            onClick={handleOrder}
-            isDisabled={stock === 0}
-          >
-            В корзину
-          </Button>
-          <Button
-            size="sm"
-            colorScheme="red"
-            onClick={handleResetQuantity}
-            isDisabled={stock === 0}
-          >
-            Удалить
-          </Button>
-        </Box>
-        <Box>
-          <Button
-            size="sm"
-            colorScheme="blue"
-            variant="ghost"
-            onClick={goToBusket}
-          >
-            Перейти в корзину
-          </Button>
-        </Box>
-      </AppModal>
+          <Box mb="5">
+            <Button
+              disabled={quantity === 0}
+              size="sm"
+              colorScheme="green"
+              mr={3}
+              onClick={handleOrder}
+              isDisabled={stock === 0}
+            >
+              В корзину
+            </Button>
+            <Button
+              size="sm"
+              colorScheme="red"
+              onClick={handleResetQuantity}
+              isDisabled={stock === 0}
+            >
+              Удалить
+            </Button>
+          </Box>
+          <Box>
+            <Button
+              size="sm"
+              colorScheme="blue"
+              variant="ghost"
+              onClick={goToBusket}
+            >
+              Перейти в корзину
+            </Button>
+          </Box>
+        </AppModal>
+      </Suspense>
 
       <Box
         p={4}
@@ -218,11 +224,15 @@ export default function ProductCard({ product }: IProductCardProps) {
       >
         <Box mb="3">
           <Link href={`/detail/${product.id}`}>
-            <EmblaCarousel
-              slides={imageUrls}
-              options={OPTIONS}
-              handleOpen={handleOpen}
-              imageMaxHeightClass="200"
+            <CImage
+              h='200px'
+              objectFit="contain"
+              objectPosition="center center"
+              w="100%"
+              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${product?.images[0]?.imageUrl}`}
+              alt={`изображение ${product.name}`}
+              cursor="pointer"
+              loading="lazy"
             />
           </Link>
         </Box>

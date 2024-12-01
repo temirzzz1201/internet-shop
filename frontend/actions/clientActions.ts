@@ -138,12 +138,9 @@ export const register = createAsyncThunk(
   'auth/register',
   async (userData: IUser, { rejectWithValue }) => {
     try {
-      const response = await registerUser(userData);
-      console.log('response ', response);
-      
-      return response
+      return await registerUser(userData);
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      return rejectWithValue(error);
     }
   }
 );
@@ -249,9 +246,6 @@ export const placeOrder = createAsyncThunk<
   try {
     const response = await createOrder(orderData);
 
-    console.log('placeOrder response ', response);
-    console.log('placeOrder orderData ', orderData);
-
     if (!response) {
       return rejectWithValue('Ошибка: пустой ответ от сервера.');
     }
@@ -286,10 +280,7 @@ export const addToCart = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      console.log(userId, productId, quantity);
-
       const response = await createCartProduct({ userId, productId, quantity });
-      console.log(response);
 
       return response?.data;
     } catch (error) {
@@ -302,7 +293,6 @@ export const removeFromCart = createAsyncThunk(
   'cart/removeFromCart',
   async ({ id }: { id: string }, { rejectWithValue }) => {
     try {
-      console.log('removeFromCart ID ', id);
 
       await deleteCartProduct(id);
       return id;

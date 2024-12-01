@@ -10,14 +10,14 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
   const { username, email, password, role } = req.body;
 
   if (!username || !email || !password) {
-    res.status(400).json({ message: 'All fields are required' });
+    res.status(400).json({ message: 'Все поля обезательны!' });
     return;
   }
 
   try {
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      res.status(400).json({ message: 'Email already registered' });
+      res.status(400).json({ message: 'Пользователь уже зарегестрирован' });
       return;
     }
 
@@ -34,17 +34,17 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
 
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      // secure: true, Только когда https
+      secure: true, //Только когда https
       sameSite: 'none', 
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      // secure: true, Только когда https
+      secure: true, // Только когда https
       sameSite: 'none', 
     });
 
     res.status(201).json({
-      message: 'User registered successfully',
+      message: 'Пользователь успешно зарегестрирован',
       user: newUser,
       accessToken,
       refreshToken,
@@ -52,7 +52,7 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
   } catch (error: any) {
     res
       .status(500)
-      .json({ message: 'Error registering user', error: error.message });
+      .json({ message: 'Ошибка регистрации пользователя', error: error.message });
   }
 });
 
@@ -84,12 +84,12 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      // secure: true, Только когда https
+      secure: true, //Только когда https
       sameSite: 'none',
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      // secure: true, Только когда https
+      secure: true, //Только когда https
       sameSite: 'none', 
     });
 
@@ -123,7 +123,7 @@ router.post(
       const newAccessToken = generateAccessToken({ id: decoded.userId });
       res.cookie('accessToken', newAccessToken, {
         httpOnly: true,
-        // secure: true, Только когда https
+        secure: true, //Только когда https
         sameSite: 'none',
       });
 
@@ -171,6 +171,12 @@ router.get('/get-users', async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({ error: 'Error can not upload users' });
   }
+});
+
+router.post('/logout', (req, res) => {
+  res.clearCookie('accessToken');
+  res.clearCookie('refreshToken');
+  res.status(200).json({ message: 'Logged out successfully' });
 });
 
 export default router;
