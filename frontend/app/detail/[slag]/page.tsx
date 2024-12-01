@@ -21,14 +21,17 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
+  Container
 } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense, lazy } from 'react';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import AppModal from '@/components/app-modal';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { IIProduct } from '@/types';
+
+const AppModal = lazy(() => import('@/components/app-modal'));
+
 
 interface DetailPageProps {
   params: {
@@ -164,13 +167,13 @@ export default function DetailPage({ params }: DetailPageProps) {
   if (!product) {
     return (
       <AppContainer title="Детальная" myClass="flex-col">
-        <Heading>Товар не найден или неверный формат</Heading>
+        <Heading>Товар не найден!</Heading>
       </AppContainer>
     );
   }
 
   return (
-    <AppContainer title={''} myClass="flex-col">
+    <AppContainer title={'Детали заказа'} myClass="flex-col">
       <Breadcrumb
         spacing="8px"
         separator={<ChevronRightIcon color="gray.500" />}
@@ -187,16 +190,21 @@ export default function DetailPage({ params }: DetailPageProps) {
         </BreadcrumbItem>
       </Breadcrumb>
 
-      <Stack spacing={6} mb="10">
-        <HStack spacing={4}>
-          <SimpleGrid columns={[1, 2, 3]} spacing={4}>
+      <Stack spacing={6} mb="10" w="100%" alignItems="flex-start">
+        <HStack spacing={4} w="100%" alignItems="flex-start" direction={{ base: "column", md: "row" }}>
+          <SimpleGrid
+            columns={{ base: 1, sm: 2, md: 5 }}
+            spacing={2}
+            w="100%"
+            justifyContent="flex-start"
+          >
             {imageUrls?.map((url, index) => (
               <Image
                 key={index}
-                boxSize="300px"
+                boxSize={{ base: "100%", md: "300px" }}
                 objectFit="contain"
                 src={url}
-                alt={`${product.name} изображение ${index + 1}`}
+                alt={`изображение ${product.name} ${index + 1}`}
                 borderRadius="md"
                 cursor="pointer"
                 onClick={() => openModal(url)}
@@ -207,26 +215,25 @@ export default function DetailPage({ params }: DetailPageProps) {
 
         <Divider />
 
+        <Heading size="2xl" mb="5" color="green.600">
+          {product.name}
+        </Heading>
         <Text fontSize={{ base: 'lg', md: 'xl' }} color="green.600">
-          ₽{product.name}
+          {product.price}{" "}₽
         </Text>
-        <Text fontSize={{ base: 'lg', md: 'xl' }} color="green.600">
-          ₽{product.price}
-        </Text>
-        <Text fontSize={{ base: 'sm', md: 'md' }} color="gray.500">
-          В наличии: {product.stock}
-        </Text>
+          <Box fontSize={{ base: 'sm', md: 'md' }}  color="red.500" fontWeight="bold" as="p">В наличии:{" "} {product.stock}</Box> 
         <Text
           fontSize={{ base: 'lg', md: 'xl' }}
           color="gray.500"
-          maxW="70%"
+          w="100%"
+          textAlign="left"
           fontWeight="600"
         >
-          Описание: {product.description}
+          {product.description}
         </Text>
 
-        <Box mb="4">
-          <HStack maxW="60%">
+        <Box mb="4" w="100%">
+          <HStack maxW={{ base: "100%", md: "60%" }} direction={{ base: "column", md: "row" }} spacing={4}>
             <Button
               size={{ base: 'md', md: 'lg' }}
               {...dec}
@@ -250,7 +257,7 @@ export default function DetailPage({ params }: DetailPageProps) {
           </HStack>
         </Box>
 
-        <Box mb="5">
+        <Box mb="5" w="100%">
           <Button
             disabled={quantity === 0}
             size={{ base: 'md', md: 'lg' }}
@@ -280,20 +287,24 @@ export default function DetailPage({ params }: DetailPageProps) {
         </Box>
       </Stack>
 
-      <AppModal
-        title={product.name}
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        modalSize="xl"
-      >
-        <Image
-          src={selectedImage || ''}
-          alt="Изображение товара"
-          boxSize="700px"
-          objectFit="contain"
-          borderRadius="md"
-        />
-      </AppModal>
+
+      <Suspense fallback={<Box as="div">Загрузка...</Box >}>
+        <AppModal
+          title={product.name}
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          modalSize="xl"
+        >
+          <Image
+            src={selectedImage || ''}
+            alt="Изображение товара"
+            boxSize="700px"
+            objectFit="contain"
+            borderRadius="md"
+          />
+        </AppModal>
+      </Suspense>
+      
     </AppContainer>
   );
 }

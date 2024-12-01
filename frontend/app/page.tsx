@@ -6,7 +6,7 @@ import { IIProduct, ICategory } from '@/types';
 import { Grid, Box } from '@chakra-ui/react';
 import AppContainer from '@/components/app-container';
 
-interface IHomeProps {
+export interface IHomeProps {
   searchParams: {
     page?: string;
     category?: string;

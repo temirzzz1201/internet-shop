@@ -15,7 +15,7 @@ const CartItem: React.FC<CartItemProps> = ({
   onRemove,
 }) => {
   return (
-    <Box border="1px solid blue" borderRadius="20px" p="10px" width="100%">
+    <Box border="1px solid blue" borderRadius="20px" p={{ base: '3', sm: '4', md: '5' }} width="100%" maxW={{ base: '100%', sm: '480px' }} >
       <Box as="h3" fontSize="xl" fontWeight="semibold" mb="5" maxW="70%">
         {item.product?.name}
       </Box>
@@ -26,6 +26,7 @@ const CartItem: React.FC<CartItemProps> = ({
             src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${image.imageUrl}`}
             alt={item.product.name}
             boxSize="100px"
+            objectFit="contain"
           />
         ))}
       </Box>

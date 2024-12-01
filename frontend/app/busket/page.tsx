@@ -1,10 +1,12 @@
 'use client';
-import { Box, Button, HStack, Stack } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Box, Stack } from '@chakra-ui/react';
+import { useState, Suspense, lazy, useCallback, useMemo } from 'react';
 import AppContainer from '@/components/app-container';
-import AppModal from '@/components/app-modal';
 import CartItem from '@/components/cart-item';
+import CartSummary from '@/components/cart-summary';
 import { useCart } from '@/hooks/useCart';
+
+const AppModal = lazy(() => import('@/components/app-modal'));
 
 const Busket = () => {
   const {
@@ -16,67 +18,74 @@ const Busket = () => {
   } = useCart();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // @ts-ignore: should type products
-  const handleIncrement = (item) => {
-    if (item.quantity < item.product.stock) {
-      updateQuantity(item.id, item.quantity + 1);
-    }
-  };
-  // @ts-ignore: should type products
-  const handleDecrement = (item) => {
-    if (item.quantity > 0) {
-      updateQuantity(item.id, item.quantity - 1);
-    }
-  };
+  const handleIncrement = useCallback(
+    // @ts-ignore: should type products
+    (item) => {
+      if (item.quantity < item.product.stock) {
+        updateQuantity(item.id, item.quantity + 1);
+      }
+    },
+    [updateQuantity]
+  );
+  
+  const handleDecrement = useCallback(
+    // @ts-ignore: should type products
+    (item) => {
+      if (item.quantity > 0) {
+        updateQuantity(item.id, item.quantity - 1);
+      }
+    },
+    [updateQuantity]
+  );
+
+  const totalQuantity = useMemo(
+    () => cartItems.reduce((total, item) => total + item.quantity, 0),
+    [cartItems]
+  );
+  
+  const totalPrice = useMemo(
+    () => cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0),
+    [cartItems]
+  );
 
   const handleOrder = () => {
-    placeCartOrder();
-    setIsModalOpen(true);
+    if (totalQuantity > 0) {
+      placeCartOrder();
+      setIsModalOpen(true);
+    }
   };
-
-  const totalQuantity = cartItems.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
-  const totalPrice = cartItems.reduce(
-    (total, item) => total + item.product.price * item.quantity,
-    0
-  );
 
   return (
     <AppContainer title="Оформление заказа" myClass="justify-center">
-      <AppModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Заказ оформлен"
-        modalSize="xl"
+      <Suspense fallback={<Box as="div">Загрузка...</Box >}>
+        <AppModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          title="Заказ оформлен"
+          modalSize="xl"
+        >
+          {cartItems.map((item) => (
+            <Box key={item.id} p="10px">
+              <Box fontWeight="semibold">Товар: {item.product?.name}</Box>
+              <Box>Количество: {item.quantity}</Box>
+              <Box>Цена: {item.product?.price} руб.</Box>
+            </Box>
+          ))}
+        </AppModal>
+      </Suspense>
+      <Stack
+        w="100%"
+        direction={{ base: 'column', md: 'row' }}
+        spacing={{ base: '3', md: '5' }}
+        mb="5"
+        align="stretch"
       >
-        {cartItems.map((item) => (
-          <Box key={item.id} p="10px">
-            <Box fontWeight="semibold">Товар: {item.product?.name}</Box>
-            <Box>Количество: {item.quantity}</Box>
-            <Box>Цена: {item.product?.price} руб.</Box>
-          </Box>
-        ))}
-      </AppModal>
-
-      <Stack direction={{ base: 'column', md: 'row' }} spacing="5" mb="5">
-        <Box mr="20" bg="orange.100" p="5" borderRadius="20px" maxW="sm">
-          <Box fontWeight="semibold" fontSize="2xl" mb="4">
-            Перейти к оформлению
-          </Box>
-          <Box mb="2">Количество товаров: {totalQuantity}</Box>
-          <Box mb="2">Итоговая цена: {totalPrice} руб.</Box>
-          <HStack spacing="4">
-            <Button colorScheme="teal" onClick={handleOrder}>
-              Оформить заказ
-            </Button>
-            <Button colorScheme="red" onClick={clearCartItems}>
-              Очистить корзину
-            </Button>
-          </HStack>
-        </Box>
-
+        <CartSummary
+          totalQuantity={totalQuantity}
+          totalPrice={totalPrice}
+          onOrder={handleOrder}
+          onClear={clearCartItems}
+        />
         <Box flex="1">
           {cartItems.length > 0 ? (
             cartItems.map((item) => (
@@ -90,7 +99,9 @@ const Busket = () => {
               </Box>
             ))
           ) : (
-            <Box>Корзина пуста</Box>
+            <Box as="p" textAlign="center">
+              Корзина пуста!
+            </Box>
           )}
         </Box>
       </Stack>

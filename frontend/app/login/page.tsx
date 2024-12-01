@@ -38,13 +38,26 @@ export default function Login() {
           validationSchema={SignupSchema}
           onSubmit={(values) => {
             dispatch(login(values))
-              .then(() => {
-                toast({
-                  title: 'Вы успешно авторизовались!',
-                  status: 'success',
-                  duration: 3000,
-                  isClosable: false,
-                });
+              .then((val) => {
+                // @ts-ignore: can be undefined
+                const username = val?.payload?.user?.username;
+                if(username) {
+                  toast({
+                    title: `Добро пожаловать ${username}`,
+                    status: 'success',
+                    duration: 3000,
+                    isClosable: false,
+                  });
+                }
+                else {
+                  toast({
+                    title: 'Нет такого пользователя!',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: false,
+                  });
+                }
+                
               })
               .catch(() => {
                 toast({

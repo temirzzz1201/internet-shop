@@ -7,12 +7,6 @@ import router from './routes';
 const app = express();
 const PORT = process.env.PORT || 3600;
 
-// app.use(
-//   cors({
-//     origin: 'http://localhost:5500'
-//   })
-// );
-
 app.use(cors())
 
 app.use(express.json());

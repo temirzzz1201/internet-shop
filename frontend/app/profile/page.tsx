@@ -52,7 +52,7 @@ function Profile() {
       <Heading mb="35px" size="lg">
         История заказов
       </Heading>
-      <Box as="aside" mr="80px" p="4">
+      <Box as="aside">
         <VStack spacing={4} align="stretch">
           {userOrders.length === 0 ? (
             <Text>У вас нет заказов.</Text>
@@ -69,7 +69,13 @@ function Profile() {
                   Заказ №: {order.id}
                 </Text>
                 <VStack spacing={2} align="start">
-                  <Box mb="3" display="flex">
+                  <Box
+                    mb="3"
+                    display="flex"
+                    flexWrap="wrap" 
+                    gap="2" 
+                    justifyContent={{ base: "center", md: "flex-start" }} 
+                  >
                     {order.Product &&
                       order.Product.images &&
                       order.Product.images.length > 0 &&
@@ -82,12 +88,12 @@ function Profile() {
                             alt={order?.Product?.name}
                             boxSize="120px"
                             objectFit="cover"
-                            mr="2"
                           />
                         );
                       })}
                   </Box>
                 </VStack>
+
                 <Divider my="4" />
 
                 {order.Product ? (

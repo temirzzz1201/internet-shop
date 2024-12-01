@@ -11,7 +11,7 @@ export default function AppContainer({
       <Box
         as="section"
         className="flex justify-start"
-        px="5"
+        px={{ base: "10px", md: "5" }}
         mb="10"
         maxW="1920"
         w="100%"
@@ -23,7 +23,7 @@ export default function AppContainer({
       <Box
         as="section"
         className={['flex', myClass].join(' ')}
-        px="5"
+        px={{ base: "10px", md: "5" }}
         maxW="1920"
         w="100%"
         pb="10"

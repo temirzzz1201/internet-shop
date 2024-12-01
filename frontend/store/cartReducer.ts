@@ -49,7 +49,6 @@ const cartSlice = createSlice({
         removeFromCart.fulfilled,
         (state, action: PayloadAction<string>) => {
           state.status = 'succeeded';
-          console.log('Удаляемый id:', action.payload);
           state.items = state.items.filter(
             (item) => item.id.toString() !== action.payload
           );

@@ -32,6 +32,7 @@ const authSlice = createSlice({
       })
       .addCase(register.rejected, (state, action: PayloadAction<unknown>) => {
         state.isLoading = false;
+        
         state.error = (action.payload as string) || 'Ошибка регистрации';
       })
       .addCase(login.pending, (state) => {

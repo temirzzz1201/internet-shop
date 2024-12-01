@@ -60,29 +60,19 @@ export const useCart = () => {
   };
 
   const placeCartOrder = () => {
-    console.log('placeCartOrder ', userId);
-
     if (userId) {
       cartItems.forEach((item) => {
         const { quantity, product } = item;
 
-        console.log('item ', item);
-        console.log('cartItems ', cartItems);
-
         if (item.quantity > product.stock) {
           alert(`Недостаточно товара "${product.name}" на складе.`);
         } else {
-          console.log('item ', item);
-          console.log('----------------------------------');
-
           const order = {
             quantity,
             total_price: product.price * quantity,
             userId: Number(userId),
             productId: product.id,
           };
-
-          console.log('oder ', order);
 
           dispatch(placeOrder(order));
         }

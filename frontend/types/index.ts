@@ -183,3 +183,10 @@ export interface AppModalProps extends IModalProps {
   onClose: () => void;
   title: string;
 }
+
+export interface ICartSummaryProps {
+  totalQuantity: number;
+  totalPrice: number; 
+  onOrder: () => void;
+  onClear: () => void; 
+}
