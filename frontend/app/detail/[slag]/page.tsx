@@ -29,6 +29,7 @@ import { useAppDispatch } from '@/hooks/useAppDispatch';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { IIProduct } from '@/types';
+import OrderActions from '@/components/order-actions';
 
 const AppModal = lazy(() => import('@/components/app-modal'));
 
@@ -173,7 +174,7 @@ export default function DetailPage({ params }: DetailPageProps) {
   }
 
   return (
-    <AppContainer title={'Детали заказа'} myClass="flex-col">
+    <AppContainer myClass="flex-col">
       <Breadcrumb
         spacing="8px"
         separator={<ChevronRightIcon color="gray.500" />}
@@ -191,7 +192,7 @@ export default function DetailPage({ params }: DetailPageProps) {
       </Breadcrumb>
 
       <Stack spacing={6} mb="10" w="100%" alignItems="flex-start">
-        <HStack spacing={4} w="100%" alignItems="flex-start" direction={{ base: "column", md: "row" }}>
+        <HStack spacing={4} w="100%" alignItems="flex-start" direction={{ base: "column", md: "row" }} border="1px solid #DEDEDE" p="5" borderRadius="10" shadow="lg">
           <SimpleGrid
             columns={{ base: 1, sm: 2, md: 5 }}
             spacing={2}
@@ -202,6 +203,7 @@ export default function DetailPage({ params }: DetailPageProps) {
               <Image
                 key={index}
                 boxSize={{ base: "100%", md: "300px" }}
+                maxW={{ base: "180px", md: "300px" }}
                 objectFit="contain"
                 src={url}
                 alt={`изображение ${product.name} ${index + 1}`}
@@ -215,7 +217,7 @@ export default function DetailPage({ params }: DetailPageProps) {
 
         <Divider />
 
-        <Heading size="2xl" mb="5" color="green.600">
+        <Heading size="lg" mb="5" color="green.600">
           {product.name}
         </Heading>
         <Text fontSize={{ base: 'lg', md: 'xl' }} color="green.600">
@@ -258,32 +260,13 @@ export default function DetailPage({ params }: DetailPageProps) {
         </Box>
 
         <Box mb="5" w="100%">
-          <Button
-            disabled={quantity === 0}
-            size={{ base: 'md', md: 'lg' }}
-            colorScheme="green"
-            mr={3}
-            onClick={handleOrder}
-            isDisabled={stock === 0}
-          >
-            В корзину
-          </Button>
-          <Button
-            size={{ base: 'md', md: 'lg' }}
-            colorScheme="red"
-            onClick={handleResetQuantity}
-            isDisabled={stock === 0}
-          >
-            Удалить
-          </Button>
-          <Button
-            size={{ base: 'md', md: 'lg' }}
-            colorScheme="blue"
-            variant="ghost"
-            onClick={goToBusket}
-          >
-            Перейти в корзину
-          </Button>
+          <OrderActions
+            quantity={quantity}
+            stock={stock}
+            handleOrder={handleOrder}
+            handleResetQuantity={handleResetQuantity}
+            goToBusket={goToBusket}
+          />
         </Box>
       </Stack>
 

@@ -30,6 +30,7 @@ import busketSrcOrange from '@/assets/images/purchase_orange.svg';
 import { addToCart } from '@/actions/clientActions';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { removeFromCart } from '@/actions/clientActions';
+import OrderActions from './order-actions';
 import Link from 'next/link';
 
 const AppModal = lazy(() => import('@/components/app-modal'));
@@ -44,7 +45,7 @@ const OPTIONS: EmblaOptionsType = { loop: true };
 
 export default function ProductCard({ product }: IProductCardProps) {
   /* eslint-disable */
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
 
   const [quantity, setQuantity] = useState<number>(0);
@@ -60,7 +61,7 @@ export default function ProductCard({ product }: IProductCardProps) {
     (image) => `${process.env.NEXT_PUBLIC_API_URL}/uploads/${image.imageUrl}`
   );
 
-  const handleOpen = () => setIsModalOpen(true);
+  // const handleOpen = () => setIsModalOpen(true);
 
   const handleOpenProduct = () => setIsProductModalOpen(true);
   const handleCloseProduct = () => setIsProductModalOpen(false);
@@ -151,7 +152,7 @@ export default function ProductCard({ product }: IProductCardProps) {
           modalSize="sm"
           isOpen={isProductModalOpen}
           onClose={handleCloseProduct}
-          title={product.category?.name || ''}
+          title={capitalize(product.name)}
         >
           <Box mb="4">
             <EmblaCarousel
@@ -177,39 +178,15 @@ export default function ProductCard({ product }: IProductCardProps) {
               </Button>
             </HStack>
           </Box>
-          <Box as="p" mt="5" mb="5">
-            {product?.name}
-          </Box>
-
+      
           <Box mb="5">
-            <Button
-              disabled={quantity === 0}
-              size="sm"
-              colorScheme="green"
-              mr={3}
-              onClick={handleOrder}
-              isDisabled={stock === 0}
-            >
-              В корзину
-            </Button>
-            <Button
-              size="sm"
-              colorScheme="red"
-              onClick={handleResetQuantity}
-              isDisabled={stock === 0}
-            >
-              Удалить
-            </Button>
-          </Box>
-          <Box>
-            <Button
-              size="sm"
-              colorScheme="blue"
-              variant="ghost"
-              onClick={goToBusket}
-            >
-              Перейти в корзину
-            </Button>
+            <OrderActions
+              quantity={quantity}
+              stock={stock}
+              handleOrder={handleOrder}
+              handleResetQuantity={handleResetQuantity}
+              goToBusket={goToBusket}
+            />
           </Box>
         </AppModal>
       </Suspense>

@@ -55,6 +55,12 @@ const Busket = () => {
     }
   };
 
+  const handleClearOrder = () => {
+    if (totalQuantity !== 0) {
+      clearCartItems()
+    }
+  };
+
   return (
     <AppContainer title="Оформление заказа" myClass="justify-center">
       <Suspense fallback={<Box as="div">Загрузка...</Box >}>
@@ -76,7 +82,7 @@ const Busket = () => {
       <Stack
         w="100%"
         direction={{ base: 'column', md: 'row' }}
-        spacing={{ base: '3', md: '5' }}
+        // spacing={{ base: '3', md: '5' }}
         mb="5"
         align="stretch"
       >
@@ -84,7 +90,7 @@ const Busket = () => {
           totalQuantity={totalQuantity}
           totalPrice={totalPrice}
           onOrder={handleOrder}
-          onClear={clearCartItems}
+          onClear={handleClearOrder}
         />
         <Box flex="1">
           {cartItems.length > 0 ? (

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '../assets/styles/globals.css';
 import Header from '../components/header/header';
+// import AppHeader from '@/components/app-header';
 import Footer from '../components/footer';
 import Providers from '@/providers/providers';
 import elephant from '@/assets/elephant.ico';

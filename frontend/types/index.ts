@@ -172,7 +172,7 @@ export interface ICart {
 }
 
 export interface IContainerProps {
-  title: string;
+  title?: string;
   children: ReactNode;
   myClass: string;
 }
