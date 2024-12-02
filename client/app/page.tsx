@@ -47,7 +47,7 @@ const Home = async ({ searchParams }: IHomeProps) => {
           <ClientProducts products={products} selectedCategory={categoryId} />
         </Box>
       </AppContainer>
-      <Box mb="80px">
+      <Box as="section" mb="80px">
         <Pagination currentPage={currentPage} totalPages={totalPages} />
       </Box>
     </>

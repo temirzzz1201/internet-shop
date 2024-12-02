@@ -12,22 +12,18 @@ import { usePathname } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { capitalize } from '../../../utils/capitalize';
 import { useAppSelector } from '@/hooks/useAppSelector';
-import { Box, UseDisclosureReturn, useDisclosure } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import MobileNav from '@/components/header/mobile-nav';
 import { useRouter } from 'next/navigation';
-
-
 
 export default function NavLinks() {
   const pathname = usePathname();
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const [userName, setUserName] = useState<string | null>(null);
   /* eslint-disable */
   const [productQuantity, setProductQuantity] = useState<number>(0);
   const { replace } = useRouter();
-
-  const { isOpen, onOpen, onClose }: UseDisclosureReturn = useDisclosure();
 
   const logoutUser = () => {
     dispatch(logout());
@@ -36,7 +32,7 @@ export default function NavLinks() {
   };
 
   useEffect(() => {
-    if (user && user.username) {
+    if (user && user.username && isAuthenticated) {
       setUserName(`Приветствую ${capitalize(user.username)}`);
     } else {
       const user = Cookies.get('user');
@@ -71,7 +67,6 @@ export default function NavLinks() {
             {links.map((link) => (
               <Box key={link.id} className="mb-4 flex items-center" as="li">
                 <Link
-                  onClick={onClose}
                   href={link.path}
                   passHref
                   className={
@@ -104,7 +99,7 @@ export default function NavLinks() {
                   className="flex items-center mr-3 mb-4"
                   as="li"
                 >
-                  <Link href="/busket" className="text-white flex" onClick={onClose}>
+                  <Link href="/busket" className="text-white flex">
                     {productQuantity > 0 && (
                       <Box
                         w="15px"
@@ -147,7 +142,7 @@ export default function NavLinks() {
               </>
             ) : (
               <Box className="flex items-center" as="li">
-                <Link href="/login" className="text-blue-600 font-semibold" onClick={onClose}>
+                <Link href="/login" className="text-blue-600 font-semibold">
                   Войти
                 </Link>
               </Box>
@@ -235,4 +230,3 @@ export default function NavLinks() {
     </>
   );
 }
-

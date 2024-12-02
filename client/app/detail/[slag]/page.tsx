@@ -21,7 +21,6 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  Container
 } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { useEffect, useState, Suspense, lazy } from 'react';
@@ -32,7 +31,6 @@ import { IIProduct } from '@/types';
 import OrderActions from '@/components/order-actions';
 
 const AppModal = lazy(() => import('@/components/app-modal'));
-
 
 interface DetailPageProps {
   params: {
@@ -192,7 +190,16 @@ export default function DetailPage({ params }: DetailPageProps) {
       </Breadcrumb>
 
       <Stack spacing={6} mb="10" w="100%" alignItems="flex-start">
-        <HStack spacing={4} w="100%" alignItems="flex-start" direction={{ base: "column", md: "row" }} border="1px solid #DEDEDE" p="5" borderRadius="10" shadow="lg">
+        <HStack
+          spacing={4}
+          w="100%"
+          alignItems="flex-start"
+          direction={{ base: 'column', md: 'row' }}
+          border="1px solid #DEDEDE"
+          p="5"
+          borderRadius="10"
+          shadow="lg"
+        >
           <SimpleGrid
             columns={{ base: 1, sm: 2, md: 5 }}
             spacing={2}
@@ -202,8 +209,8 @@ export default function DetailPage({ params }: DetailPageProps) {
             {imageUrls?.map((url, index) => (
               <Image
                 key={index}
-                boxSize={{ base: "100%", md: "300px" }}
-                maxW={{ base: "180px", md: "300px" }}
+                boxSize={{ base: '100%', md: '300px' }}
+                maxW={{ base: '180px', md: '300px' }}
                 objectFit="contain"
                 src={url}
                 alt={`изображение ${product.name} ${index + 1}`}
@@ -221,9 +228,16 @@ export default function DetailPage({ params }: DetailPageProps) {
           {product.name}
         </Heading>
         <Text fontSize={{ base: 'lg', md: 'xl' }} color="green.600">
-          {product.price}{" "}₽
+          {product.price} ₽
         </Text>
-          <Box fontSize={{ base: 'sm', md: 'md' }}  color="red.500" fontWeight="bold" as="p">В наличии:{" "} {product.stock}</Box> 
+        <Box
+          fontSize={{ base: 'sm', md: 'md' }}
+          color="red.500"
+          fontWeight="bold"
+          as="p"
+        >
+          В наличии: {product.stock}
+        </Box>
         <Text
           fontSize={{ base: 'lg', md: 'xl' }}
           color="gray.500"
@@ -235,7 +249,11 @@ export default function DetailPage({ params }: DetailPageProps) {
         </Text>
 
         <Box mb="4" w="100%">
-          <HStack maxW={{ base: "100%", md: "320px" }} direction={{ base: "column", md: "row" }} spacing={4}>
+          <HStack
+            maxW={{ base: '100%', md: '320px' }}
+            direction={{ base: 'column', md: 'row' }}
+            spacing={4}
+          >
             <Button
               size={{ base: 'sm', md: 'md' }}
               {...dec}
@@ -270,8 +288,7 @@ export default function DetailPage({ params }: DetailPageProps) {
         </Box>
       </Stack>
 
-
-      <Suspense fallback={<Box as="div">Загрузка...</Box >}>
+      <Suspense fallback={<Box as="div">Загрузка...</Box>}>
         <AppModal
           title={product.name}
           isOpen={isModalOpen}
@@ -287,7 +304,6 @@ export default function DetailPage({ params }: DetailPageProps) {
           />
         </AppModal>
       </Suspense>
-      
     </AppContainer>
   );
 }

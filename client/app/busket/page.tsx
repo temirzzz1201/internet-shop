@@ -27,7 +27,7 @@ const Busket = () => {
     },
     [updateQuantity]
   );
-  
+
   const handleDecrement = useCallback(
     // @ts-ignore: should type products
     (item) => {
@@ -42,9 +42,13 @@ const Busket = () => {
     () => cartItems.reduce((total, item) => total + item.quantity, 0),
     [cartItems]
   );
-  
+
   const totalPrice = useMemo(
-    () => cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0),
+    () =>
+      cartItems.reduce(
+        (total, item) => total + item.product.price * item.quantity,
+        0
+      ),
     [cartItems]
   );
 
@@ -57,13 +61,13 @@ const Busket = () => {
 
   const handleClearOrder = () => {
     if (totalQuantity !== 0) {
-      clearCartItems()
+      clearCartItems();
     }
   };
 
   return (
     <AppContainer title="Оформление заказа" myClass="justify-center">
-      <Suspense fallback={<Box as="div">Загрузка...</Box >}>
+      <Suspense fallback={<Box as="div">Загрузка...</Box>}>
         <AppModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}

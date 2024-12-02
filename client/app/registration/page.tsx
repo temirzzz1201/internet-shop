@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { register } from '@/actions/clientActions';
+import { useRouter } from 'next/navigation';
 import {
   FormControl,
   FormLabel,
@@ -30,9 +31,10 @@ export default function Register() {
   const dispatch = useAppDispatch();
   const { isLoading, error } = useAppSelector((store) => store.auth);
   const toast = useToast();
+  const { replace } = useRouter();
 
   return (
-    <AppContainer title="Страница регистрации" myClass="justify-center">
+    <AppContainer myClass="justify-center">
       <FormControl className="max-w-[500px]">
         <FormLabel fontSize="24px" mb="5" color="blue.600">
           Пожалуйста зарегестрируйтесь
@@ -45,16 +47,20 @@ export default function Register() {
               .then((val) => {
                 // @ts-ignore: can be undefined
                 const username = val?.payload?.user?.username;
-                if(username) {
+                if (username) {
                   toast({
-                    title: `Вы успешно зарегестрировались, ${username}`,
+                    position: 'top',
+                    title: `Вы успешно зарегестрировались, ${username}!\n
+                    Пожалуйста авторизуйтесь
+                    `,
                     status: 'success',
                     duration: 3000,
                     isClosable: false,
                   });
-                }
-                else {
+                  replace('/login');
+                } else {
                   toast({
+                    position: 'top',
                     // @ts-ignore: error oblect problem
                     title: error,
                     status: 'error',
@@ -65,6 +71,7 @@ export default function Register() {
               })
               .catch((error) => {
                 toast({
+                  position: 'top',
                   title: error.payload || 'Упс... Что-то пошло не так!',
                   status: 'error',
                   duration: 3000,

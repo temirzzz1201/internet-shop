@@ -71,7 +71,7 @@ export const registerUser = async (
     const response = await api.post<IUserResponse>('users/register', userData);
     localStorage.setItem('refreshToken', response.data.refreshToken);
     Cookies.set('accessToken', response.data.accessToken, { secure: true });
-    
+
     return response.data;
   } catch (error) {
     // @ts-ignore: can be undefined
@@ -88,7 +88,7 @@ export const loginUser = async (
 
     const safeUserData = {
       id: id,
-      email: email,
+      // email: email,
       username: username,
       role: role,
     };
@@ -209,7 +209,6 @@ export const createOrder = async (orderData: {
     const response = await api.post<IOrder>('orders/create-order', orderData, {
       headers: { 'Content-Type': 'application/json' },
     });
-
 
     if (response) return response || [];
   } catch (error) {

@@ -72,9 +72,9 @@ function Profile() {
                   <Box
                     mb="3"
                     display="flex"
-                    flexWrap="wrap" 
-                    gap="2" 
-                    justifyContent={{ base: "center", md: "flex-start" }} 
+                    flexWrap="wrap"
+                    gap="2"
+                    justifyContent={{ base: 'center', md: 'flex-start' }}
                   >
                     {order.Product &&
                       order.Product.images &&

@@ -60,14 +60,14 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    res.status(400).json({ message: 'Email and password are required' });
+    res.status(400).json({ message: 'Необходимы польователь и пароль' });
     return;
   }
 
   try {
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: 'Пользователь не найден' });
       return;
     }
 
@@ -75,7 +75,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     const isPasswordValid = bcrypt.compare(password, hashedPassword);
 
     if (!isPasswordValid) {
-      res.status(401).json({ message: 'Invalid credentials' });
+      res.status(401).json({ message: 'Неверные данные' });
       return;
     }
 
@@ -94,13 +94,13 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     });
 
     res.json({
-      message: 'Logged in successfully',
+      message: 'авторизация успешна',
       accessToken,
       refreshToken,
       user,
     });
   } catch (error: any) {
-    res.status(500).json({ message: 'Error logging in', error: error.message });
+    res.status(500).json({ message: 'Ошибка авторизации', error: error.message });
   }
 });
 
@@ -110,7 +110,7 @@ router.post(
     const { token: refreshToken } = req.body;
 
     if (!refreshToken) {
-      res.status(400).json({ message: 'Refresh token is required' });
+      res.status(400).json({ message: 'Необходим refresh токен' });
       return;
     }
 
@@ -129,10 +129,10 @@ router.post(
 
       res.json({ accessToken: newAccessToken });
     } catch (error: any) {
-      console.error('Error verifying refresh token:', error);
+      console.error('Ошибка верифакации refresh токена:', error);
       res
         .status(403)
-        .json({ message: 'Invalid refresh token', error: error.message });
+        .json({ message: 'Невалидный refresh токен', error: error.message });
     }
   }
 );
@@ -141,9 +141,9 @@ router.delete('/delete-user/:id', async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
     await User.destroy({ where: { id: userId } });
-    res.status(200).json({ message: 'User deleted' });
+    res.status(200).json({ message: 'Пользователь удален' });
   } catch (error) {
-    res.status(500).json({ error: 'Error deleting user' });
+    res.status(500).json({ error: 'Ошибка удаления пользователя' });
   }
 });
 
@@ -157,10 +157,10 @@ router.put('/update-user/:id', async (req: Request, res: Response) => {
       await user.update(updates);
       res.status(200).json(user);
     } else {
-      res.status(404).json({ error: 'User not found' });
+      res.status(404).json({ error: 'Пользователь не найден' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Error updating user' });
+    res.status(500).json({ error: 'Ошибка обновления поьзователя' });
   }
 });
 
@@ -169,14 +169,14 @@ router.get('/get-users', async (req: Request, res: Response) => {
     const users = await User.findAll();
     res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ error: 'Error can not upload users' });
+    res.status(500).json({ error: 'Не получилось обновить пользователя' });
   }
 });
 
 router.post('/logout', (req, res) => {
   res.clearCookie('accessToken');
   res.clearCookie('refreshToken');
-  res.status(200).json({ message: 'Logged out successfully' });
+  res.status(200).json({ message: 'Вы успешно разлогировались' });
 });
 
 export default router;

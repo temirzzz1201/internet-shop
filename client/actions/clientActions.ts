@@ -293,7 +293,6 @@ export const removeFromCart = createAsyncThunk(
   'cart/removeFromCart',
   async ({ id }: { id: string }, { rejectWithValue }) => {
     try {
-
       await deleteCartProduct(id);
       return id;
     } catch (error) {

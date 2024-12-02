@@ -15,7 +15,13 @@ const CartItem: React.FC<CartItemProps> = ({
   onRemove,
 }) => {
   return (
-    <Box border="1px solid #DEDEDE" borderRadius="20px" p={{ base: '3', sm: '4', md: '5' }} width="100%" maxW={{ base: '100%', sm: '480px' }} >
+    <Box
+      border="1px solid #DEDEDE"
+      borderRadius="20px"
+      p={{ base: '3', sm: '4', md: '5' }}
+      width="100%"
+      maxW={{ base: '100%', sm: '480px' }}
+    >
       <Box as="h3" fontSize="xl" fontWeight="semibold" mb="5" maxW="70%">
         {item.product?.name}
       </Box>

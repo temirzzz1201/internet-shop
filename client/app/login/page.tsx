@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { login } from '@/actions/clientActions';
+import { useRouter } from 'next/navigation';
 import {
   FormControl,
   FormLabel,
@@ -26,9 +27,10 @@ export default function Login() {
   const dispatch = useAppDispatch();
   const { isLoading } = useAppSelector((store) => store.auth);
   const toast = useToast();
+  const { replace } = useRouter();
 
   return (
-    <AppContainer title="Страница авторизации" myClass="justify-center">
+    <AppContainer myClass="justify-center">
       <FormControl className="max-w-[500px]">
         <FormLabel fontSize="24px" mb="5" color="blue.600">
           Пожалуйста авторизуйтесь
@@ -41,26 +43,28 @@ export default function Login() {
               .then((val) => {
                 // @ts-ignore: can be undefined
                 const username = val?.payload?.user?.username;
-                if(username) {
+                if (username) {
                   toast({
+                    position: 'top',
                     title: `Добро пожаловать ${username}`,
                     status: 'success',
                     duration: 3000,
                     isClosable: false,
                   });
-                }
-                else {
+                  replace('/');
+                } else {
                   toast({
+                    position: 'top',
                     title: 'Нет такого пользователя!',
                     status: 'error',
                     duration: 3000,
                     isClosable: false,
                   });
                 }
-                
               })
               .catch(() => {
                 toast({
+                  position: 'top',
                   title: 'Упс... Что то пошло не так!',
                   status: 'error',
                   duration: 3000,

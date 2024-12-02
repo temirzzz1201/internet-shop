@@ -79,6 +79,7 @@ export interface IAuthState {
   user: IUser | null;
   isLoading: boolean;
   isAuthenticated: boolean;
+  isARegistrated: boolean;
   error: string | null | Error;
 }
 
@@ -186,7 +187,7 @@ export interface AppModalProps extends IModalProps {
 
 export interface ICartSummaryProps {
   totalQuantity: number;
-  totalPrice: number; 
+  totalPrice: number;
   onOrder: () => void;
-  onClear: () => void; 
+  onClear: () => void;
 }
