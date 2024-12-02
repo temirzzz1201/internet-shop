@@ -1,10 +1,10 @@
 import { fetchAllProducts, fetchCategories } from '@/actions/serverActions';
-import ProductCard from '@/components/product-card';
 import CategoryMenu from '@/components/category-menu';
 import Pagination from '@/components/pagination';
-import { IIProduct, ICategory } from '@/types';
-import { Grid, Box } from '@chakra-ui/react';
+import { ICategory } from '@/types';
+import { Box } from '@chakra-ui/react';
 import AppContainer from '@/components/app-container';
+import ClientProducts from '@/components/client-products';
 
 export interface IHomeProps {
   searchParams: {
@@ -17,6 +17,8 @@ const ITEMS_PER_PAGE = 30;
 
 const Home = async ({ searchParams }: IHomeProps) => {
   const currentPage = searchParams.page ? parseInt(searchParams.page) : 1;
+  const categoryId = searchParams.category;
+
   const productsResponse = await fetchAllProducts({
     page: currentPage,
     limit: ITEMS_PER_PAGE,
@@ -24,20 +26,10 @@ const Home = async ({ searchParams }: IHomeProps) => {
   const categories: ICategory[] = await fetchCategories();
 
   const { products, totalPages } = productsResponse;
-  const categoryId = searchParams.category;
-
-  const filteredProducts = categoryId
-    ? products.filter(
-        (product: IIProduct) => product.categoryId?.toString() === categoryId
-      )
-    : products;
 
   return (
     <>
-      <AppContainer
-        title={`Все товары: ${filteredProducts.length}`}
-        myClass="justify-start"
-      >
+      <AppContainer myClass="justify-start">
         <Box
           display={{ base: 'flex', md: 'flex' }}
           flexDirection={{ base: 'column', md: 'row' }}
@@ -51,26 +43,8 @@ const Home = async ({ searchParams }: IHomeProps) => {
           >
             <CategoryMenu categories={categories} />
           </Box>
-          <Box as="main" mb="20" flex="1">
-            <Grid
-              templateColumns={{
-                base: '1fr',
-                md: 'repeat(2, 1fr)',
-                lg: 'repeat(3, 1fr)',
-                xl: 'repeat(5, 1fr)',
-              }}
-              gap={{ base: 6, md: 3 }}
-              alignItems="stretch"
-            >
-              {filteredProducts.length > 0 ? (
-                filteredProducts.map((product: IIProduct) => (
-                  <ProductCard product={product} key={product.id} />
-                ))
-              ) : (
-                <p>Продукты отсутствуют!</p>
-              )}
-            </Grid>
-          </Box>
+          {/* Передаем категорию в клиентский компонент */}
+          <ClientProducts products={products} selectedCategory={categoryId} />
         </Box>
       </AppContainer>
       <Box mb="80px">

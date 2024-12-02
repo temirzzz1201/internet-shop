@@ -16,9 +16,9 @@ export default function AppContainer({
         maxW="1920"
         w="100%"
       >
-        <Text color="blue.600" fontSize="2xl">
+        {title && <Text color="blue.600" fontSize="2xl">
           {title}
-        </Text>
+        </Text>}
       </Box>
       <Box
         as="section"
