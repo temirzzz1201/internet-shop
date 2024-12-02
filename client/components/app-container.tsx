@@ -8,22 +8,24 @@ export default function AppContainer({
 }: IContainerProps) {
   return (
     <Box className="flex flex-col items-center">
-      <Box
-        as="section"
-        className="flex justify-start"
-        px={{ base: "10px", md: "5" }}
-        mb="10"
-        maxW="1920"
-        w="100%"
-      >
-        {title && <Text color="blue.600" fontSize="2xl">
-          {title}
-        </Text>}
-      </Box>
+      {title && (
+        <Box
+          as="section"
+          className="flex justify-start"
+          px={{ base: '10px', md: '5' }}
+          mb="10"
+          maxW="1920"
+          w="100%"
+        >
+          <Text color="blue.600" fontSize="2xl">
+            {title}
+          </Text>
+        </Box>
+      )}
       <Box
         as="section"
         className={['flex', myClass].join(' ')}
-        px={{ base: "10px", md: "5" }}
+        px={{ base: '10px', md: '5' }}
         maxW="1920"
         w="100%"
         pb="10"

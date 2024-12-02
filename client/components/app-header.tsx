@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { Box } from '@chakra-ui/react';
 import profileSrcBlue from '@/assets/images/profile_blue.svg';
 
-
 const links = [
   { id: 1, title: 'Главная', path: '/' },
   { id: 2, title: 'О нас', path: '/about' },
@@ -34,23 +33,22 @@ function AppHeader() {
         <Link href="/">
           <Image className="w-9 h-9" src={logoSrc} alt="logo" />
         </Link>
-        
-      <>
+
+        <>
           {/* Мобильная версия */}
           <Box display={{ base: 'block', md: 'none' }}>
-              <Box className="flex-col bg-white text-slate-600" as="ul">
-                {links.map((link) => (
-                  <Box key={link.id} className="mb-4 flex items-center" as="li">
-                    <Link
-                      href={link.path}
-                      passHref
-                      className="text-blue-400 flex cursor-pointer"
-                    >
-                      {link.title}                
-                    </Link>
-                  </Box>
-                ))}
-              
+            <Box className="flex-col bg-white text-slate-600" as="ul">
+              {links.map((link) => (
+                <Box key={link.id} className="mb-4 flex items-center" as="li">
+                  <Link
+                    href={link.path}
+                    passHref
+                    className="text-blue-400 flex cursor-pointer"
+                  >
+                    {link.title}
+                  </Link>
+                </Box>
+              ))}
             </Box>
           </Box>
 
@@ -64,11 +62,9 @@ function AppHeader() {
                   className="text-blue-400 flex cursor-pointer"
                 >
                   {link.title}
-                  
                 </Link>
               </Box>
             ))}
-            
           </Box>
         </>
       </Box>
@@ -77,4 +73,3 @@ function AppHeader() {
 }
 
 export default AppHeader;
-

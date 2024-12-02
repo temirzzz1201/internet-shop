@@ -16,7 +16,7 @@ import {
   useNumberInput,
   useToast,
   Tooltip,
-  Image as CImage
+  Image as CImage,
 } from '@chakra-ui/react';
 import Image from 'next/image';
 import { useState, useEffect, Suspense, lazy } from 'react';
@@ -34,7 +34,6 @@ import OrderActions from './order-actions';
 import Link from 'next/link';
 
 const AppModal = lazy(() => import('@/components/app-modal'));
-
 
 // Динамический импорт карусели без SSR
 const EmblaCarousel = dynamic(() => import('./carousel/embla-carousel'), {
@@ -73,7 +72,6 @@ export default function ProductCard({ product }: IProductCardProps) {
     if (userCookie) {
       const userFromCookie = JSON.parse(userCookie);
       setUserId(userFromCookie.id);
-
     }
   }, [userId, userCookie]);
 
@@ -147,7 +145,7 @@ export default function ProductCard({ product }: IProductCardProps) {
 
   return (
     <Box className={stock === 0 ? 'pointer-events-none' : ''}>
-      <Suspense fallback={<Box as="div">Загрузка...</Box >}>
+      <Suspense fallback={<Box as="div">Загрузка...</Box>}>
         <AppModal
           modalSize="sm"
           isOpen={isProductModalOpen}
@@ -178,7 +176,7 @@ export default function ProductCard({ product }: IProductCardProps) {
               </Button>
             </HStack>
           </Box>
-      
+
           <Box mb="5">
             <OrderActions
               quantity={quantity}
@@ -202,7 +200,7 @@ export default function ProductCard({ product }: IProductCardProps) {
         <Box mb="3">
           <Link href={`/detail/${product.id}`}>
             <CImage
-              h='200px'
+              h="200px"
               objectFit="contain"
               objectPosition="center center"
               w="100%"

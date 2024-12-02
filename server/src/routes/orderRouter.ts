@@ -10,7 +10,7 @@ router.get('/get-all', async (req: Request, res: Response) => {
     res.json(orders);
   } catch (error) {
     console.error(`Error: ${error}`);
-    res.status(500).json({ error: 'Failed to get orders' });
+    res.status(500).json({ error: 'Не удалось получить заказы' });
   }
 });
 
@@ -50,7 +50,7 @@ router.post('/create-order', async (req: any, res: any) => {
 
     const user = await User.findOne({ where: { id: userId } });
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Пользователь не найден' });
     }
 
     const product = await Product.findOne({
@@ -66,13 +66,13 @@ router.post('/create-order', async (req: any, res: any) => {
     if (!product) {
       return res
         .status(404)
-        .json({ error: `Product with ID ${productId} not found` });
+        .json({ error: `Товар с ID ${productId} не найден` });
     }
 
     if (product.stock < quantity) {
       return res
         .status(400)
-        .json({ error: `Not enough stock for product ID ${productId}` });
+        .json({ error: `Не достаточно остатков товара с ID ${productId}` });
     }
 
     const newOrder = await Order.create({
@@ -105,7 +105,7 @@ router.post('/create-order', async (req: any, res: any) => {
     res.json({ success: true, order: orderDetails });
   } catch (error) {
     console.error(`Error: ${error}`);
-    res.status(500).json({ error: 'Failed to create order' });
+    res.status(500).json({ error: 'Не удалось создать заказ' });
   }
 });
 

@@ -12,7 +12,6 @@ export default function Header() {
       w="100%"
       minH="16"
       bg="gray.500"
-      mb="5"
       position="fixed"
       zIndex="99"
     >
@@ -31,4 +30,3 @@ export default function Header() {
     </Box>
   );
 }
-

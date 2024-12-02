@@ -84,19 +84,6 @@ router.post(
         categoryId,
       });
 
-      // if (req.files && Array.isArray(req.files)) {
-      //   const imageUrls = (req.files as Express.Multer.File[]).map(
-      //     (file) => file.filename
-      //   );
-
-      //   await Image.bulkCreate(
-      //     imageUrls.map((url) => ({
-      //       productId: newProduct.id,
-      //       imageUrl: url,
-      //     }))
-      //   );
-      // }
-
       if (req.files && Array.isArray(req.files)) {
         const imageUrls = (req.files as Express.Multer.File[]).map((file) => {
           const tempPath = path.join(__dirname, '..', 'uploads', file.filename); 
@@ -125,10 +112,10 @@ router.post(
 
       res
         .status(201)
-        .json({ message: 'Product created successfully', product: newProduct });
+        .json({ message: 'Продукт успешно создан', product: newProduct });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Error creating product' });
+      res.status(500).json({ message: 'Ошибка создания продукта' });
     }
   }
 );

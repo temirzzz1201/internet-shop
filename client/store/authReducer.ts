@@ -5,6 +5,8 @@ import { IAuthState } from '../types';
 export const initialState: IAuthState = {
   user: null,
   isAuthenticated: false,
+  isARegistrated: false,
+
   isLoading: false,
   error: null,
 };
@@ -22,17 +24,17 @@ const authSlice = createSlice({
         state.isLoading = false;
         if (action.payload) {
           state.user = action.payload.user;
-          state.isAuthenticated = true;
+          state.isARegistrated = true;
           state.error = null;
         } else {
           state.user = null;
-          state.isAuthenticated = false;
+          state.isARegistrated = false;
           state.error = 'Ошибка регистрации';
         }
       })
       .addCase(register.rejected, (state, action: PayloadAction<unknown>) => {
         state.isLoading = false;
-        
+
         state.error = (action.payload as string) || 'Ошибка регистрации';
       })
       .addCase(login.pending, (state) => {

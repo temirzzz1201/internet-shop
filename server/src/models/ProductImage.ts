@@ -1,6 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/config';
-// import Product from './ProductModel';
 
 class ProductImage extends Model {}
 

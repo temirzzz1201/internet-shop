@@ -49,7 +49,7 @@ const sendOrderEmails = ({
 
   const adminMailOptions = {
     from: process.env.EMAIL_USER,
-    to: process.env.ADMIN_EMAIL || 'defaultAdmin@example.com', // Configurable admin email
+    to: process.env.ADMIN_EMAIL || 'defaultAdmin@example.com', 
     subject: 'Новый заказ',
     html: `
       <h2>Заказ от пользователя: ${userEmail} - ${name.toUpperCase()}</h2>
