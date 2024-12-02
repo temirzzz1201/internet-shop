@@ -150,7 +150,6 @@ export default function NavLinks() {
           </Box>
         </MobileNav>
       </Box>
-
       {/* Десктопная версия */}
       <Box display={{ base: 'none', md: 'flex' }} as="ul" className="flex">
         {links.map((link) => (
