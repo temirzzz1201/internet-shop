@@ -18,33 +18,33 @@ pnpm-debug.log*
 .env.test.local
 .env.production.local
 
-# Frontend (если вы используете React/Vue/Angular)
-frontend/node_modules
-frontend/.pnp
-frontend/.pnp.js
-frontend/.yarn/install-state.gz
+# client (если вы используете React/Vue/Angular)
+client/node_modules
+client/.pnp
+client/.pnp.js
+client/.yarn/install-state.gz
 # testing
-frontend//coverage
+client//coverage
 # next.js
-frontend/.next/
-frontend/out/
+client/.next/
+client/out/
 # production
-frontend/build
-frontend/dist/
+client/build
+client/dist/
 # misc
-frontend/.DS_Store
-frontend/*.pem
+client/.DS_Store
+client/*.pem
 # debug
-frontend/npm-debug.log*
-frontend/yarn-debug.log*
-frontend/yarn-error.log*
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
 # local env files
-frontend/.env*.local
+client/.env*.local
 # vercel
-frontend/.vercel
+client/.vercel
 # typescript
-frontend/*.tsbuildinfo
-frontend/next-env.d.ts
+client/*.tsbuildinfo
+client/next-env.d.ts
 
 # Server
 server/node_modules/
