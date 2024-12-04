@@ -191,3 +191,7 @@ export interface ICartSummaryProps {
   onOrder: () => void;
   onClear: () => void;
 }
+
+export interface ResetPasswordError {
+  message: string;
+}

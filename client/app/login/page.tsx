@@ -116,7 +116,7 @@ export default function Login() {
               >
                 Войти
               </Button>
-              <FormHelperText mb='5'>
+              <FormHelperText mb="5">
                 Еще не зарегестрированы?{' '}
                 <Link className="underline" href="/registration">
                   Регистрация
