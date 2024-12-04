@@ -116,10 +116,16 @@ export default function Login() {
               >
                 Войти
               </Button>
-              <FormHelperText>
+              <FormHelperText mb='5'>
                 Еще не зарегестрированы?{' '}
                 <Link className="underline" href="/registration">
                   Регистрация
+                </Link>
+              </FormHelperText>
+              <FormHelperText>
+                Забыли пароль?{' '}
+                <Link className="underline" href="/enter-email">
+                  Восстановить
                 </Link>
               </FormHelperText>
             </Form>

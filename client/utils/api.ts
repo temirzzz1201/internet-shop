@@ -38,7 +38,7 @@ const refreshToken = async (): Promise<string | null> => {
     return newAccessToken;
   } catch (error) {
     console.error('Failed to refresh token:', error);
-    return null;
+    throw error;
   }
 };
 
@@ -99,7 +99,7 @@ export const loginUser = async (
     return response.data;
   } catch (error) {
     console.error(`Ошибка авторизации пользователя: ${error}`);
-    return undefined;
+    throw error;
   }
 };
 
@@ -110,7 +110,7 @@ export const fetchAllUsers = async (): Promise<
     return await api.get<IUser[]>('/users/get-users');
   } catch (error) {
     console.error(`Ошибка получения пользователей: ${error}`);
-    return undefined;
+    throw error;
   }
 };
 
@@ -120,9 +120,9 @@ export const logoutUser = async (): Promise<void> => {
     Cookies.remove('user');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('busket');
-    await api.post('/users/logout');
   } catch (error) {
     console.error(`Ошибка выхода пользователя: ${error}`);
+    throw error;
   }
 };
 
@@ -133,7 +133,7 @@ export const fetchCategories = async (): Promise<
     return (await api.get<ICategory[]>('category/all-categories')) || [];
   } catch (error) {
     console.error(`Ошибка получения категорий: ${error}`);
-    return undefined;
+    throw error;
   }
 };
 
@@ -146,7 +146,7 @@ export const createCategory = async (categoryData: {
     });
   } catch (error) {
     console.error(`Ошибка создания категории: ${error}`);
-    return undefined;
+    throw error;
   }
 };
 
@@ -157,7 +157,7 @@ export const fetchAllProducts = async (): Promise<
     return (await api.get<IIProduct[]>('products/all-products')) || [];
   } catch (error) {
     console.error(`Ошибка получения продуктов: ${error}`);
-    return undefined;
+    throw error;
   }
 };
 
@@ -170,7 +170,7 @@ export const createProduct = async (
     });
   } catch (error) {
     console.error(`Ошибка создания продукта: ${error}`);
-    return undefined;
+    throw error;
   }
 };
 
@@ -182,7 +182,7 @@ export const deleteChoosenProduct = async (
     return await axios.delete(`${BASE_URL}/${deleteFlag}/${productId}`);
   } catch (error) {
     console.error(`Ошибка удаления продукта: ${error}`);
-    return undefined;
+    throw error; 
   }
 };
 
@@ -195,7 +195,7 @@ export const updateChoosenProduct = async (
     return await axios.put(`${BASE_URL}/${updateFlag}/${productId}`, updates);
   } catch (error) {
     console.error(`Ошибка обновления продукта: ${error}`);
-    return undefined;
+    throw error; 
   }
 };
 
@@ -213,7 +213,7 @@ export const createOrder = async (orderData: {
     if (response) return response || [];
   } catch (error) {
     console.error(`Ошибка создания заказа: ${error}`);
-    return undefined;
+    throw error; 
   }
 };
 
@@ -228,7 +228,7 @@ export const fetchUserOrder = async (
     return response;
   } catch (error) {
     console.error('Ошибка в fetchUserOrder:', error);
-    throw error;
+    throw error; 
   }
 };
 
@@ -243,17 +243,20 @@ export const createCartProduct = async (productData: {
     });
   } catch (error) {
     console.error(`Ошибка добавления в корзину: ${error}`);
-    return undefined;
+    throw error; 
   }
 };
 
 export const deleteCartProduct = async (id: string): Promise<void> => {
   try {
+    console.log('deleteCartProduct ', id);
+    
     await api.delete(`cart/remove/${id}`, {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
     console.error(`Ошибка удаления из корзины: ${error}`);
+    throw error; 
   }
 };
 
@@ -264,6 +267,7 @@ export const deleteAllfromCart = async (): Promise<void> => {
     });
   } catch (error) {
     console.error(`Ошибка очистки корзины: ${error}`);
+    throw error; 
   }
 };
 
@@ -277,6 +281,7 @@ export const updateCartProduct = async (
     });
   } catch (error) {
     console.error(`Ошибка обновления корзины: ${error}`);
+    throw error; 
   }
 };
 
@@ -289,7 +294,7 @@ export const getCartProducts = async (
     });
   } catch (error) {
     console.error(`Ошибка получения заказов корзины: ${error}`);
-    return undefined;
+    throw error; 
   }
 };
 
@@ -307,8 +312,34 @@ export const getOneProduct = async (
     return response.data;
   } catch (error) {
     console.error(`Ошибка получения продукта: ${error}`);
-    return undefined;
+    throw error; 
   }
 };
+
+export const sendPassword = async (email: string) => {
+  try {
+    const response = await api.post('users/forgot-password', { email });
+
+    console.log('sendPassword data ', response);
+    
+    return response
+  }
+  catch (error) {
+    console.error('Ошибка в sendPassword: ', error);
+    throw error; 
+  }
+}
+
+export const resetPassword = async (token: string, password: string) => {
+  try {
+    const response = await api.post(`users/reset-password/${token}`, { password });
+    console.log('resetPassword data ', response);
+    return response;
+  } catch (error) {
+    console.error('Ошибка в resetPassword: ', error);
+    throw error; 
+  }
+};
+
 
 export default api;

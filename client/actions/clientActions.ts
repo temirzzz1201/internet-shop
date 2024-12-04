@@ -18,6 +18,8 @@ import {
   getCartProducts,
   deleteAllfromCart,
   getOneProduct,
+  sendPassword,
+  resetPassword
 } from '@/utils/api';
 import { IUser, IIProduct, ICategory, IOrder } from '@/types';
 import { getErrorMessage } from '@/utils/errorMessage';
@@ -331,6 +333,31 @@ export const fetchCartItems = createAsyncThunk(
   async (userId: string, { rejectWithValue }) => {
     try {
       const response = await getCartProducts(userId);
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
+
+export const sendEmailToResetPassword = createAsyncThunk(
+  'auth/sendEmailToResetPassword',
+  async (email: string, { rejectWithValue }) => {
+    try {
+      const response = await sendPassword(email);
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
+export const resetPasswordHandler = createAsyncThunk(
+  'auth/resetPasswordHandler',
+  async ({ token, password }: { token: string; password: string }, { rejectWithValue }) => {
+    try {
+      const response = await resetPassword(token, password);
       return response?.data;
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));

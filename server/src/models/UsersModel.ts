@@ -8,11 +8,14 @@ class User extends Model {
   public email!: string;
   public password!: string;
   public role!: string;
+  public resetPasswordToken!: string | null;
+  public resetPasswordExpires!: number | null| Date;
 
   public async comparePassword(enteredPassword: string): Promise<boolean> {
     return await bcrypt.compare(enteredPassword, this.password);
   }
 }
+
 
 User.init(
   {
@@ -50,6 +53,14 @@ User.init(
           msg: 'Password must be at least 8 characters long',
         },
       },
+    },
+    resetPasswordToken: {
+      type: DataTypes.STRING, // Сохраняем хэш токена
+      allowNull: true,
+    },
+    resetPasswordExpires: {
+      type: DataTypes.BIGINT, // Срок действия токена
+      allowNull: true,
     },
   },
   {

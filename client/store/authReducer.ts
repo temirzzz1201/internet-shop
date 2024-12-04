@@ -6,7 +6,6 @@ export const initialState: IAuthState = {
   user: null,
   isAuthenticated: false,
   isARegistrated: false,
-
   isLoading: false,
   error: null,
 };

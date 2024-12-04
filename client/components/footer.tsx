@@ -4,12 +4,11 @@ import Link from 'next/link';
 export default function Footer() {
   const footerColumnFirst = [
     { id: 1, href: '/about', text: 'О нас' },
-    { id: 2, href: '/Контакты', text: 'contacts' },
+    { id: 2, href: '/contacts', text: 'Контакты' },
     { id: 3, href: '/#', text: 'vk' },
     { id: 4, href: '/#', text: 'telegram' },
   ];
-  const d = new Date();
-  const year = d.getFullYear();
+  const year = new Date().getFullYear();
 
   return (
     <Box

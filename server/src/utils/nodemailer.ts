@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendOrderEmails = ({
+export const sendOrderEmails = ({
   userEmail,
   name,
   orders,
@@ -89,4 +89,27 @@ const sendOrderEmails = ({
   });
 };
 
-export default sendOrderEmails;
+export const  sendResetPassword = ({ email, name, resetUrl }: {email: string, name: string, resetUrl: string}) => {
+
+  const resetMailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Сброс пароля',
+    html: `
+      <h1>Сброс пароля</h1>
+      <p>Привет, ${name}!</p>
+      <p>Для сброса пароля перейдите по следующей ссылке:</p>
+      <a href="${resetUrl}">Сбросить пароль</a>
+      <p>Ссылка действительна в течение 1 часа.</p>
+    `,
+  };
+
+  transporter.sendMail(resetMailOptions, (error, info) => {
+    if (error) {
+      console.error(`Ошибка отправки письма для сброса пароля: ${error}`);
+    } else {
+      console.log(`Письмо для сброса пароля отправлено: ${info.response}`);
+    }
+  });
+
+}

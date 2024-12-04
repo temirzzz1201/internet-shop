@@ -2,7 +2,11 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import User from '../models/UsersModel';
 import { generateAccessToken, generateRefreshToken } from '../utils/tokenUtils';
+import crypto from 'crypto'
 import jwt from 'jsonwebtoken';
+import { sendResetPassword } from '../utils/nodemailer';
+import { Op } from 'sequelize'; // Добавьте импорт Op
+import dayjs from 'dayjs';
 
 const router = Router();
 
@@ -21,11 +25,10 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({
       username,
       email,
-      password: hashedPassword,
+      password, // Передаем сырой пароль, он будет хэширован в beforeCreate
       role,
     });
 
@@ -72,7 +75,10 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     }
 
     const hashedPassword = user.getDataValue('password');
-    const isPasswordValid = bcrypt.compare(password, hashedPassword);
+
+    console.log('/login hashedPassword ', hashedPassword);
+
+    const isPasswordValid = await bcrypt.compare(password, hashedPassword);
 
     if (!isPasswordValid) {
       res.status(401).json({ message: 'Неверные данные' });
@@ -173,11 +179,69 @@ router.get('/get-users', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/logout', (req, res) => {
-  res.clearCookie('accessToken');
-  res.clearCookie('refreshToken');
-  res.status(200).json({ message: 'Вы успешно разлогировались' });
+router.post('/forgot-password', async (req: any, res: any) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ message: 'Пользователь не найден' });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    const tokenExpiry = Date.now() + 3600000; // Токен действует 1 час
+
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpires = tokenExpiry;
+    await user.save();
+
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+
+    sendResetPassword({
+      email,
+      name: user.username,
+      resetUrl
+    })
+
+    res.json({ message: 'Ссылка для сброса пароля отправлена на email' });
+  } catch (error) {
+    res.status(500).json({ message: 'Ошибка сервера', error });
+  }
 });
+
+router.post('/reset-password/:token', async (req: any, res: any) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  const now = Date.now(); 
+
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex'); // Хэшируем токен
+
+  try {
+    const user = await User.findOne({
+      where: {
+        resetPasswordToken: hashedToken,
+        resetPasswordExpires: { [Op.gt]: now }, // Токен должен быть действительным
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Неверный или истекший токен' });
+    }
+
+    user.password = password;
+    user.resetPasswordToken = null;
+    user.resetPasswordExpires = null;
+    await user.save();
+
+    res.json({ message: 'Пароль успешно обновлен' });
+  } catch (error) {
+    res.status(500).json({ message: 'Ошибка сервера', error });
+  }
+});
+
+
 
 export default router;
 
