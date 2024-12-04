@@ -13,6 +13,7 @@ import * as Yup from 'yup';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { sendEmailToResetPassword } from '@/actions/clientActions';
 import AppContainer from '@/components/app-container';
+import { ResetPasswordError } from '@/types';
 
 const ForgotPasswordSchema = Yup.object().shape({
   email: Yup.string()
@@ -29,15 +30,19 @@ function ForgotPassword() {
       const data = await dispatch(sendEmailToResetPassword(email));
       toast({
         title: 'Успешно!',
-        description: data.payload.message || 'Ссылка для сброса пароля отправлена на почту.',
+        description:
+          data.payload.message ||
+          'Ссылка для сброса пароля отправлена на почту.',
         status: 'success',
         duration: 3000,
         isClosable: true,
       });
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as ResetPasswordError;
       toast({
         title: 'Ошибка',
-        description: error.message || 'Не удалось отправить ссылку для сброса пароля.',
+        description:
+          err.message || 'Не удалось отправить ссылку для сброса пароля.',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -49,12 +54,13 @@ function ForgotPassword() {
     <AppContainer title="Восстановление пароля" myClass="flex justify-center">
       <Box maxWidth="500px" width="100%">
         <FormControl mb={4}>
-
           <Formik
             initialValues={{ email: '' }}
             validationSchema={ForgotPasswordSchema}
             onSubmit={(values, { setSubmitting }) => {
-              handleForgotPassword(values.email).finally(() => setSubmitting(false));
+              handleForgotPassword(values.email).finally(() =>
+                setSubmitting(false)
+              );
             }}
           >
             {({ errors, isSubmitting }) => (
@@ -81,7 +87,6 @@ function ForgotPassword() {
             )}
           </Formik>
         </FormControl>
-
       </Box>
     </AppContainer>
   );

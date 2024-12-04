@@ -19,7 +19,7 @@ import {
   deleteAllfromCart,
   getOneProduct,
   sendPassword,
-  resetPassword
+  resetPassword,
 } from '@/utils/api';
 import { IUser, IIProduct, ICategory, IOrder } from '@/types';
 import { getErrorMessage } from '@/utils/errorMessage';
@@ -340,7 +340,6 @@ export const fetchCartItems = createAsyncThunk(
   }
 );
 
-
 export const sendEmailToResetPassword = createAsyncThunk(
   'auth/sendEmailToResetPassword',
   async (email: string, { rejectWithValue }) => {
@@ -355,7 +354,10 @@ export const sendEmailToResetPassword = createAsyncThunk(
 
 export const resetPasswordHandler = createAsyncThunk(
   'auth/resetPasswordHandler',
-  async ({ token, password }: { token: string; password: string }, { rejectWithValue }) => {
+  async (
+    { token, password }: { token: string; password: string },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await resetPassword(token, password);
       return response?.data;

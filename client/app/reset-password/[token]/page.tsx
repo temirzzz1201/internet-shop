@@ -27,7 +27,9 @@ function ResetPassword({ params }: { params: { token: string } }) {
 
   const handleResetPassword = async (password: string) => {
     try {
-      const response = await dispatch(resetPasswordHandler({ token, password })).unwrap();
+      const response = await dispatch(
+        resetPasswordHandler({ token, password })
+      ).unwrap();
 
       toast({
         title: 'Успешно!',
@@ -36,10 +38,13 @@ function ResetPassword({ params }: { params: { token: string } }) {
         duration: 3000,
         isClosable: true,
       });
-    } catch (error: any) {
+    } catch (error) {
+      // Приводим error к строке для безопасного отображения
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       toast({
         title: 'Ошибка',
-        description: error,
+        description: errorMessage,
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -55,7 +60,9 @@ function ResetPassword({ params }: { params: { token: string } }) {
             initialValues={{ password: '' }}
             validationSchema={ResetPasswordSchema}
             onSubmit={(values, { setSubmitting }) => {
-              handleResetPassword(values.password).finally(() => setSubmitting(false));
+              handleResetPassword(values.password).finally(() =>
+                setSubmitting(false)
+              );
             }}
           >
             {({ errors, touched, isSubmitting }) => (
