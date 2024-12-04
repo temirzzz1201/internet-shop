@@ -20,4 +20,5 @@ export const sequelize = new Sequelize(database, user, password, {
   host: host,
   dialect: 'mysql',
   logging: console.log,
+  // timezone: '+00:00', // Сохраняем время в UTC
 });

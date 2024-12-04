@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { Order, User, Product, Images } from '../models/index';
-import sendOrderEmails from '../utils/nodemailer';
+import {sendOrderEmails} from '../utils/nodemailer';
 
 const router = Router();
 

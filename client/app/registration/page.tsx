@@ -138,7 +138,7 @@ export default function Register() {
               <FormHelperText>
                 Есть аккаунт?{' '}
                 <Link className="underline" href="/login">
-                  авторизация
+                  Авторизация
                 </Link>
               </FormHelperText>
             </Form>
