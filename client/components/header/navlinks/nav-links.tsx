@@ -1,231 +1,259 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useAppDispatch } from '@/hooks/useAppDispatch';
+import {
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerBody,
+  Box,
+  useDisclosure,
+  Heading,
+} from '@chakra-ui/react';
+import { CloseIcon } from '@chakra-ui/icons';
+import { motion } from 'framer-motion';
+import busketSrc from '@/assets/images/purchase_white.svg';
 import { logout } from '@/actions/clientActions';
-import profileSrcBlue from '@/assets/images/profile_blue.svg';
-import profileSrcWhite from '@/assets/images/profile_white.svg';
-import busketSrc from '@/assets/images/purchase.svg';
-import busketSrcBlue from '@/assets/images/purchase_blue.svg';
-import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { capitalize } from '../../../utils/capitalize';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
-import { Box } from '@chakra-ui/react';
-import MobileNav from '@/components/header/mobile-nav';
-import { useRouter } from 'next/navigation';
+import { useCart } from '@/hooks/useCart';
 
 export default function NavLinks() {
-  const pathname = usePathname();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useAppDispatch();
-  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
-  const [userName, setUserName] = useState<string | null>(null);
-  /* eslint-disable */
-  const [productQuantity, setProductQuantity] = useState<number>(0);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { replace } = useRouter();
+  const [userName, setUserName] = useState<string | null>(null);
+  // const [cartItems, setCartItems] = useState<null | number| 'loading'>(null);
 
   const logoutUser = () => {
     dispatch(logout());
     setUserName(null);
+    // setCartItems(null);
+    onClose();
     replace('/');
   };
 
   useEffect(() => {
-    if (user && user.username && isAuthenticated) {
-      setUserName(`Приветствую ${capitalize(user.username)}`);
+    const userCookie = Cookies.get('user');
+    if (userCookie) {
+      const userFromCookie = JSON.parse(userCookie);
+      setUserName(`Приветствую ${capitalize(userFromCookie.username)}`);
     } else {
-      const user = Cookies.get('user');
-      if (user) {
-        const userNameFromCookie = JSON.parse(user);
-        setUserName(`Приветствую ${capitalize(userNameFromCookie.username)}`);
-      } else {
-        setUserName(null);
-      }
+      setUserName(null);
     }
-  }, [user]);
+  }, []);
+
+  const { cartItems } = useCart();
+
+  const totalQuantity = useMemo(
+    () => cartItems.reduce((total, item) => total + item.quantity, 0),
+    [cartItems]
+  );
 
   const links = [
     { id: 1, title: 'Главная', path: '/' },
     { id: 2, title: 'О нас', path: '/about' },
     { id: 3, title: 'Контакты', path: '/contacts' },
-    {
-      id: 4,
-      title: userName || 'Профиль',
-      path: '/profile',
-      blueImgSrc: profileSrcBlue,
-      whiteImgSrc: profileSrcWhite,
-    },
   ];
 
   return (
-    <>
-      {/* Мобильная версия */}
+    <Box as="nav">
+      {/* Мобильное меню */}
       <Box display={{ base: 'block', md: 'none' }}>
-        <MobileNav>
-          <Box className="flex-col bg-white text-slate-600" as="ul">
-            {links.map((link) => (
-              <Box key={link.id} className="mb-4 flex items-center" as="li">
-                <Link
-                  href={link.path}
-                  passHref
-                  className={
-                    pathname === link.path
-                      ? 'text-blue-600 underline flex items-center cursor-pointer'
-                      : 'text-blue-400 flex cursor-pointer'
-                  }
-                >
-                  {link.title}
-                  {link.title === 'Профиль' && (
-                    <Image
-                      className={
-                        pathname === link.path ? 'h-6 w-6 pl-2' : 'w-6 h-6 pl-2'
-                      }
-                      src={
-                        pathname === link.path
-                          ? link.blueImgSrc
-                          : link.whiteImgSrc
-                      }
-                      alt={link.title}
-                    />
-                  )}
-                </Link>
-              </Box>
-            ))}
-            {userName || user ? (
-              <>
-                <Box
-                  position="relative"
-                  className="flex items-center mr-3 mb-4"
-                  as="li"
-                >
-                  <Link href="/busket" className="text-white flex">
-                    {productQuantity > 0 && (
-                      <Box
-                        w="15px"
-                        h="15px"
-                        position="absolute"
-                        top="-9px"
-                        right="230px"
-                        borderRadius="50%"
-                        bg="red"
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                      >
+        <Box cursor="pointer" onClick={onOpen}>
+          <motion.div
+            initial={{ rotate: 0 }}
+            animate={isOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              width: '25px',
+              height: '2px',
+              background: 'white',
+              marginBottom: '5px',
+            }}
+          />
+          <motion.div
+            initial={{ opacity: 1 }}
+            animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              width: '25px',
+              height: '2px',
+              background: 'white',
+              marginBottom: '5px',
+            }}
+          />
+          <motion.div
+            initial={{ rotate: 0 }}
+            animate={isOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{ width: '25px', height: '2px', background: 'white' }}
+          />
+        </Box>
+        <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
+          <DrawerOverlay />
+          <DrawerContent bg="#6f7e95">
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              p={4}
+            >
+              <Heading className="text-white" size="lg">
+                Electronic Elephant
+              </Heading>
+              <CloseIcon color="white" onClick={onClose} cursor="pointer" />
+            </Box>
+            <DrawerBody>
+              <Box as="ul">
+                {links.map((link) => (
+                  <Box key={link.id} as="li" mb={4}>
+                    <Link
+                      href={link.path}
+                      onClick={onClose}
+                      className="text-white cursor-pointer outline-none transition-all duration-300"
+                    >
+                      {link.title}
+                    </Link>
+                  </Box>
+                ))}
+                {isAuthenticated || userName ? (
+                  <Box as="li">
+                    <Link
+                      href="/profile"
+                      onClick={onClose}
+                      className="text-white cursor-pointer outline-none transition-all duration-300"
+                    >
+                      Профиль
+                    </Link>
+                  </Box>
+                ) : null}
+                {isAuthenticated || userName ? (
+                  <Box as="li" mt={4}>
+                    <Link
+                      onClick={onClose}
+                      href="/busket"
+                      className="flex relative text-white cursor-pointer w-[97px] outline-none transition-all duration-300"
+                    >
+                      Корзина
+                      {totalQuantity && (
                         <Box
-                          position="absolute"
-                          color="white"
-                          fontWeight="extrabold"
-                          fontSize="12px"
+                          className="min-w-[15px] max-w-[15px] min-h-[15px] max-h-[15px] flex justify-center items-center absolute top-[-7px] right-[-7px] bg-blue-600 text-white"
+                          borderRadius="50%"
+                          fontSize="10"
+                          fontWeight="bold"
                         >
-                          {productQuantity}
+                          {totalQuantity}
                         </Box>
-                      </Box>
-                    )}
-                    <Image
-                      className="max-w-[20px]"
-                      src={busketSrcBlue}
-                      alt={busketSrcBlue}
-                    />
-                  </Link>
-                </Box>
-                <Box className="flex items-center" as="li">
-                  <Link
-                    href="/"
-                    onClick={logoutUser}
-                    className="text-blue-600 font-semibold"
-                  >
-                    Выйти
-                  </Link>
-                </Box>
-              </>
-            ) : (
-              <Box className="flex items-center" as="li">
-                <Link href="/login" className="text-blue-600 font-semibold">
-                  Войти
-                </Link>
+                      )}
+                      <Image
+                        className="w-[25px] h-[20px]"
+                        alt={busketSrc}
+                        src={busketSrc}
+                      />
+                    </Link>
+                  </Box>
+                ) : null}
+                {isAuthenticated || userName ? (
+                  <Box as="li" mt={4}>
+                    <Box
+                      as="button"
+                      onClick={logoutUser}
+                      className="text-white cursor-pointer outline-none transition-all duration-300"
+                    >
+                      Выйти
+                    </Box>
+                  </Box>
+                ) : (
+                  <Box as="li">
+                    <Link
+                      href="/login"
+                      onClick={onClose}
+                      className="text-white cursor-pointer outline-none transition-all duration-300"
+                    >
+                      Войти
+                    </Link>
+                  </Box>
+                )}
               </Box>
-            )}
-          </Box>
-        </MobileNav>
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
       </Box>
-      {/* Десктопная версия */}
+
+      {/* Десктопное меню */}
       <Box display={{ base: 'none', md: 'flex' }} as="ul" className="flex">
         {links.map((link) => (
-          <Box key={link.id} className="mr-5 flex items-center" as="li">
+          <Box key={link.id} as="li" className="mr-3">
             <Link
               href={link.path}
-              passHref
-              className={
-                pathname === link.path
-                  ? 'text-blue-300 underline flex items-center'
-                  : 'text-white flex'
-              }
+              className="text-white cursor-pointer outline-none hover:text-blue-200 transition-all duration-300"
             >
               {link.title}
-              {link.title === 'Профиль' && (
-                <Image
-                  className={
-                    pathname === link.path ? 'h-6 w-6 pl-2' : 'w-6 h-6 pl-2'
-                  }
-                  src={
-                    pathname === link.path ? link.blueImgSrc : link.whiteImgSrc
-                  }
-                  alt={link.title}
-                />
-              )}
             </Link>
           </Box>
         ))}
-        {userName || user ? (
-          <>
-            <Box position="relative" className="flex items-center mr-5" as="li">
-              <Link href="/busket" className="text-white flex">
-                {productQuantity > 0 && (
-                  <Box
-                    w="15px"
-                    h="15px"
-                    position="absolute"
-                    top="-9px"
-                    right="-11px"
-                    borderRadius="50%"
-                    bg="red"
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <Box
-                      position="absolute"
-                      color="white"
-                      fontWeight="extrabold"
-                      fontSize="12px"
-                    >
-                      {productQuantity}
-                    </Box>
-                  </Box>
-                )}
-                <Image
-                  className="max-w-[20px]"
-                  src={busketSrc}
-                  alt={busketSrc}
-                />
-              </Link>
+        {isAuthenticated || userName ? (
+          <Box as="li">
+            <Link
+              href="/busket"
+              className="flex relative text-white cursor-pointer outline-none hover:text-blue-200 transition-all duration-300 mr-3"
+            >
+              Корзина
+              {totalQuantity > 0 && (
+                <Box
+                  className="min-w-[15px] max-w-[15px] min-h-[15px] max-h-[15px] flex justify-center items-center absolute top-[-7px] right-[-7px] bg-blue-600 text-white"
+                  borderRadius="50%"
+                  fontSize="10"
+                  fontWeight="bold"
+                >
+                  {totalQuantity}
+                </Box>
+              )}
+              <Image
+                className="w-[25px] h-[20px]"
+                alt={busketSrc}
+                src={busketSrc}
+              />
+            </Link>
+          </Box>
+        ) : null}
+        {isAuthenticated || userName ? (
+          <Box as="li">
+            <Link
+              href="/profile"
+              className="text-white cursor-pointer outline-none hover:text-blue-200 transition-all duration-300 mr-3"
+            >
+              Профиль
+            </Link>
+          </Box>
+        ) : null}
+        {isAuthenticated || userName ? (
+          <Box as="li">
+            <Box
+              as="button"
+              onClick={logoutUser}
+              className="text-white cursor-pointer outline-none hover:text-blue-200 transition-all duration-300 mr-3"
+            >
+              Выйти
             </Box>
-            <Box className="mr-5 flex items-center" as="li">
-              <Link href="/" onClick={logoutUser} className="text-white flex">
-                Выйти
-              </Link>
-            </Box>
-          </>
+          </Box>
         ) : (
-          <Box className="mr-5 flex items-center" as="li">
-            <Link href="/login" className="text-white flex">
+          <Box as="li">
+            <Link
+              href="/login"
+              className="text-white cursor-pointer outline-none hover:text-blue-200 transition-all duration-300"
+            >
               Войти
             </Link>
           </Box>
         )}
       </Box>
-    </>
+    </Box>
   );
 }

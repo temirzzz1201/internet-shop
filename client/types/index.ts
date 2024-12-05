@@ -103,6 +103,7 @@ export interface IUserResponse {
   role: string;
   accessToken: string;
   refreshToken: string;
+  message: string;
   user: IUser;
 }
 
@@ -194,4 +195,8 @@ export interface ICartSummaryProps {
 
 export interface ResetPasswordError {
   message: string;
+}
+
+export interface ICartQuantityResponse {
+  totalQuantity: number;
 }

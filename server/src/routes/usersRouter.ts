@@ -5,8 +5,7 @@ import { generateAccessToken, generateRefreshToken } from '../utils/tokenUtils';
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken';
 import { sendResetPassword } from '../utils/nodemailer';
-import { Op } from 'sequelize'; // Добавьте импорт Op
-import dayjs from 'dayjs';
+import { Op } from 'sequelize'; 
 
 const router = Router();
 
@@ -216,13 +215,13 @@ router.post('/reset-password/:token', async (req: any, res: any) => {
 
   const now = Date.now(); 
 
-  const hashedToken = crypto.createHash('sha256').update(token).digest('hex'); // Хэшируем токен
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex'); 
 
   try {
     const user = await User.findOne({
       where: {
         resetPasswordToken: hashedToken,
-        resetPasswordExpires: { [Op.gt]: now }, // Токен должен быть действительным
+        resetPasswordExpires: { [Op.gt]: now }, 
       },
     });
 
