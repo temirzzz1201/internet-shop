@@ -84,18 +84,22 @@ export const loginUser = async (
 ): Promise<IUserResponse | undefined> => {
   try {
     const response = await api.post<IUserResponse>('users/login', userData);
-    const { id, username, role, email } = response.data.user;
 
-    const safeUserData = {
-      id: id,
-      // email: email,
-      username: username,
-      role: role,
-    };
+    console.log('response ', response.data.message);
+    if (response.data.message === 'авторизация успешна') {
+      const { id, username, role } = response.data.user;
 
-    localStorage.setItem('refreshToken', response.data.refreshToken);
-    Cookies.set('accessToken', response.data.accessToken, { secure: true });
-    Cookies.set('user', JSON.stringify(safeUserData), { secure: true });
+      const safeUserData = {
+        id: id,
+        username: username,
+        role: role,
+      };
+
+      localStorage.setItem('refreshToken', response.data.refreshToken);
+      Cookies.set('accessToken', response.data.accessToken, { secure: true });
+      Cookies.set('user', JSON.stringify(safeUserData), { secure: true });
+    }
+
     return response.data;
   } catch (error) {
     console.error(`Ошибка авторизации пользователя: ${error}`);

@@ -83,12 +83,6 @@ router.delete('/remove/:id', async (req: any, res: any, next: NextFunction) => {
       where: { id },
     });
 
-    // const productId = id;
-
-    // const result = await Cart.destroy({
-    //   where: { productId },
-    // });
-
     if (result === 0) {
       return res.status(404).json({ message: 'Товар не найден в корзине' });
     }
