@@ -48,12 +48,12 @@ export default function NavLinks() {
     }
   }, []);
 
-  const { cartItems } = useCart();
+  const {  totalQuantity } = useCart();
 
-  const totalQuantity = useMemo(
-    () => cartItems.reduce((total, item) => total + item.quantity, 0),
-    [cartItems]
-  );
+  // const totalQuantity = useMemo(
+  //   () => cartItems.reduce((total, item) => total + item.quantity, 0),
+  //   [cartItems]
+  // );
 
   const links = [
     { id: 1, title: 'Главная', path: '/' },
@@ -116,7 +116,7 @@ export default function NavLinks() {
                     <Link
                       href={link.path}
                       onClick={onClose}
-                      className="text-white cursor-pointer outline-none transition-all duration-300"
+                      className="text-white cursor-pointer outline-none hover:text-blue-200 transition-all duration-300"
                     >
                       {link.title}
                     </Link>
@@ -127,7 +127,7 @@ export default function NavLinks() {
                     <Link
                       href="/profile"
                       onClick={onClose}
-                      className="text-white cursor-pointer outline-none transition-all duration-300"
+                      className="text-white cursor-pointer outline-none hover:text-blue-200 transition-all duration-300"
                     >
                       Профиль
                     </Link>
@@ -138,10 +138,10 @@ export default function NavLinks() {
                     <Link
                       onClick={onClose}
                       href="/busket"
-                      className="flex relative text-white cursor-pointer w-[97px] outline-none transition-all duration-300"
+                      className="flex relative text-white cursor-pointer w-[97px] outline-none hover:text-blue-200 transition-all duration-300"
                     >
                       Корзина
-                      {totalQuantity && (
+                      {totalQuantity > 0 && (
                         <Box
                           className="min-w-[15px] max-w-[15px] min-h-[15px] max-h-[15px] flex justify-center items-center absolute top-[-7px] right-[-7px] bg-blue-600 text-white"
                           borderRadius="50%"
@@ -164,7 +164,7 @@ export default function NavLinks() {
                     <Box
                       as="button"
                       onClick={logoutUser}
-                      className="text-white cursor-pointer outline-none transition-all duration-300"
+                      className="text-white cursor-pointer outline-none hover:text-blue-200 transition-all duration-300"
                     >
                       Выйти
                     </Box>
@@ -174,7 +174,7 @@ export default function NavLinks() {
                     <Link
                       href="/login"
                       onClick={onClose}
-                      className="text-white cursor-pointer outline-none transition-all duration-300"
+                      className="text-white cursor-pointer outline-none hover:text-blue-200 transition-all duration-300"
                     >
                       Войти
                     </Link>

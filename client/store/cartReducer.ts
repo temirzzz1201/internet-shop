@@ -1,121 +1,113 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ICart } from '@/types';
-import {
-  addToCart,
-  removeFromCart,
-  fetchCartItems,
-  updateCartItem,
-  clearCart,
-} from '@/actions/clientActions';
+// import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+// import {
+//   fetchCartItems as apiFetchCartItems,
+//   updateCartItem as apiUpdateCartItem,
+//   removeFromCart as apiRemoveFromCart,
+//   clearCart as apiClearCart,
+// } from '@/actions/clientActions';
+// import { IBusketProduct } from '@/types';
 
-interface CartState {
-  items: ICart[];
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  error: string | null;
-}
+// // Типы
+// interface CartState {
+//   cartItems: IBusketProduct[];
+//   totalQuantity: number;
+//   isLoading: boolean;
+//   error: string | null;
+// }
 
-const initialState: CartState = {
-  items: [],
-  status: 'idle',
-  error: null,
-};
+// // Начальное состояние
+// const initialState: CartState = {
+//   cartItems: [],
+//   totalQuantity: 0,
+//   isLoading: false,
+//   error: null,
+// };
 
-const cartSlice = createSlice({
-  name: 'cart',
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(addToCart.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(
-        addToCart.fulfilled,
-        (state, action: PayloadAction<ICart | undefined>) => {
-          state.status = 'succeeded';
-          if (action.payload) {
-            state.items.push(action.payload);
-          }
-        }
-      )
-      .addCase(addToCart.rejected, (state, action: PayloadAction<unknown>) => {
-        state.status = 'failed';
-        state.error = (action.payload as string) || 'Неизвестная ошибка';
-      })
-      .addCase(removeFromCart.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(
-        removeFromCart.fulfilled,
-        (state, action: PayloadAction<string>) => {
-          state.status = 'succeeded';
-          state.items = state.items.filter(
-            (item) => item.id.toString() !== action.payload
-          );
-        }
-      )
-      .addCase(
-        removeFromCart.rejected,
-        (state, action: PayloadAction<unknown>) => {
-          state.status = 'failed';
-          state.error = (action.payload as string) || 'Неизвестная ошибка';
-        }
-      )
-      .addCase(clearCart.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(clearCart.fulfilled, (state) => {
-        state.status = 'succeeded';
-        state.items = [];
-      })
-      .addCase(clearCart.rejected, (state, action: PayloadAction<unknown>) => {
-        state.status = 'failed';
-        state.error = (action.payload as string) || 'Неизвестная ошибка';
-      })
-      .addCase(updateCartItem.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(
-        updateCartItem.fulfilled,
-        (state, action: PayloadAction<{ id: string; quantity: number }>) => {
-          state.status = 'succeeded';
-          const index = state.items.findIndex(
-            (item) => item.id.toString() === action.payload.id
-          );
-          if (index !== -1) {
-            state.items[index].quantity = action.payload.quantity;
-          } else {
-            console.warn(
-              `Товар с id ${action.payload.id} не найден в корзине.`
-            );
-          }
-        }
-      )
-      .addCase(
-        updateCartItem.rejected,
-        (state, action: PayloadAction<unknown>) => {
-          state.status = 'failed';
-          state.error = (action.payload as string) || 'Неизвестная ошибка';
-        }
-      )
-      .addCase(fetchCartItems.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(
-        fetchCartItems.fulfilled,
-        (state, action: PayloadAction<ICart[] | undefined>) => {
-          state.status = 'succeeded';
-          state.items = action.payload ?? []; // Устанавливаем пустой массив, если payload = undefined
-        }
-      )
-      .addCase(
-        fetchCartItems.rejected,
-        (state, action: PayloadAction<unknown>) => {
-          state.status = 'failed';
-          state.error = (action.payload as string) || 'Неизвестная ошибка';
-        }
-      );
-  },
-});
+// // Асинхронные действия
+// export const fetchCartItems = createAsyncThunk('cart/fetchCartItems', async (userId: number, { rejectWithValue }) => {
+//   try {
+//     const data = await apiFetchCartItems(userId);
+//     return data;
+//   } catch (error: any) {
+//     return rejectWithValue(error.message);
+//   }
+// });
 
-export default cartSlice.reducer;
+// export const updateCartItem = createAsyncThunk(
+//   'cart/updateCartItem',
+//   async ({ id, quantity }: { id: string; quantity: number }, { rejectWithValue }) => {
+//     try {
+//       await apiUpdateCartItem({ id, quantity });
+//       return { id, quantity };
+//     } catch (error: any) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
+
+// export const removeFromCart = createAsyncThunk(
+//   'cart/removeFromCart',
+//   async (id: number, { rejectWithValue }) => {
+//     try {
+//       await apiRemoveFromCart({ id });
+//       return id;
+//     } catch (error: any) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
+
+// export const clearCart = createAsyncThunk('cart/clearCart', async (_, { rejectWithValue }) => {
+//   try {
+//     await apiClearCart();
+//     return true;
+//   } catch (error: any) {
+//     return rejectWithValue(error.message);
+//   }
+// });
+
+// // Слайс
+// const cartSlice = createSlice({
+//   name: 'cart',
+//   initialState,
+//   reducers: {
+//     calculateTotalQuantity(state) {
+//       state.totalQuantity = state.cartItems.reduce((sum, item) => sum + item.quantity, 0);
+//     },
+//   },
+//   extraReducers: (builder) => {
+//     builder
+//       .addCase(fetchCartItems.pending, (state) => {
+//         state.isLoading = true;
+//         state.error = null;
+//       })
+//       .addCase(fetchCartItems.fulfilled, (state, action: PayloadAction<IBusketProduct[]>) => {
+//         state.cartItems = action.payload;
+//         state.isLoading = false;
+//         state.totalQuantity = action.payload.reduce((sum, item) => sum + item.quantity, 0);
+//       })
+//       .addCase(fetchCartItems.rejected, (state, action) => {
+//         state.isLoading = false;
+//         state.error = action.payload as string;
+//       })
+//       .addCase(updateCartItem.fulfilled, (state, action: PayloadAction<{ id: number; quantity: number }>) => {
+//         const { id, quantity } = action.payload;
+//         const item = state.cartItems.find((item) => item.id === id);
+//         if (item) {
+//           item.quantity = quantity;
+//           state.totalQuantity = state.cartItems.reduce((sum, item) => sum + item.quantity, 0);
+//         }
+//       })
+//       .addCase(removeFromCart.fulfilled, (state, action: PayloadAction<number>) => {
+//         state.cartItems = state.cartItems.filter((item) => item.id !== action.payload);
+//         state.totalQuantity = state.cartItems.reduce((sum, item) => sum + item.quantity, 0);
+//       })
+//       .addCase(clearCart.fulfilled, (state) => {
+//         state.cartItems = [];
+//         state.totalQuantity = 0;
+//       });
+//   },
+// });
+
+// export const { calculateTotalQuantity } = cartSlice.actions;
+// export default cartSlice.reducer;

@@ -21,7 +21,7 @@ const ResetPasswordSchema = Yup.object().shape({
 });
 
 function ResetPassword({ params }: { params: { token: string } }) {
-  const { token } = params; // Получаем токен из URL
+  const { token } = params;
   const dispatch = useAppDispatch();
   const toast = useToast();
 
@@ -39,7 +39,6 @@ function ResetPassword({ params }: { params: { token: string } }) {
         isClosable: true,
       });
     } catch (error) {
-      // Приводим error к строке для безопасного отображения
       const errorMessage =
         error instanceof Error ? error.message : String(error);
       toast({
