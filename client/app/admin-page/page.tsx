@@ -34,7 +34,6 @@ export default function Admin() {
   const { users } = useAppSelector((state) => state.users);
   const { category } = useAppSelector((state) => state.category);
   const { products, isLoading } = useAppSelector((state) => state.products);
-
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState<number | ''>('');

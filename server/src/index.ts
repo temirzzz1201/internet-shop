@@ -5,7 +5,7 @@ import { initModels } from './models';
 import router from './routes';
 
 const app = express();
-const PORT = process.env.PORT || 3600;
+const PORT = process.env.PORT || 5500;
 
 app.use(cors())
 
