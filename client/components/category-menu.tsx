@@ -12,10 +12,12 @@ const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
   };
 
   return (
-    <Box as="aside" className='bg-white border rounded-lg' shadow="md">
-      <Heading className='mt-4 ml-4' size='md'>Каталог</Heading>
+    <Box as="aside" className="bg-white border rounded-lg" shadow="md">
+      <Heading className="mt-4 ml-4" size="md">
+        Каталог
+      </Heading>
       <UnorderedList
-        className='w-[100%] overflow-hidden list-none'
+        className="w-[100%] overflow-hidden list-none"
         px={4}
         listStyleType="none"
         ml="0"
@@ -24,18 +26,18 @@ const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
           onClick={() => handleCategoryClick(null)}
           className="flex cursor-pointer mx-0 my-5"
         >
-        Все товары
-      </ListItem>
-      {categories.map((cat) => (
-        <ListItem
-          key={cat.id}
-          onClick={() => handleCategoryClick(cat.id)}
-          className="flex cursor-pointer mx-0 my-5"
-        >
-          {capitalize(cat.name)}
+          Все товары
         </ListItem>
-      ))}
-    </UnorderedList>
+        {categories.map((cat) => (
+          <ListItem
+            key={cat.id}
+            onClick={() => handleCategoryClick(cat.id)}
+            className="flex cursor-pointer mx-0 my-5"
+          >
+            {capitalize(cat.name)}
+          </ListItem>
+        ))}
+      </UnorderedList>
     </Box>
   );
 };

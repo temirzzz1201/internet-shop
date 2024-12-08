@@ -33,7 +33,9 @@ import { removeFromCart } from '@/actions/clientActions';
 import OrderActions from './order-actions';
 import Link from 'next/link';
 
-const AppModal = dynamic(() => import('@/components/app-modal'), {ssr: false});
+const AppModal = dynamic(() => import('@/components/app-modal'), {
+  ssr: false,
+});
 
 // Динамический импорт карусели без SSR
 const EmblaCarousel = dynamic(() => import('./carousel/embla-carousel'), {

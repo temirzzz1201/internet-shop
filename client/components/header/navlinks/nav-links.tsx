@@ -251,16 +251,12 @@
 //   );
 // }
 
-
 'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import {
-  Box,
-  Heading,
-} from '@chakra-ui/react';
+import { Box, Heading } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
 import busketSrc from '@/assets/images/purchase_white.svg';
@@ -334,7 +330,12 @@ export default function NavLinks() {
   };
 
   return (
-    <Box as="nav" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
+    <Box
+      as="nav"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* Мобильное меню */}
       <Box display={{ base: 'block', md: 'none' }}>
         <Box cursor="pointer" onClick={() => setMenuOpen(!menuOpen)}>
@@ -392,7 +393,11 @@ export default function NavLinks() {
             <Heading className="text-white" size="lg">
               Electronic Elephant
             </Heading>
-            <CloseIcon color="white" onClick={() => setMenuOpen(false)} cursor="pointer" />
+            <CloseIcon
+              color="white"
+              onClick={() => setMenuOpen(false)}
+              cursor="pointer"
+            />
           </Box>
           <Box as="ul">
             {links.map((link) => (

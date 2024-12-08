@@ -102,7 +102,6 @@
 //     [cartItems]
 //   );
 
-
 //   return {
 //     cartItems,
 //     loadCartItems,
@@ -114,7 +113,6 @@
 //     totalQuantity
 //   };
 // };
-
 
 import { useEffect, useState } from 'react';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
@@ -131,8 +129,12 @@ import { IBusketProduct } from '@/types';
 import { useToast } from '@chakra-ui/react';
 
 export const useCart = () => {
-  const [cartItems, setCartItems] = useState<IBusketProduct[]>(cartManager.getCartItems());
-  const [totalQuantity, setTotalQuantity] = useState(cartManager.getTotalQuantity());
+  const [cartItems, setCartItems] = useState<IBusketProduct[]>(
+    cartManager.getCartItems()
+  );
+  const [totalQuantity, setTotalQuantity] = useState(
+    cartManager.getTotalQuantity()
+  );
   const dispatch = useAppDispatch();
   const toast = useToast();
   const userId = Cookies.get('user')
@@ -234,4 +236,3 @@ export const useCart = () => {
     placeCartOrder,
   };
 };
-

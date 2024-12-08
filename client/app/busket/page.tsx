@@ -7,7 +7,9 @@ import CartSummary from '@/components/cart-summary';
 import { useCart } from '@/hooks/useCart';
 import dynamic from 'next/dynamic';
 
-const AppModal = dynamic(() => import('@/components/app-modal'), {ssr: false});
+const AppModal = dynamic(() => import('@/components/app-modal'), {
+  ssr: false,
+});
 
 const Busket = () => {
   const {

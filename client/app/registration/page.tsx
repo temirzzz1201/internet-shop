@@ -126,17 +126,17 @@ export default function Register() {
                 {errors.password && touched.password && errors.password}
               </small>
               <Button
-                mt='4'
-                mb='3'
+                mt="4"
+                mb="3"
                 isLoading={isLoading}
                 loadingText="Submitting"
                 colorScheme="teal"
                 variant="outline"
                 type="submit"
-                width="210px" 
+                width="210px"
                 sx={{
-                  "@media (max-width: 360px)": {
-                    width: "100%", 
+                  '@media (max-width: 360px)': {
+                    width: '100%',
                   },
                 }}
               >

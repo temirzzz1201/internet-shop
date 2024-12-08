@@ -12,7 +12,6 @@ import {
   Stack,
   Button,
   HStack,
-  Divider,
   SimpleGrid,
   Image,
   useNumberInput,
@@ -31,7 +30,9 @@ import { useRouter } from 'next/navigation';
 import { IIProduct } from '@/types';
 import OrderActions from '@/components/order-actions';
 
-const AppModal = dynamic(() => import('@/components/app-modal'), {ssr: false});
+const AppModal = dynamic(() => import('@/components/app-modal'), {
+  ssr: false,
+});
 
 interface DetailPageProps {
   params: {
@@ -194,7 +195,7 @@ export default function DetailPage({ params }: DetailPageProps) {
         <HStack
           spacing={4}
           w="100%"
-          bg='white'
+          bg="white"
           alignItems="flex-start"
           direction={{ base: 'column', md: 'row' }}
           border="1px solid #DEDEDE"
@@ -223,12 +224,15 @@ export default function DetailPage({ params }: DetailPageProps) {
             ))}
           </SimpleGrid>
         </HStack>
-
         <Heading size="lg" mb="5" color="green.600">
           {product.name}
         </Heading>
-          whiteSpace='nowrap'
-        <Text fontSize={{ base: 'lg', md: 'xl' }} color="green.600" whiteSpace='nowrap'>
+        whiteSpace='nowrap'
+        <Text
+          fontSize={{ base: 'lg', md: 'xl' }}
+          color="green.600"
+          whiteSpace="nowrap"
+        >
           {product.price} ₽
         </Text>
         <Box
@@ -236,7 +240,7 @@ export default function DetailPage({ params }: DetailPageProps) {
           color="red.500"
           fontWeight="bold"
           as="p"
-          whiteSpace='nowrap'
+          whiteSpace="nowrap"
         >
           В наличии: {product.stock}
         </Box>
@@ -249,7 +253,6 @@ export default function DetailPage({ params }: DetailPageProps) {
         >
           {product.description}
         </Text>
-
         <Box mb="4" w="100%">
           <HStack
             maxW={{ base: '100%', md: '320px' }}
@@ -278,8 +281,7 @@ export default function DetailPage({ params }: DetailPageProps) {
             </Button>
           </HStack>
         </Box>
-
-        <Box mb="5" w='full' maxW='450px'>
+        <Box mb="5" w="full" maxW="450px">
           <OrderActions
             quantity={quantity}
             stock={stock}
