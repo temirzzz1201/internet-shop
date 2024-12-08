@@ -17,8 +17,8 @@ const OrderActions: React.FC<CartActionsProps> = ({
   goToBusket,
 }) => {
   return (
-    <>
-      <Box mb="3">
+    <Box className='w-full'>
+      <Box as='div' className='flex'>
         <Button
           disabled={quantity === 0}
           size="sm"
@@ -26,14 +26,27 @@ const OrderActions: React.FC<CartActionsProps> = ({
           mr={3}
           onClick={handleOrder}
           isDisabled={stock === 0}
+          width="50%" 
+          sx={{
+            "@media (max-width: 360px)": {
+              width: "100%", 
+              marginBottom: "10px"
+            },
+          }}
         >
-          Добавить в корзину
+          В корзину
         </Button>
         <Button
           size="sm"
           colorScheme="red"
           onClick={handleResetQuantity}
           isDisabled={stock === 0}
+          width="50%" 
+          sx={{
+            "@media (max-width: 360px)": {
+              width: "100%", 
+            },
+          }}
         >
           Удалить
         </Button>
@@ -44,11 +57,13 @@ const OrderActions: React.FC<CartActionsProps> = ({
           colorScheme="blue"
           variant="ghost"
           onClick={goToBusket}
+          width="100%" 
+          mt='2'
         >
           Перейти в корзину
         </Button>
       </Box>
-    </>
+    </Box>
   );
 };
 

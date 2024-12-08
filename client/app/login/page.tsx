@@ -18,9 +18,9 @@ import AppContainer from '@/components/app-container';
 
 const SignupSchema = Yup.object().shape({
   password: Yup.string()
-    .min(8, 'Password should be of minimum 8 characters length')
-    .required('password is required'),
-  email: Yup.string().email('Invalid email').required('email is required'),
+    .min(8, 'Пароль должен сосотоять из 8 символов минимум')
+    .required('Пароль обязателен'),
+  email: Yup.string().email('Неправильный email').required('email обязателен'),
 });
 
 export default function Login() {
@@ -107,12 +107,19 @@ export default function Login() {
                 {errors.password && touched.password && errors.password}
               </small>
               <Button
-                mt={4}
+                mt='4'
+                mb='3'
                 isLoading={isLoading}
                 loadingText="Submitting"
                 colorScheme="teal"
                 variant="outline"
                 type="submit"
+                width="210px" 
+                sx={{
+                  "@media (max-width: 360px)": {
+                    width: "100%", 
+                  },
+                }}
               >
                 Войти
               </Button>

@@ -16,11 +16,13 @@ const CartItem: React.FC<CartItemProps> = ({
 }) => {
   return (
     <Box
+      bg='white'
       border="1px solid #DEDEDE"
       borderRadius="20px"
       p={{ base: '3', sm: '4', md: '5' }}
       width="100%"
       maxW={{ base: '100%', sm: '480px' }}
+      mx="auto"
     >
       <Box as="h3" fontSize="xl" fontWeight="semibold" mb="5" maxW="70%">
         {item.product?.name}
@@ -42,7 +44,15 @@ const CartItem: React.FC<CartItemProps> = ({
       <Box mb="2" as="p" fontWeight="semibold">
         Цена: {item.product?.price} руб.
       </Box>
-      <HStack spacing="4" wrap="wrap">
+      <HStack 
+        spacing="4" 
+        width="280px" 
+        sx={{
+          "@media (max-width: 360px)": {
+            width: "100%", 
+          },
+        }}
+        >
         <Button
           size="sm"
           colorScheme="blue"
@@ -51,7 +61,17 @@ const CartItem: React.FC<CartItemProps> = ({
         >
           -
         </Button>
-        <Input value={item.quantity} readOnly textAlign="center" width="60px" />
+        <Input 
+          value={item.quantity} 
+          readOnly 
+          textAlign="center" 
+          width="100px" 
+          sx={{
+            "@media (max-width: 360px)": {
+              width: "100%", 
+            },
+          }}
+        />
         <Button
           size="sm"
           colorScheme="blue"
@@ -65,6 +85,12 @@ const CartItem: React.FC<CartItemProps> = ({
           size="sm"
           onClick={() => onRemove(item.id)}
           minW="90px"
+          width="140px" 
+          sx={{
+            "@media (max-width: 360px)": {
+              width: "100%", 
+            },
+          }}
         >
           Удалить
         </Button>

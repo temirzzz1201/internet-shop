@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { ICategoryMenuProps } from '@/types';
-import { UnorderedList, ListItem } from '@chakra-ui/react';
+import { UnorderedList, ListItem, Box, Heading } from '@chakra-ui/react';
 import { capitalize } from '@/utils/capitalize';
 
 const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
@@ -12,20 +12,18 @@ const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
   };
 
   return (
-    <UnorderedList
-      w="100%"
-      borderWidth="1px"
-      borderRadius="lg"
-      overflow="hidden"
-      as="aside"
-      px={4}
-      listStyleType="none"
-      ml="0"
-    >
-      <ListItem
-        onClick={() => handleCategoryClick(null)}
-        className="flex cursor-pointer mx-0 my-5"
+    <Box as="aside" className='bg-white border rounded-lg' shadow="md">
+      <Heading className='mt-4 ml-4' size='md'>Каталог</Heading>
+      <UnorderedList
+        className='w-[100%] overflow-hidden list-none'
+        px={4}
+        listStyleType="none"
+        ml="0"
       >
+        <ListItem
+          onClick={() => handleCategoryClick(null)}
+          className="flex cursor-pointer mx-0 my-5"
+        >
         Все товары
       </ListItem>
       {categories.map((cat) => (
@@ -38,6 +36,7 @@ const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
         </ListItem>
       ))}
     </UnorderedList>
+    </Box>
   );
 };
 

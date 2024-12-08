@@ -18,13 +18,13 @@ import AppContainer from '@/components/app-container';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
-    .min(4, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('name is required'),
+    .min(4, 'Слишком короткое имя')
+    .max(50, 'Слишком длинное имя')
+    .required('Имя обязательно'),
   password: Yup.string()
-    .min(8, 'Password should be of minimum 8 characters length')
-    .required('password is required'),
-  email: Yup.string().email('Invalid email').required('email is required'),
+    .min(8, 'Пароль должен сосотоять из 8 символов минимум')
+    .required('Пароль обязателен'),
+  email: Yup.string().email('Неправильный email').required('email обязателен'),
 });
 
 export default function Register() {
@@ -119,21 +119,28 @@ export default function Register() {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.password}
-                className="border rounded-sm mb-4 h-10 p-1"
+                className="border rounded-sm mb-2 h-10 p-1"
                 placeholder="Пароль"
               />
               <small className="text-red-700">
                 {errors.password && touched.password && errors.password}
               </small>
               <Button
-                mt={4}
+                mt='4'
+                mb='3'
                 isLoading={isLoading}
                 loadingText="Submitting"
                 colorScheme="teal"
                 variant="outline"
                 type="submit"
+                width="210px" 
+                sx={{
+                  "@media (max-width: 360px)": {
+                    width: "100%", 
+                  },
+                }}
               >
-                Зарегестрироваться
+                Зарегистрироваться
               </Button>
               <FormHelperText>
                 Есть аккаунт?{' '}
