@@ -1,5 +1,5 @@
 'use client';
-import { Box, Stack } from '@chakra-ui/react';
+import { Box, Heading, Stack } from '@chakra-ui/react';
 import { useState, Suspense, useCallback, useMemo } from 'react';
 import AppContainer from '@/components/app-container';
 import CartItem from '@/components/cart-item';
@@ -99,11 +99,12 @@ const Busket = () => {
           onOrder={handleOrder}
           onClear={handleClearOrder}
         />
-        <Box flex="1">
+        <Box w="100%">
           {cartItems.length > 0 ? (
             cartItems.map((item) => (
               <Box mb="5" key={item.id}>
                 <CartItem
+                  key={item.id}
                   item={item}
                   onIncrement={() => handleIncrement(item)}
                   onDecrement={() => handleDecrement(item)}
@@ -112,9 +113,9 @@ const Busket = () => {
               </Box>
             ))
           ) : (
-            <Box as="p" textAlign="center">
+            <Heading size="lg" textAlign="center">
               Корзина пуста!
-            </Box>
+            </Heading>
           )}
         </Box>
       </Stack>

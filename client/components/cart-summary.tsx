@@ -11,13 +11,13 @@ const CartSummary: React.FC<ICartSummaryProps> = ({
 
   return (
     <Box
-      bg="orange.100"
-      p={{ base: '3', sm: '4', md: '5' }}
+      bg="white"
+      border="1px solid #DEDEDE"
       borderRadius="20px"
-      width="100%"
-      maxW={{ base: '100%', sm: '480px' }}
+      p={{ base: '3', sm: '4', md: '5' }}
+      maxW={{ base: '100%', md: '100%' }}
+      shadow="md"
       maxH="350px"
-      mx="auto"
     >
       <Box fontWeight="semibold" fontSize={{ base: 'md', md: 'xl' }} mb="3">
         Перейти к оформлению

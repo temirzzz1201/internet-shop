@@ -52,7 +52,7 @@ function Profile() {
       <Heading mb="35px" size="lg">
         История заказов
       </Heading>
-      <Box as="aside">
+      <Box as="section">
         <VStack spacing={4} align="stretch">
           {userOrders.length === 0 ? (
             <Text>У вас нет заказов.</Text>
@@ -64,6 +64,7 @@ function Profile() {
                 borderWidth="1px"
                 borderRadius="lg"
                 w="full"
+                shadow="md"
               >
                 <Text fontWeight="bold" mb="2">
                   Заказ №: {order.id}
@@ -100,9 +101,6 @@ function Profile() {
                   <>
                     {order.Product.name && (
                       <Box mb="4">
-                        <Text color="blue.400" mb="1">
-                          Названеие:{' '}
-                        </Text>
                         <Heading size="md"> {order.Product.name}</Heading>
                       </Box>
                     )}
