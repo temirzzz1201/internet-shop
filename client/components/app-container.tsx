@@ -7,7 +7,7 @@ export default function AppContainer({
   myClass,
 }: IContainerProps) {
   return (
-    <Box className="flex flex-col items-center">
+    <Box className="flex flex-col items-center bg-white">
       {title && (
         <Box
           as="section"

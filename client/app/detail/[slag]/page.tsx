@@ -12,7 +12,6 @@ import {
   Stack,
   Button,
   HStack,
-  Divider,
   SimpleGrid,
   Image,
   useNumberInput,
@@ -23,14 +22,17 @@ import {
   BreadcrumbLink,
 } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
-import { useEffect, useState, Suspense, lazy } from 'react';
+import { useEffect, useState, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { IIProduct } from '@/types';
 import OrderActions from '@/components/order-actions';
 
-const AppModal = lazy(() => import('@/components/app-modal'));
+const AppModal = dynamic(() => import('@/components/app-modal'), {
+  ssr: false,
+});
 
 interface DetailPageProps {
   params: {
@@ -193,6 +195,7 @@ export default function DetailPage({ params }: DetailPageProps) {
         <HStack
           spacing={4}
           w="100%"
+          bg="white"
           alignItems="flex-start"
           direction={{ base: 'column', md: 'row' }}
           border="1px solid #DEDEDE"
@@ -221,13 +224,15 @@ export default function DetailPage({ params }: DetailPageProps) {
             ))}
           </SimpleGrid>
         </HStack>
-
-        <Divider />
-
         <Heading size="lg" mb="5" color="green.600">
           {product.name}
         </Heading>
-        <Text fontSize={{ base: 'lg', md: 'xl' }} color="green.600">
+        whiteSpace='nowrap'
+        <Text
+          fontSize={{ base: 'lg', md: 'xl' }}
+          color="green.600"
+          whiteSpace="nowrap"
+        >
           {product.price} ₽
         </Text>
         <Box
@@ -235,6 +240,7 @@ export default function DetailPage({ params }: DetailPageProps) {
           color="red.500"
           fontWeight="bold"
           as="p"
+          whiteSpace="nowrap"
         >
           В наличии: {product.stock}
         </Box>
@@ -247,7 +253,6 @@ export default function DetailPage({ params }: DetailPageProps) {
         >
           {product.description}
         </Text>
-
         <Box mb="4" w="100%">
           <HStack
             maxW={{ base: '100%', md: '320px' }}
@@ -276,8 +281,7 @@ export default function DetailPage({ params }: DetailPageProps) {
             </Button>
           </HStack>
         </Box>
-
-        <Box mb="5" w="100%">
+        <Box mb="5" w="full" maxW="450px">
           <OrderActions
             quantity={quantity}
             stock={stock}

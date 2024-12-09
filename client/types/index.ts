@@ -40,7 +40,7 @@ export interface IBusketProduct {
   id: number;
   product: IIProduct;
   quantity: number;
-  setTotalQuantityInBusket: number
+  setTotalQuantityInBusket: number;
 }
 
 export interface IIProductResponse {

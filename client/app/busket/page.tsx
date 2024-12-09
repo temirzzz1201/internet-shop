@@ -1,12 +1,15 @@
 'use client';
 import { Box, Stack } from '@chakra-ui/react';
-import { useState, Suspense, lazy, useCallback, useMemo } from 'react';
+import { useState, Suspense, useCallback, useMemo } from 'react';
 import AppContainer from '@/components/app-container';
 import CartItem from '@/components/cart-item';
 import CartSummary from '@/components/cart-summary';
 import { useCart } from '@/hooks/useCart';
+import dynamic from 'next/dynamic';
 
-const AppModal = lazy(() => import('@/components/app-modal'));
+const AppModal = dynamic(() => import('@/components/app-modal'), {
+  ssr: false,
+});
 
 const Busket = () => {
   const {

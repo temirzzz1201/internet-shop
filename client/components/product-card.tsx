@@ -19,7 +19,7 @@ import {
   Image as CImage,
 } from '@chakra-ui/react';
 import Image from 'next/image';
-import { useState, useEffect, Suspense, lazy } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { formatDate } from '@/utils/dateHelper';
@@ -33,7 +33,9 @@ import { removeFromCart } from '@/actions/clientActions';
 import OrderActions from './order-actions';
 import Link from 'next/link';
 
-const AppModal = lazy(() => import('@/components/app-modal'));
+const AppModal = dynamic(() => import('@/components/app-modal'), {
+  ssr: false,
+});
 
 // Динамический импорт карусели без SSR
 const EmblaCarousel = dynamic(() => import('./carousel/embla-carousel'), {
@@ -144,7 +146,7 @@ export default function ProductCard({ product }: IProductCardProps) {
   const input = getInputProps();
 
   return (
-    <Box className={stock === 0 ? 'pointer-events-none' : ''}>
+    <Box className={stock === 0 ? 'pointer-events-none' : 'bg-slate-50'}>
       <Suspense fallback={<Box as="div">Загрузка...</Box>}>
         <AppModal
           modalSize="sm"
