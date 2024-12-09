@@ -29,6 +29,7 @@ function ForgotPassword() {
     try {
       const data = await dispatch(sendEmailToResetPassword(email));
       toast({
+        position: 'top',
         title: 'Успешно!',
         description:
           data.payload.message ||
@@ -40,6 +41,7 @@ function ForgotPassword() {
     } catch (error) {
       const err = error as ResetPasswordError;
       toast({
+        position: 'top',
         title: 'Ошибка',
         description:
           err.message || 'Не удалось отправить ссылку для сброса пароля.',

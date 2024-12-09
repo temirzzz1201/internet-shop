@@ -101,6 +101,7 @@ export default function DetailPage({ params }: DetailPageProps) {
   const handleOrder = () => {
     if (!userCookie) {
       toast({
+        position: 'top',
         title: 'Авторизуйтесь, чтобы сделать заказ!',
         status: 'warning',
         duration: 3000,
@@ -111,6 +112,7 @@ export default function DetailPage({ params }: DetailPageProps) {
 
     if (userId === null) {
       toast({
+        position: 'top',
         title: 'Ошибка: не удалось получить идентификатор пользователя.',
         status: 'error',
         duration: 3000,
@@ -124,6 +126,7 @@ export default function DetailPage({ params }: DetailPageProps) {
       .unwrap()
       .then(() => {
         toast({
+          position: 'top',
           title: 'Товар добавлен в корзину!',
           status: 'success',
           duration: 3000,
@@ -132,6 +135,7 @@ export default function DetailPage({ params }: DetailPageProps) {
       })
       .catch((error) => {
         toast({
+          position: 'top',
           title: 'Не удалось добавить товар в корзину',
           description: error.message || 'Ошибка сети',
           status: 'error',

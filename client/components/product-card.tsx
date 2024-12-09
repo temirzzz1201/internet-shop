@@ -46,7 +46,6 @@ const OPTIONS: EmblaOptionsType = { loop: true };
 
 export default function ProductCard({ product }: IProductCardProps) {
   /* eslint-disable */
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
 
   const [quantity, setQuantity] = useState<number>(0);
@@ -80,6 +79,7 @@ export default function ProductCard({ product }: IProductCardProps) {
   const handleOrder = () => {
     if (!userCookie) {
       toast({
+        position: 'top',
         title: 'Авторизуйтесь, чтобы сделать заказ!',
         status: 'warning',
         duration: 3000,
@@ -90,6 +90,7 @@ export default function ProductCard({ product }: IProductCardProps) {
 
     if (userId === null) {
       toast({
+        position: 'top',
         title: 'Ошибка: не удалось получить идентификатор пользователя.',
         status: 'error',
         duration: 3000,
@@ -104,6 +105,7 @@ export default function ProductCard({ product }: IProductCardProps) {
       .unwrap()
       .then(() => {
         toast({
+          position: 'top',
           title: 'Товар добавлен в корзину!',
           status: 'success',
           duration: 3000,
@@ -112,6 +114,7 @@ export default function ProductCard({ product }: IProductCardProps) {
       })
       .catch((error) => {
         toast({
+          position: 'top',
           title: 'Не удалось добавить товар в корзину',
           description: error.message || 'Ошибка сети',
           status: 'error',

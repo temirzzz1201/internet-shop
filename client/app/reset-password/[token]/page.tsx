@@ -32,6 +32,7 @@ function ResetPassword({ params }: { params: { token: string } }) {
       ).unwrap();
 
       toast({
+        position: 'top',
         title: 'Успешно!',
         description: response.message || 'Пароль успешно сброшен.',
         status: 'success',
@@ -42,6 +43,7 @@ function ResetPassword({ params }: { params: { token: string } }) {
       const errorMessage =
         error instanceof Error ? error.message : String(error);
       toast({
+        position: 'top',
         title: 'Ошибка',
         description: errorMessage,
         status: 'error',

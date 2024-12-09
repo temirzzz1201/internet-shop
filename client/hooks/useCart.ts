@@ -214,6 +214,7 @@ export const useCart = () => {
 
   const showError = (title: string, description?: string) => {
     toast({
+      position: 'top',
       title,
       description,
       status: 'error',
