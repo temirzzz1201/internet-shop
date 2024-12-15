@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Image, Input } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, Image, Input } from '@chakra-ui/react';
 import { IBusketProduct } from '@/types';
 
 interface CartItemProps {
@@ -23,9 +23,14 @@ const CartItem: React.FC<CartItemProps> = ({
       width="100%"
       shadow="md"
     >
-      <Box as="h3" fontSize="xl" fontWeight="semibold" mb="5" maxW="70%">
+      <Heading
+        size={{ base: 'md', md: 'xl' }}
+        fontWeight="semibold"
+        mb="5"
+        maxW="70%"
+      >
         {item.product?.name}
-      </Box>
+      </Heading>
       <Box display="flex" gap="4" mb="5" flexWrap="wrap">
         {item.product.images.map((image, imgIndex) => (
           <Image
@@ -34,11 +39,12 @@ const CartItem: React.FC<CartItemProps> = ({
             alt={item.product.name}
             boxSize="140px"
             objectFit="contain"
+            mr="5"
           />
         ))}
       </Box>
       <Box mb="2" as="p">
-        Количество: {item.quantity}
+        Количество: {item.quantity} шт.
       </Box>
       <Box mb="2" as="p" fontWeight="semibold">
         Цена: {item.product?.price} руб.

@@ -12,6 +12,7 @@ import Cookies from 'js-cookie';
 import { capitalize } from '../../../utils/capitalize';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
+import { fetchCartItems } from '@/actions/clientActions';
 
 export default function NavLinks() {
   const dispatch = useAppDispatch();
@@ -41,6 +42,13 @@ export default function NavLinks() {
     }
   }, []);
 
+  const userId = Cookies.get('user')
+    ? JSON.parse(Cookies.get('user')!).id
+    : null;
+
+  useEffect(() => {
+    dispatch(fetchCartItems(userId));
+  }, [dispatch, userId]);
 
   const links = [
     { id: 1, title: 'Главная', path: '/' },

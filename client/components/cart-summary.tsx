@@ -1,4 +1,10 @@
-import { Box, Button, VStack, useBreakpointValue } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  VStack,
+  useBreakpointValue,
+  Heading,
+} from '@chakra-ui/react';
 import { ICartSummaryProps } from '@/types';
 
 const CartSummary: React.FC<ICartSummaryProps> = ({
@@ -17,16 +23,20 @@ const CartSummary: React.FC<ICartSummaryProps> = ({
       p={{ base: '3', sm: '4', md: '5' }}
       maxW={{ base: '100%', md: '100%' }}
       shadow="md"
-      maxH="350px"
+      maxH="417px"
+      h="100%"
+      className="flex flex-col justify-between"
     >
-      <Box fontWeight="semibold" fontSize={{ base: 'md', md: 'xl' }} mb="3">
-        Перейти к оформлению
-      </Box>
-      <Box fontSize={{ base: 'sm', md: 'md' }} mb="2">
-        Количество товаров: {totalQuantity}
-      </Box>
-      <Box fontSize={{ base: 'sm', md: 'md' }} mb="3">
-        Итоговая цена: {totalPrice} руб.
+      <Box>
+        <Heading fontWeight="semibold" mb="5" size={{ base: 'md', md: 'xl' }}>
+          Все товары
+        </Heading>
+        <Box as="p" fontSize={{ base: 'sm', md: 'md' }} mb="2">
+          Всего товаров: {totalQuantity} шт.
+        </Box>
+        <Box as="p" fontSize={{ base: 'sm', md: 'md' }} mb="3">
+          Итоговая цена: {totalPrice} руб.
+        </Box>
       </Box>
       <VStack spacing="3" align="stretch">
         <Button colorScheme="teal" size={buttonSize} onClick={onOrder}>

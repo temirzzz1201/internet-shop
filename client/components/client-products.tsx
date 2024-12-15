@@ -1,5 +1,4 @@
 'use client';
-
 import { Box, Input, Grid } from '@chakra-ui/react';
 import ProductCard from './product-card';
 import { IIProduct } from '@/types';
@@ -16,7 +15,6 @@ const ClientProducts: React.FC<ClientProductsProps> = ({
 }) => {
   const [query, setQuery] = useState('');
 
-  // Фильтруем товары по поисковому запросу и категории
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
       const matchesQuery = product.name
@@ -40,12 +38,12 @@ const ClientProducts: React.FC<ClientProductsProps> = ({
       </Box>
       <Grid
         templateColumns={{
-          base: '1fr',
+          base: 'repeat(2, 1fr)',
           md: 'repeat(2, 1fr)',
           lg: 'repeat(3, 1fr)',
           xl: 'repeat(5, 1fr)',
         }}
-        gap={{ base: 6, md: 3 }}
+        gap={{ base: 1, md: 3 }}
         alignItems="stretch"
       >
         {filteredProducts.length > 0 ? (

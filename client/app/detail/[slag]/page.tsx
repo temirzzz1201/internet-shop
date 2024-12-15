@@ -1,8 +1,5 @@
 'use client';
-import {
-  getProductDetail,
-  addToCart,
-} from '@/actions/clientActions';
+import { getProductDetail, addToCart } from '@/actions/clientActions';
 import AppContainer from '@/components/app-container';
 import {
   Box,
@@ -48,7 +45,6 @@ export default function DetailPage({ params }: DetailPageProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const router = useRouter();
   const showInfoMessage = useInfoMessage();
-  
 
   const [quantity, setQuantity] = useState<number>(0);
   const [stock, setStock] = useState<number>(0);
@@ -101,11 +97,7 @@ export default function DetailPage({ params }: DetailPageProps) {
 
   const handleOrder = () => {
     if (!userCookie) {
-      showInfoMessage(
-        'top',
-        'Авторизуйтесь, чтобы сделать заказ!',
-        'warning'
-      );
+      showInfoMessage('top', 'Авторизуйтесь, чтобы сделать заказ!', 'warning');
       return;
     }
 

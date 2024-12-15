@@ -32,7 +32,6 @@ export default function Register() {
   const { isLoading, error } = useAppSelector((store) => store.auth);
   const { replace } = useRouter();
   const showInfoMessage = useInfoMessage();
-  
 
   return (
     <AppContainer myClass="justify-center">

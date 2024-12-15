@@ -32,7 +32,6 @@ import OrderActions from './order-actions';
 import Link from 'next/link';
 import { useInfoMessage } from '@/utils/toastHelper';
 
-
 const AppModal = dynamic(() => import('@/components/app-modal'), {
   ssr: false,
 });
@@ -56,12 +55,10 @@ export default function ProductCard({ product }: IProductCardProps) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const showInfoMessage = useInfoMessage();
-  
 
   const imageUrls = images!.map(
     (image) => `${process.env.NEXT_PUBLIC_API_URL}/uploads/${image.imageUrl}`
   );
-
 
   const handleOpenProduct = () => setIsProductModalOpen(true);
   const handleCloseProduct = () => setIsProductModalOpen(false);
@@ -78,11 +75,7 @@ export default function ProductCard({ product }: IProductCardProps) {
 
   const handleOrder = () => {
     if (!userCookie) {
-      showInfoMessage(
-              'top',
-              'Авторизуйтесь, чтобы сделать заказ!',
-              'warning'
-            );
+      showInfoMessage('top', 'Авторизуйтесь, чтобы сделать заказ!', 'warning');
       return;
     }
 
@@ -109,7 +102,6 @@ export default function ProductCard({ product }: IProductCardProps) {
           'error',
           error.message || 'Ошибка сети'
         );
-
       });
   };
 
@@ -183,7 +175,7 @@ export default function ProductCard({ product }: IProductCardProps) {
       </Suspense>
 
       <Box
-        p={4}
+        p={{ base: '7px', md: '20px' }}
         bg={stock === 0 ? 'gray.100' : 'white'}
         borderRadius={10}
         as="article"

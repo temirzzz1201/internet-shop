@@ -23,8 +23,7 @@ const ForgotPasswordSchema = Yup.object().shape({
 
 function ForgotPassword() {
   const dispatch = useAppDispatch();
-    const showInfoMessage = useInfoMessage();
-  
+  const showInfoMessage = useInfoMessage();
 
   const handleForgotPassword = async (email: string) => {
     try {

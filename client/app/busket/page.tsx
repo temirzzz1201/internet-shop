@@ -8,7 +8,12 @@ import dynamic from 'next/dynamic';
 import Cookies from 'js-cookie';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useInfoMessage } from '@/utils/toastHelper';
-import { clearCart, fetchCartItems, placeOrder, removeFromCart, updateCartItem } from '@/actions/clientActions';
+import {
+  clearCart,
+  placeOrder,
+  removeFromCart,
+  updateCartItem,
+} from '@/actions/clientActions';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { ICartItem } from '@/types';
 
@@ -21,19 +26,13 @@ const Busket = () => {
   const dispatch = useAppDispatch();
   const showInfoMessage = useInfoMessage();
 
-  const { cartItems, totalQuantity } = useAppSelector(state => state.cart)
+  const { cartItems, totalQuantity } = useAppSelector((state) => state.cart);
 
   console.log(totalQuantity);
-  
 
   const userId = Cookies.get('user')
     ? JSON.parse(Cookies.get('user')!).id
     : null;
-
-  useEffect(() => {
-    dispatch(fetchCartItems(userId));
-  }, [])
-
 
   const handleIncrement = (item: ICartItem) => {
     if (item.quantity < item.product.stock) {
@@ -48,8 +47,8 @@ const Busket = () => {
   };
 
   const handleRemoveFromCart = (itemId: number) => {
-    dispatch(removeFromCart({id: itemId}));
-  }
+    dispatch(removeFromCart({ id: itemId }));
+  };
 
   const totalPrice = useMemo(
     () =>
@@ -59,8 +58,6 @@ const Busket = () => {
       ),
     [cartItems]
   );
-
-
 
   const placeOrderHandler = async () => {
     if (userId) {
@@ -81,7 +78,7 @@ const Busket = () => {
         }
       });
     } else {
-      showInfoMessage('top','Авторизуйтесь, чтобы сделать заказ!', 'error');
+      showInfoMessage('top', 'Авторизуйтесь, чтобы сделать заказ!', 'error');
     }
   };
 
@@ -94,7 +91,7 @@ const Busket = () => {
 
   const handleClearOrder = () => {
     if (totalQuantity !== 0) {
-      dispatch(clearCart())
+      dispatch(clearCart());
     }
   };
 
@@ -153,4 +150,3 @@ const Busket = () => {
 };
 
 export default Busket;
-

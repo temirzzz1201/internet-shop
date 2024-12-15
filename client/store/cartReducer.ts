@@ -35,8 +35,6 @@ const cartSlice = createSlice({
       .addCase(fetchCartItems.fulfilled, (state, action) => {
         state.cartItems = action.payload as any;
 
-        console.log(state.cartItems);
-        
         // @ts-ignore: should type products
         state.totalQuantity = action.payload.reduce(
           (sum, item) => sum + item.quantity,
@@ -102,32 +100,7 @@ const cartSlice = createSlice({
       .addCase(clearCart.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message || 'Failed to clear cart';
-      })
-
-      // .addCase(addToCart.pending, (state) => {
-      //   state.isLoading = true;
-      //   state.error = null;
-      // })
-      // .addCase(addToCart.fulfilled, (state, action) => {
-      //   state.cartItems = action.payload as any;
-      //   // @ts-ignore: should type products
-      //   state.totalQuantity = action.payload.reduce(
-      //     (sum, item) => sum + item.quantity,
-      //     0
-      //   );
-
-      //   console.log('addToCart reducer ', state.totalQuantity);
-   
-        
-
-      //   state.isLoading = false;
-      // })
-      // .addCase(addToCart.rejected, (state, action) => {
-      //   state.isLoading = false;
-      //   state.error = action.error.message || 'Failed to add product to cart';
-      // });
-
-   
+      });
   },
 });
 
