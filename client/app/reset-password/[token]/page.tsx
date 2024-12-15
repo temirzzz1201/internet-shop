@@ -24,19 +24,15 @@ function ResetPassword({ params }: { params: { token: string } }) {
   const { token } = params;
   const dispatch = useAppDispatch();
   const showInfoMessage = useInfoMessage();
-  
 
   const handleResetPassword = async (password: string) => {
     try {
-      const response = await dispatch(
-        resetPasswordHandler({ token, password })
-      ).unwrap();
-       showInfoMessage('top', 'Успешно', 'success');
+      await dispatch(resetPasswordHandler({ token, password })).unwrap();
+      showInfoMessage('top', 'Успешно', 'success');
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : String(error);
-        showInfoMessage('top', 'Ошибка', 'error', errorMessage);
-
+      showInfoMessage('top', 'Ошибка', 'error', errorMessage);
     }
   };
 

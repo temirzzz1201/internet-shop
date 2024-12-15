@@ -40,6 +40,8 @@ const Home = async ({ searchParams }: IHomeProps) => {
             mb={{ base: '20px', md: '20px' }}
             w={{ base: '100%', md: '240px' }}
             mr={{ base: '0', md: '60px', lg: '100px' }}
+            borderColor="none"
+            outline="none"
           >
             <CategoryMenu categories={categories} />
           </Box>

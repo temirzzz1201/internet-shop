@@ -28,7 +28,6 @@ export default function Login() {
   const { isLoading } = useAppSelector((store) => store.auth);
   const { replace } = useRouter();
   const showInfoMessage = useInfoMessage();
-  
 
   return (
     <AppContainer myClass="justify-center">
@@ -45,22 +44,18 @@ export default function Login() {
                 // @ts-ignore: can be undefined
                 const username = val?.payload?.user?.username;
                 if (username) {
-                   showInfoMessage(
-                     'top',
-                     `Добро пожаловать ${username}`,
-                     'success'
-                   );
+                  showInfoMessage(
+                    'top',
+                    `Добро пожаловать ${username}`,
+                    'success'
+                  );
                   replace('/');
                 } else {
-                   showInfoMessage('top', 'Нет такого пользователя!', 'error');
+                  showInfoMessage('top', 'Нет такого пользователя!', 'error');
                 }
               })
               .catch(() => {
-                   showInfoMessage(
-                     'top',
-                     'Упс... Что то пошло не так!',
-                     'error'
-                   );
+                showInfoMessage('top', 'Упс... Что то пошло не так!', 'error');
               });
           }}
         >

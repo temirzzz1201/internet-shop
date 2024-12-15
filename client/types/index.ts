@@ -202,9 +202,8 @@ export interface ICartQuantityResponse {
   totalQuantity: number;
 }
 
-
 export interface ICartItem {
   id: number;
   quantity: number;
-  product: IIProduct
+  product: IIProduct;
 }

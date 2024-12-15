@@ -11,7 +11,7 @@ const store = configureStore({
     auth: authSlice,
     users: usersSlice,
     category: categorySlice,
-    cart: cartReducer
+    cart: cartReducer,
   },
 });
 

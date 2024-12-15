@@ -1,5 +1,4 @@
 'use client';
-
 import { Box, Button } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
