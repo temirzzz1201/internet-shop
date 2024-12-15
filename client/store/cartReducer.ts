@@ -1,113 +1,134 @@
-// import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-// import {
-//   fetchCartItems as apiFetchCartItems,
-//   updateCartItem as apiUpdateCartItem,
-//   removeFromCart as apiRemoveFromCart,
-//   clearCart as apiClearCart,
-// } from '@/actions/clientActions';
-// import { IBusketProduct } from '@/types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  fetchCartItems,
+  updateCartItem,
+  removeFromCart,
+  clearCart,
+  addToCart,
+} from '@/actions/clientActions';
+import { ICartItem } from '@/types';
 
-// // Типы
-// interface CartState {
-//   cartItems: IBusketProduct[];
-//   totalQuantity: number;
-//   isLoading: boolean;
-//   error: string | null;
-// }
+interface CartState {
+  cartItems: ICartItem[];
+  totalQuantity: number;
+  isLoading: boolean;
+  error: string | null;
+}
 
-// // Начальное состояние
-// const initialState: CartState = {
-//   cartItems: [],
-//   totalQuantity: 0,
-//   isLoading: false,
-//   error: null,
-// };
+const initialState: CartState = {
+  cartItems: [],
+  totalQuantity: 0,
+  isLoading: false,
+  error: null,
+};
 
-// // Асинхронные действия
-// export const fetchCartItems = createAsyncThunk('cart/fetchCartItems', async (userId: number, { rejectWithValue }) => {
-//   try {
-//     const data = await apiFetchCartItems(userId);
-//     return data;
-//   } catch (error: any) {
-//     return rejectWithValue(error.message);
-//   }
-// });
+const cartSlice = createSlice({
+  name: 'cart',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCartItems.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchCartItems.fulfilled, (state, action) => {
+        state.cartItems = action.payload as any;
 
-// export const updateCartItem = createAsyncThunk(
-//   'cart/updateCartItem',
-//   async ({ id, quantity }: { id: string; quantity: number }, { rejectWithValue }) => {
-//     try {
-//       await apiUpdateCartItem({ id, quantity });
-//       return { id, quantity };
-//     } catch (error: any) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
+        console.log(state.cartItems);
+        
+        // @ts-ignore: should type products
+        state.totalQuantity = action.payload.reduce(
+          (sum, item) => sum + item.quantity,
+          0
+        );
 
-// export const removeFromCart = createAsyncThunk(
-//   'cart/removeFromCart',
-//   async (id: number, { rejectWithValue }) => {
-//     try {
-//       await apiRemoveFromCart({ id });
-//       return id;
-//     } catch (error: any) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
+        state.isLoading = false;
+      })
+      .addCase(fetchCartItems.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to fetch cart items';
+      })
 
-// export const clearCart = createAsyncThunk('cart/clearCart', async (_, { rejectWithValue }) => {
-//   try {
-//     await apiClearCart();
-//     return true;
-//   } catch (error: any) {
-//     return rejectWithValue(error.message);
-//   }
-// });
+      .addCase(updateCartItem.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateCartItem.fulfilled, (state, action) => {
+        const { id, quantity } = action.payload;
+        const item = state.cartItems.find((item) => item.id === id);
+        if (item) {
+          item.quantity = quantity;
+        }
+        state.totalQuantity = state.cartItems.reduce(
+          (sum, item) => sum + item.quantity,
+          0
+        );
+        state.isLoading = false;
+      })
+      .addCase(updateCartItem.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to update cart item';
+      })
 
-// // Слайс
-// const cartSlice = createSlice({
-//   name: 'cart',
-//   initialState,
-//   reducers: {
-//     calculateTotalQuantity(state) {
-//       state.totalQuantity = state.cartItems.reduce((sum, item) => sum + item.quantity, 0);
-//     },
-//   },
-//   extraReducers: (builder) => {
-//     builder
-//       .addCase(fetchCartItems.pending, (state) => {
-//         state.isLoading = true;
-//         state.error = null;
-//       })
-//       .addCase(fetchCartItems.fulfilled, (state, action: PayloadAction<IBusketProduct[]>) => {
-//         state.cartItems = action.payload;
-//         state.isLoading = false;
-//         state.totalQuantity = action.payload.reduce((sum, item) => sum + item.quantity, 0);
-//       })
-//       .addCase(fetchCartItems.rejected, (state, action) => {
-//         state.isLoading = false;
-//         state.error = action.payload as string;
-//       })
-//       .addCase(updateCartItem.fulfilled, (state, action: PayloadAction<{ id: number; quantity: number }>) => {
-//         const { id, quantity } = action.payload;
-//         const item = state.cartItems.find((item) => item.id === id);
-//         if (item) {
-//           item.quantity = quantity;
-//           state.totalQuantity = state.cartItems.reduce((sum, item) => sum + item.quantity, 0);
-//         }
-//       })
-//       .addCase(removeFromCart.fulfilled, (state, action: PayloadAction<number>) => {
-//         state.cartItems = state.cartItems.filter((item) => item.id !== action.payload);
-//         state.totalQuantity = state.cartItems.reduce((sum, item) => sum + item.quantity, 0);
-//       })
-//       .addCase(clearCart.fulfilled, (state) => {
-//         state.cartItems = [];
-//         state.totalQuantity = 0;
-//       });
-//   },
-// });
+      .addCase(removeFromCart.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(removeFromCart.fulfilled, (state, action) => {
+        state.cartItems = state.cartItems.filter(
+          (item) => item.id !== action.payload
+        );
+        state.totalQuantity = state.cartItems.reduce(
+          (sum, item) => sum + item.quantity,
+          0
+        );
+        state.isLoading = false;
+      })
+      .addCase(removeFromCart.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to remove cart item';
+      })
 
-// export const { calculateTotalQuantity } = cartSlice.actions;
-// export default cartSlice.reducer;
+      .addCase(clearCart.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(clearCart.fulfilled, (state) => {
+        state.cartItems = [];
+        state.totalQuantity = 0;
+        state.isLoading = false;
+      })
+      .addCase(clearCart.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to clear cart';
+      })
+
+      // .addCase(addToCart.pending, (state) => {
+      //   state.isLoading = true;
+      //   state.error = null;
+      // })
+      // .addCase(addToCart.fulfilled, (state, action) => {
+      //   state.cartItems = action.payload as any;
+      //   // @ts-ignore: should type products
+      //   state.totalQuantity = action.payload.reduce(
+      //     (sum, item) => sum + item.quantity,
+      //     0
+      //   );
+
+      //   console.log('addToCart reducer ', state.totalQuantity);
+   
+        
+
+      //   state.isLoading = false;
+      // })
+      // .addCase(addToCart.rejected, (state, action) => {
+      //   state.isLoading = false;
+      //   state.error = action.error.message || 'Failed to add product to cart';
+      // });
+
+   
+  },
+});
+
+export default cartSlice.reducer;

@@ -6,7 +6,6 @@ import {
   Box,
   Input,
   FormErrorMessage,
-  useToast,
 } from '@chakra-ui/react';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
@@ -14,6 +13,7 @@ import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { sendEmailToResetPassword } from '@/actions/clientActions';
 import AppContainer from '@/components/app-container';
 import { ResetPasswordError } from '@/types';
+import { useInfoMessage } from '@/utils/toastHelper';
 
 const ForgotPasswordSchema = Yup.object().shape({
   email: Yup.string()
@@ -23,32 +23,26 @@ const ForgotPasswordSchema = Yup.object().shape({
 
 function ForgotPassword() {
   const dispatch = useAppDispatch();
-  const toast = useToast();
+    const showInfoMessage = useInfoMessage();
+  
 
   const handleForgotPassword = async (email: string) => {
     try {
       const data = await dispatch(sendEmailToResetPassword(email));
-      toast({
-        position: 'top',
-        title: 'Успешно!',
-        description:
-          data.payload.message ||
-          'Ссылка для сброса пароля отправлена на почту.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
+      showInfoMessage(
+        'top',
+        'Успешно!',
+        'success',
+        data.payload.message || 'Ссылка для сброса пароля отправлена на почту.'
+      );
     } catch (error) {
       const err = error as ResetPasswordError;
-      toast({
-        position: 'top',
-        title: 'Ошибка',
-        description:
-          err.message || 'Не удалось отправить ссылку для сброса пароля.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
+      showInfoMessage(
+        'top',
+        'Ошибка!',
+        'error',
+        err.message || 'Не удалось отправить ссылку для сброса пароля.'
+      );
     }
   };
 

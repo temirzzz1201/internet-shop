@@ -251,7 +251,7 @@ export const createCartProduct = async (productData: {
   }
 };
 
-export const deleteCartProduct = async (id: string): Promise<void> => {
+export const deleteCartProduct = async (id: number): Promise<void> => {
   try {
     console.log('deleteCartProduct ', id);
 
@@ -276,7 +276,7 @@ export const deleteAllfromCart = async (): Promise<void> => {
 };
 
 export const updateCartProduct = async (
-  id: string,
+  id: number,
   productData: { quantity: number }
 ): Promise<void> => {
   try {

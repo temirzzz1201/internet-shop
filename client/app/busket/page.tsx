@@ -1,50 +1,55 @@
 'use client';
 import { Box, Heading, Stack } from '@chakra-ui/react';
-import { useState, Suspense, useCallback, useMemo } from 'react';
+import { useState, Suspense, useMemo, useEffect } from 'react';
 import AppContainer from '@/components/app-container';
 import CartItem from '@/components/cart-item';
 import CartSummary from '@/components/cart-summary';
-import { useCart } from '@/hooks/useCart';
 import dynamic from 'next/dynamic';
+import Cookies from 'js-cookie';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { useInfoMessage } from '@/utils/toastHelper';
+import { clearCart, fetchCartItems, placeOrder, removeFromCart, updateCartItem } from '@/actions/clientActions';
+import { useAppSelector } from '@/hooks/useAppSelector';
+import { ICartItem } from '@/types';
 
 const AppModal = dynamic(() => import('@/components/app-modal'), {
   ssr: false,
 });
 
 const Busket = () => {
-  const {
-    cartItems,
-    updateQuantity,
-    removeProduct,
-    clearCartItems,
-    placeCartOrder,
-  } = useCart();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const showInfoMessage = useInfoMessage();
 
-  const handleIncrement = useCallback(
-    // @ts-ignore: should type products
-    (item) => {
-      if (item.quantity < item.product.stock) {
-        updateQuantity(item.id, item.quantity + 1);
-      }
-    },
-    [updateQuantity]
-  );
+  const { cartItems, totalQuantity } = useAppSelector(state => state.cart)
 
-  const handleDecrement = useCallback(
-    // @ts-ignore: should type products
-    (item) => {
-      if (item.quantity > 0) {
-        updateQuantity(item.id, item.quantity - 1);
-      }
-    },
-    [updateQuantity]
-  );
+  console.log(totalQuantity);
+  
 
-  const totalQuantity = useMemo(
-    () => cartItems.reduce((total, item) => total + item.quantity, 0),
-    [cartItems]
-  );
+  const userId = Cookies.get('user')
+    ? JSON.parse(Cookies.get('user')!).id
+    : null;
+
+  useEffect(() => {
+    dispatch(fetchCartItems(userId));
+  }, [])
+
+
+  const handleIncrement = (item: ICartItem) => {
+    if (item.quantity < item.product.stock) {
+      dispatch(updateCartItem({ id: item.id, quantity: item.quantity + 1 }));
+    }
+  };
+
+  const handleDecrement = (item: ICartItem) => {
+    if (item.quantity > 0) {
+      dispatch(updateCartItem({ id: item.id, quantity: item.quantity - 1 }));
+    }
+  };
+
+  const handleRemoveFromCart = (itemId: number) => {
+    dispatch(removeFromCart({id: itemId}));
+  }
 
   const totalPrice = useMemo(
     () =>
@@ -55,16 +60,41 @@ const Busket = () => {
     [cartItems]
   );
 
+
+
+  const placeOrderHandler = async () => {
+    if (userId) {
+      cartItems.forEach((item) => {
+        const { quantity, product } = item;
+
+        if (item.quantity > product.stock) {
+          alert(`Недостаточно товара "${product.name}" на складе.`);
+        } else {
+          const order = {
+            quantity,
+            total_price: product.price * quantity,
+            userId: Number(userId),
+            productId: product.id,
+          };
+
+          dispatch(placeOrder(order));
+        }
+      });
+    } else {
+      showInfoMessage('top','Авторизуйтесь, чтобы сделать заказ!', 'error');
+    }
+  };
+
   const handleOrder = () => {
     if (totalQuantity > 0) {
-      placeCartOrder();
+      placeOrderHandler();
       setIsModalOpen(true);
     }
   };
 
   const handleClearOrder = () => {
     if (totalQuantity !== 0) {
-      clearCartItems();
+      dispatch(clearCart())
     }
   };
 
@@ -104,11 +134,10 @@ const Busket = () => {
             cartItems.map((item) => (
               <Box mb="5" key={item.id}>
                 <CartItem
-                  key={item.id}
                   item={item}
                   onIncrement={() => handleIncrement(item)}
                   onDecrement={() => handleDecrement(item)}
-                  onRemove={() => removeProduct(item.id)}
+                  onRemove={() => handleRemoveFromCart(item.id)}
                 />
               </Box>
             ))
@@ -124,3 +153,4 @@ const Busket = () => {
 };
 
 export default Busket;
+

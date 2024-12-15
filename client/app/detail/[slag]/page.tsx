@@ -2,7 +2,6 @@
 import {
   getProductDetail,
   addToCart,
-  removeFromCart,
 } from '@/actions/clientActions';
 import AppContainer from '@/components/app-container';
 import {
@@ -15,7 +14,6 @@ import {
   SimpleGrid,
   Image,
   useNumberInput,
-  useToast,
   Input,
   Breadcrumb,
   BreadcrumbItem,
@@ -28,6 +26,8 @@ import { useAppDispatch } from '@/hooks/useAppDispatch';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { IIProduct } from '@/types';
+import { useInfoMessage } from '@/utils/toastHelper';
+
 import OrderActions from '@/components/order-actions';
 
 const AppModal = dynamic(() => import('@/components/app-modal'), {
@@ -47,10 +47,11 @@ export default function DetailPage({ params }: DetailPageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const router = useRouter();
+  const showInfoMessage = useInfoMessage();
+  
 
   const [quantity, setQuantity] = useState<number>(0);
   const [stock, setStock] = useState<number>(0);
-  const toast = useToast();
 
   const getProduct = async () => {
     const { payload } = await dispatch(getProductDetail(slag));
@@ -100,24 +101,20 @@ export default function DetailPage({ params }: DetailPageProps) {
 
   const handleOrder = () => {
     if (!userCookie) {
-      toast({
-        position: 'top',
-        title: 'Авторизуйтесь, чтобы сделать заказ!',
-        status: 'warning',
-        duration: 3000,
-        isClosable: true,
-      });
+      showInfoMessage(
+        'top',
+        'Авторизуйтесь, чтобы сделать заказ!',
+        'warning'
+      );
       return;
     }
 
     if (userId === null) {
-      toast({
-        position: 'top',
-        title: 'Ошибка: не удалось получить идентификатор пользователя.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
+      showInfoMessage(
+        'top',
+        'Ошибка: не удалось получить идентификатор пользователя.',
+        'error'
+      );
       return;
     }
 
@@ -125,23 +122,15 @@ export default function DetailPage({ params }: DetailPageProps) {
     dispatch(addToCart(newItem))
       .unwrap()
       .then(() => {
-        toast({
-          position: 'top',
-          title: 'Товар добавлен в корзину!',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        });
+        showInfoMessage('top', 'Товар добавлен в корзину!', 'success');
       })
       .catch((error) => {
-        toast({
-          position: 'top',
-          title: 'Не удалось добавить товар в корзину',
-          description: error.message || 'Ошибка сети',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
+        showInfoMessage(
+          'top',
+          'Не удалось добавить товар в корзину',
+          'success',
+          error.message
+        );
       });
   };
 
@@ -151,7 +140,6 @@ export default function DetailPage({ params }: DetailPageProps) {
 
   const handleResetQuantity = () => {
     setQuantity(0);
-    dispatch(removeFromCart({ id: product!.id.toString() }));
   };
 
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
