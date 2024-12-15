@@ -6,13 +6,13 @@ import {
   Box,
   Input,
   FormErrorMessage,
-  useToast,
 } from '@chakra-ui/react';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { resetPasswordHandler } from '@/actions/clientActions';
 import AppContainer from '@/components/app-container';
+import { useInfoMessage } from '@/utils/toastHelper';
 
 const ResetPasswordSchema = Yup.object().shape({
   password: Yup.string()
@@ -23,33 +23,20 @@ const ResetPasswordSchema = Yup.object().shape({
 function ResetPassword({ params }: { params: { token: string } }) {
   const { token } = params;
   const dispatch = useAppDispatch();
-  const toast = useToast();
+  const showInfoMessage = useInfoMessage();
+  
 
   const handleResetPassword = async (password: string) => {
     try {
       const response = await dispatch(
         resetPasswordHandler({ token, password })
       ).unwrap();
-
-      toast({
-        position: 'top',
-        title: 'Успешно!',
-        description: response.message || 'Пароль успешно сброшен.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
+       showInfoMessage('top', 'Успешно', 'success');
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : String(error);
-      toast({
-        position: 'top',
-        title: 'Ошибка',
-        description: errorMessage,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
+        showInfoMessage('top', 'Ошибка', 'error', errorMessage);
+
     }
   };
 

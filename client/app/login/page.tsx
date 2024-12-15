@@ -9,12 +9,12 @@ import {
   FormLabel,
   Button,
   FormHelperText,
-  useToast,
 } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { IFormValues } from '@/types';
 import AppContainer from '@/components/app-container';
+import { useInfoMessage } from '@/utils/toastHelper';
 
 const SignupSchema = Yup.object().shape({
   password: Yup.string()
@@ -26,8 +26,9 @@ const SignupSchema = Yup.object().shape({
 export default function Login() {
   const dispatch = useAppDispatch();
   const { isLoading } = useAppSelector((store) => store.auth);
-  const toast = useToast();
   const { replace } = useRouter();
+  const showInfoMessage = useInfoMessage();
+  
 
   return (
     <AppContainer myClass="justify-center">
@@ -44,32 +45,22 @@ export default function Login() {
                 // @ts-ignore: can be undefined
                 const username = val?.payload?.user?.username;
                 if (username) {
-                  toast({
-                    position: 'top',
-                    title: `Добро пожаловать ${username}`,
-                    status: 'success',
-                    duration: 3000,
-                    isClosable: false,
-                  });
+                   showInfoMessage(
+                     'top',
+                     `Добро пожаловать ${username}`,
+                     'success'
+                   );
                   replace('/');
                 } else {
-                  toast({
-                    position: 'top',
-                    title: 'Нет такого пользователя!',
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: false,
-                  });
+                   showInfoMessage('top', 'Нет такого пользователя!', 'error');
                 }
               })
               .catch(() => {
-                toast({
-                  position: 'top',
-                  title: 'Упс... Что то пошло не так!',
-                  status: 'error',
-                  duration: 3000,
-                  isClosable: false,
-                });
+                   showInfoMessage(
+                     'top',
+                     'Упс... Что то пошло не так!',
+                     'error'
+                   );
               });
           }}
         >

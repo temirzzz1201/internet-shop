@@ -40,7 +40,7 @@ export interface IBusketProduct {
   id: number;
   product: IIProduct;
   quantity: number;
-  setTotalQuantityInBusket: number;
+  setTotalQuantityInBusket?: number;
 }
 
 export interface IIProductResponse {
@@ -200,4 +200,11 @@ export interface ResetPasswordError {
 
 export interface ICartQuantityResponse {
   totalQuantity: number;
+}
+
+
+export interface ICartItem {
+  id: number;
+  quantity: number;
+  product: IIProduct
 }

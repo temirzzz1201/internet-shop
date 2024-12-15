@@ -9,12 +9,12 @@ import {
   FormLabel,
   Button,
   FormHelperText,
-  useToast,
 } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { IFormValues } from '@/types';
 import AppContainer from '@/components/app-container';
+import { useInfoMessage } from '@/utils/toastHelper';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -30,8 +30,9 @@ const SignupSchema = Yup.object().shape({
 export default function Register() {
   const dispatch = useAppDispatch();
   const { isLoading, error } = useAppSelector((store) => store.auth);
-  const toast = useToast();
   const { replace } = useRouter();
+  const showInfoMessage = useInfoMessage();
+  
 
   return (
     <AppContainer myClass="justify-center">
@@ -48,35 +49,25 @@ export default function Register() {
                 // @ts-ignore: can be undefined
                 const username = val?.payload?.user?.username;
                 if (username) {
-                  toast({
-                    position: 'top',
-                    title: `Вы успешно зарегестрировались, ${username}!\n
+                  showInfoMessage(
+                    'top',
+                    `Вы успешно зарегестрировались, ${username}!\n
                     Пожалуйста авторизуйтесь
                     `,
-                    status: 'success',
-                    duration: 3000,
-                    isClosable: false,
-                  });
+                    'success'
+                  );
                   replace('/login');
                 } else {
-                  toast({
-                    position: 'top',
-                    // @ts-ignore: error oblect problem
-                    title: error,
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: false,
-                  });
+                  // @ts-ignore: error oblect problem
+                  showInfoMessage('top', error, 'error');
                 }
               })
               .catch((error) => {
-                toast({
-                  position: 'top',
-                  title: error.payload || 'Упс... Что-то пошло не так!',
-                  status: 'error',
-                  duration: 3000,
-                  isClosable: false,
-                });
+                showInfoMessage(
+                  'top',
+                  error.payload || 'Упс... Что-то пошло не так!',
+                  'error'
+                );
               });
           }}
         >
