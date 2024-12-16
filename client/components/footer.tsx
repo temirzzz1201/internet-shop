@@ -53,7 +53,7 @@ export default function Footer() {
           </Box>
         </Box>
         <Text className="mb-4 mt-3 text-white" fontSize="l">
-          @ copyright {year}
+          @ copyright {year}. created by Tmzzz
         </Text>
       </Box>
     </Box>

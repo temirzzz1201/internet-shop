@@ -27,19 +27,26 @@ const CartItem: React.FC<CartItemProps> = ({
         size={{ base: 'md', md: 'xl' }}
         fontWeight="semibold"
         mb="5"
-        maxW="70%"
+        maxW={{ base: '100%', md: '70%' }}
       >
         {item.product?.name}
       </Heading>
-      <Box display="flex" gap="4" mb="5" flexWrap="wrap">
+      <Box
+        display="flex"
+        gap="4"
+        mb="5"
+        flexWrap="wrap"
+        justifyContent={{ base: 'center', md: 'flex-start' }}
+      >
         {item.product.images.map((image, imgIndex) => (
           <Image
             key={`${item.product.id}-${imgIndex}`}
             src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${image.imageUrl}`}
             alt={item.product.name}
-            boxSize="140px"
+            w={{ base: '300px', sm: '140px' }}
+            h={{ base: '140px', sm: '140px' }}
+            mr={{ base: '0', sm: '20px' }}
             objectFit="contain"
-            mr="5"
           />
         ))}
       </Box>

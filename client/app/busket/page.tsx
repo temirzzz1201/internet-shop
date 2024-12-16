@@ -14,6 +14,7 @@ import {
   removeFromCart,
   updateCartItem,
 } from '@/actions/clientActions';
+import { fetchCartItems } from '@/actions/clientActions';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { ICartItem } from '@/types';
 
@@ -33,6 +34,10 @@ const Busket = () => {
   const userId = Cookies.get('user')
     ? JSON.parse(Cookies.get('user')!).id
     : null;
+
+  useEffect(() => {
+    dispatch(fetchCartItems(userId));
+  }, [dispatch, userId]);
 
   const handleIncrement = (item: ICartItem) => {
     if (item.quantity < item.product.stock) {

@@ -24,7 +24,7 @@ const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
       >
         <ListItem
           onClick={() => handleCategoryClick(null)}
-          className="flex cursor-pointer mx-0 my-5"
+          className="flex cursor-pointer mx-0 my-5 text-black hover:text-blue-800 hover:underline transition-all duration-300"
         >
           Все товары
         </ListItem>
@@ -32,7 +32,7 @@ const CategoryMenu: React.FC<ICategoryMenuProps> = ({ categories }) => {
           <ListItem
             key={cat.id}
             onClick={() => handleCategoryClick(cat.id)}
-            className="flex cursor-pointer mx-0 my-5"
+            className="flex cursor-pointer mx-0 my-5 text-black hover:text-blue-800 hover:underline transition-all duration-300"
           >
             {capitalize(cat.name)}
           </ListItem>

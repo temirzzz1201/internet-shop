@@ -1,9 +1,5 @@
 'use client';
-
-/**
- * TODO
- * разбить на компоненты
- */
+import React from 'react';
 import { IProductCardProps } from '@/types';
 import {
   Box,
@@ -17,7 +13,6 @@ import {
   Tooltip,
   Image as CImage,
 } from '@chakra-ui/react';
-import Image from 'next/image';
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
@@ -25,12 +20,17 @@ import { formatDate } from '@/utils/dateHelper';
 import { EmblaOptionsType } from 'embla-carousel';
 import { capitalize } from '@/utils/capitalize';
 import Cookies from 'js-cookie';
-import busketSrcOrange from '@/assets/images/purchase_orange.svg';
+import { FaShoppingBasket } from 'react-icons/fa';
 import { addToCart } from '@/actions/clientActions';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import OrderActions from './order-actions';
 import Link from 'next/link';
 import { useInfoMessage } from '@/utils/toastHelper';
+
+interface HighlightProps {
+  text: string;
+  highlight: string;
+}
 
 const AppModal = dynamic(() => import('@/components/app-modal'), {
   ssr: false,
@@ -43,7 +43,30 @@ const EmblaCarousel = dynamic(() => import('./carousel/embla-carousel'), {
 
 const OPTIONS: EmblaOptionsType = { loop: true };
 
-export default function ProductCard({ product }: IProductCardProps) {
+const Highlight: React.FC<HighlightProps> = ({ text, highlight }) => {
+  if (!highlight) return <>{text}</>;
+  const regex = new RegExp(`(${highlight})`, 'gi');
+  const parts = text.split(regex);
+
+  return (
+    <>
+      {parts.map((part, index) =>
+        regex.test(part) ? (
+          <span key={index} style={{ backgroundColor: 'orange' }}>
+            {part}
+          </span>
+        ) : (
+          part
+        )
+      )}
+    </>
+  );
+};
+
+const ProductCard: React.FC<IProductCardProps & { query: string }> = ({
+  product,
+  query,
+}) => {
   /* eslint-disable */
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
 
@@ -196,12 +219,14 @@ export default function ProductCard({ product }: IProductCardProps) {
             />
           </Link>
         </Box>
+
         <Tooltip label={product.name} aria-label="A tooltip">
           <Heading noOfLines={1} size="l" fontWeight="bold">
             {' '}
-            {capitalize(product.name)}{' '}
+            <Highlight text={capitalize(product.name)} highlight={query} />
           </Heading>
         </Tooltip>
+
         <Badge
           my="2"
           borderRadius="full"
@@ -211,10 +236,9 @@ export default function ProductCard({ product }: IProductCardProps) {
           {' '}
           Осталось {stock} шт.
         </Badge>
-        <Tooltip label={product.description} aria-label="A tooltip">
-          <Text mb="2" fontSize="md" noOfLines={1}>
-            {' '}
-            {capitalize(product.description)}{' '}
+        <Tooltip label={product.description} aria-label="Описание товара">
+          <Text fontSize="sm" mb={2} noOfLines={1}>
+            <Highlight text={product.description || ''} highlight={query} />
           </Text>
         </Tooltip>
         <Tooltip label="Добавить в корзину" aria-label="A tooltip">
@@ -234,12 +258,8 @@ export default function ProductCard({ product }: IProductCardProps) {
             }}
           >
             {' '}
-            {product.price} руб.{' '}
-            <Image
-              className="max-w-[20px] hover:fill-orange-400"
-              src={busketSrcOrange}
-              alt={busketSrcOrange}
-            />
+            {product.price} руб.
+            <FaShoppingBasket className="w-5 h-5" />
           </Text>
         </Tooltip>
 
@@ -250,4 +270,6 @@ export default function ProductCard({ product }: IProductCardProps) {
       </Box>
     </Box>
   );
-}
+};
+
+export default ProductCard;

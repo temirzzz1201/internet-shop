@@ -17,9 +17,12 @@ const ClientProducts: React.FC<ClientProductsProps> = ({
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
-      const matchesQuery = product.name
-        .toLowerCase()
-        .includes(query.toLowerCase());
+      const queryLower = query.toLowerCase();
+      const matchesQuery =
+        product.name.toLowerCase().includes(queryLower) ||
+        product.description?.toLowerCase().includes(queryLower) ||
+        product.price.toString().includes(queryLower) ||
+        product.stock.toString().includes(queryLower);
       const matchesCategory = selectedCategory
         ? product.categoryId?.toString() === selectedCategory
         : true;
@@ -29,7 +32,7 @@ const ClientProducts: React.FC<ClientProductsProps> = ({
 
   return (
     <Box flex="1">
-      <Box maxW="350px" mb={4}>
+      <Box maxW={{ base: '100%', md: '350px' }} mb={4}>
         <Input
           placeholder="Поиск товаров"
           value={query}
@@ -48,7 +51,7 @@ const ClientProducts: React.FC<ClientProductsProps> = ({
       >
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product: IIProduct) => (
-            <ProductCard product={product} key={product.id} />
+            <ProductCard product={product} key={product.id} query={query} />
           ))
         ) : (
           <p>Продукты отсутствуют!</p>
