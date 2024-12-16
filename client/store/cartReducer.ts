@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import {
   fetchCartItems,
   updateCartItem,
@@ -46,6 +46,35 @@ const cartSlice = createSlice({
       .addCase(fetchCartItems.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message || 'Failed to fetch cart items';
+      })
+
+      .addCase(addToCart.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(addToCart.fulfilled, (state, action) => {
+        const newItem = action.payload;
+
+        const existingItem = state.cartItems.find(
+          (item) => item.id === newItem!.id
+        );
+        if (existingItem) {
+          existingItem.quantity += newItem!.quantity;
+        } else {
+          // @ts-ignore: posible undefined
+          state.cartItems.push(newItem);
+        }
+
+        state.totalQuantity = state.cartItems.reduce(
+          (sum, item) => sum + item.quantity,
+          0
+        );
+
+        state.isLoading = false;
+      })
+      .addCase(addToCart.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Failed to add item to cart';
       })
 
       .addCase(updateCartItem.pending, (state) => {

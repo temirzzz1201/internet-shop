@@ -38,11 +38,11 @@ const CartItem: React.FC<CartItemProps> = ({
         flexWrap="wrap"
         justifyContent={{ base: 'center', md: 'flex-start' }}
       >
-        {item.product.images.map((image, imgIndex) => (
+        {item.product?.images.map((image, imgIndex) => (
           <Image
-            key={`${item.product.id}-${imgIndex}`}
+            key={`${item.product?.id}-${imgIndex}`}
             src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${image.imageUrl}`}
-            alt={item.product.name}
+            alt={item.product?.name}
             w={{ base: '300px', sm: '140px' }}
             h={{ base: '140px', sm: '140px' }}
             mr={{ base: '0', sm: '20px' }}
@@ -76,7 +76,7 @@ const CartItem: React.FC<CartItemProps> = ({
             -
           </Button>
           <Input
-            value={item.quantity}
+            value={item?.quantity}
             readOnly
             textAlign="center"
             width="100px"

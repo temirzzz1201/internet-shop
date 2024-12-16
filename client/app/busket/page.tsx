@@ -29,8 +29,6 @@ const Busket = () => {
 
   const { cartItems, totalQuantity } = useAppSelector((state) => state.cart);
 
-  console.log(totalQuantity);
-
   const userId = Cookies.get('user')
     ? JSON.parse(Cookies.get('user')!).id
     : null;
@@ -55,14 +53,13 @@ const Busket = () => {
     dispatch(removeFromCart({ id: itemId }));
   };
 
-  const totalPrice = useMemo(
-    () =>
-      cartItems.reduce(
-        (total, item) => total + item.product.price * item.quantity,
-        0
-      ),
-    [cartItems]
-  );
+  const totalPrice = useMemo(() => {
+    return cartItems.reduce((total, item) => {
+      const price = item.product?.price ?? 0; // Если product или price нет, будет использовано 0
+
+      return total + price * item.quantity;
+    }, 0);
+  }, [cartItems]);
 
   const placeOrderHandler = async () => {
     if (userId) {

@@ -7,8 +7,6 @@ export function profileMiddleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  console.log('TOKEN ', token);
-
   return NextResponse.next();
 }
 
