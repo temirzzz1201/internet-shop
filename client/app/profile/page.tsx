@@ -71,7 +71,6 @@ function Profile() {
                 </Text>
                 <VStack spacing={2} align="start">
                   <Box
-                    mb="3"
                     display="flex"
                     flexWrap="wrap"
                     gap="2"
@@ -87,8 +86,10 @@ function Profile() {
                             key={image.imageUrl}
                             src={imageUrl}
                             alt={order?.Product?.name}
-                            boxSize="120px"
-                            objectFit="cover"
+                            w={{ base: '300px', sm: '140px' }}
+                            h={{ base: '140px', sm: '140px' }}
+                            mr={{ base: '0', sm: '20px' }}
+                            objectFit="contain"
                           />
                         );
                       })}
@@ -107,16 +108,12 @@ function Profile() {
                     {order.description && (
                       <Text>Описание: {order.description}</Text>
                     )}
-                    <Text color="blue.400" mb="2">
-                      Колличество: {order.quantity} шт.
-                    </Text>
-                    <Text color="blue.400" mb="2">
-                      На {order.Product?.price} руб.
-                    </Text>
-                    <Text color="blue.400" display="block" mb="4" as="b">
+                    <Text mb="2">Колличество: {order.quantity} шт.</Text>
+                    <Text mb="2">На {order.Product?.price} руб.</Text>
+                    <Text display="block" mb="4" as="b">
                       Общая сумма: {order.total_price.toFixed(2)} руб.
                     </Text>
-                    <Box display="block" color="gray.500" as="small" mb="2">
+                    <Box display="block" as="small" mb="2">
                       Дата заказа:{' '}
                       {new Date(order.createdAt).toLocaleDateString('ru-RU')}
                     </Box>

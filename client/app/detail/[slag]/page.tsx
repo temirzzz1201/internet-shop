@@ -191,14 +191,15 @@ export default function DetailPage({ params }: DetailPageProps) {
             columns={{ base: 1, sm: 2, md: 5 }}
             spacing={2}
             w="100%"
-            justifyContent="flex-start"
+            justifyContent={{ base: 'center', md: 'flex-start' }}
           >
             {imageUrls?.map((url, index) => (
               <Image
-                key={index}
-                boxSize={{ base: '100%', md: '300px' }}
-                maxW={{ base: '180px', md: '300px' }}
+                w={{ base: '300px', sm: '250px' }}
+                h={{ base: '140px', sm: '250px' }}
+                mr={{ base: '0', sm: '20px' }}
                 objectFit="contain"
+                key={index}
                 src={url}
                 alt={`изображение ${product.name} ${index + 1}`}
                 borderRadius="md"
@@ -212,16 +213,11 @@ export default function DetailPage({ params }: DetailPageProps) {
           {product.name}
         </Heading>
         whiteSpace='nowrap'
-        <Text
-          fontSize={{ base: 'lg', md: 'xl' }}
-          color="green.600"
-          whiteSpace="nowrap"
-        >
+        <Text fontSize={{ base: 'lg', md: 'xl' }} whiteSpace="nowrap">
           {product.price} ₽
         </Text>
         <Box
           fontSize={{ base: 'sm', md: 'md' }}
-          color="red.500"
           fontWeight="bold"
           as="p"
           whiteSpace="nowrap"
@@ -230,7 +226,6 @@ export default function DetailPage({ params }: DetailPageProps) {
         </Box>
         <Text
           fontSize={{ base: 'lg', md: 'xl' }}
-          color="gray.500"
           w="100%"
           textAlign="left"
           fontWeight="600"

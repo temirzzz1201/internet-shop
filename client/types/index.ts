@@ -152,6 +152,7 @@ export interface IModalProps {
 
 export interface IProductCardProps {
   product: IIProduct;
+  selectedCategory?: string;
 }
 
 export interface IOrdersState {

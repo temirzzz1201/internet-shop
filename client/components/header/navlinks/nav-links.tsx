@@ -1,11 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Box, Heading } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
-import busketSrc from '@/assets/images/purchase_white.svg';
 import { logout } from '@/actions/clientActions';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
@@ -13,6 +11,7 @@ import { capitalize } from '../../../utils/capitalize';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { fetchCartItems } from '@/actions/clientActions';
+import { FaShoppingBasket } from 'react-icons/fa';
 
 export default function NavLinks() {
   const dispatch = useAppDispatch();
@@ -176,7 +175,11 @@ export default function NavLinks() {
               </Box>
             ) : null}
             {isAuthenticated || userName ? (
-              <Box as="li" mt={4}>
+              <Box
+                as="li"
+                mt={4}
+                className="flex relative text-white cursor-pointer w-[97px] outline-none hover:text-blue-200 transition-all duration-300"
+              >
                 <Link
                   onClick={() => setMenuOpen(false)}
                   href="/busket"
@@ -185,19 +188,17 @@ export default function NavLinks() {
                   Корзина
                   {totalQuantity > 0 && (
                     <Box
-                      className="min-w-[15px] max-w-[15px] min-h-[15px] max-h-[15px] flex justify-center items-center absolute top-[-7px] right-[-7px] bg-blue-600 text-white"
+                      className="min-w-[15px] max-w-[15px] min-h-[15px] max-h-[15px] flex justify-center items-center absolute top-[-7px] right-[-7px] text-orange-300"
                       borderRadius="50%"
-                      fontSize="10"
+                      fontSize="14"
                       fontWeight="bold"
                     >
                       {totalQuantity}
                     </Box>
                   )}
-                  <Image
-                    className="w-[25px] h-[20px]"
-                    alt={busketSrc}
-                    src={busketSrc}
-                  />
+                  <Box as="span" display="inline-block">
+                    <FaShoppingBasket className="w-5 h-5 ml-2" />
+                  </Box>
                 </Link>
               </Box>
             ) : null}
@@ -238,27 +239,28 @@ export default function NavLinks() {
           </Box>
         ))}
         {isAuthenticated || userName ? (
-          <Box as="li">
+          <Box
+            as="li"
+            className="flex relative text-white cursor-pointer outline-none hover:text-blue-200 transition-all duration-300 mr-3"
+          >
             <Link
               href="/busket"
-              className="flex relative text-white cursor-pointer outline-none hover:text-blue-200 transition-all duration-300 mr-3"
+              className="flex relative text-white cursor-pointer outline-none hover:text-blue-200 transition-all duration-300"
             >
               Корзина
               {totalQuantity > 0 && (
                 <Box
-                  className="min-w-[15px] max-w-[15px] min-h-[15px] max-h-[15px] flex justify-center items-center absolute top-[-7px] right-[-7px] bg-blue-600 text-white"
+                  className="min-w-[15px] max-w-[15px] min-h-[15px] max-h-[15px] flex justify-center items-center absolute top-[-7px] right-[-7px] text-orange-300"
                   borderRadius="50%"
-                  fontSize="10"
+                  fontSize="14"
                   fontWeight="bold"
                 >
                   {totalQuantity}
                 </Box>
               )}
-              <Image
-                className="w-[25px] h-[20px]"
-                alt={busketSrc}
-                src={busketSrc}
-              />
+              <Box as="span" display="inline-block">
+                <FaShoppingBasket className="w-4 h-4 ml-1" />
+              </Box>
             </Link>
           </Box>
         ) : null}

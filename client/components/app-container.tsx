@@ -1,4 +1,4 @@
-import { Text, Box, Heading } from '@chakra-ui/react';
+import { Box, Heading } from '@chakra-ui/react';
 import { IContainerProps } from '@/types';
 
 export default function AppContainer({
