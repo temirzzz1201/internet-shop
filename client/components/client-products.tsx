@@ -34,6 +34,7 @@ const ClientProducts: React.FC<ClientProductsProps> = ({
     <Box flex="1">
       <Box maxW={{ base: '100%', md: '350px' }} mb={4}>
         <Input
+          className="outline-none"
           placeholder="Поиск товаров"
           value={query}
           onChange={(e) => setQuery(e.target.value)}

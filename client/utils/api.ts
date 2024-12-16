@@ -85,7 +85,6 @@ export const loginUser = async (
   try {
     const response = await api.post<IUserResponse>('users/login', userData);
 
-    console.log('response ', response.data.message);
     if (response.data.message === 'авторизация успешна') {
       const { id, username, role } = response.data.user;
 
@@ -242,9 +241,11 @@ export const createCartProduct = async (productData: {
   quantity: number;
 }): Promise<AxiosResponse<ICart> | undefined> => {
   try {
-    return await api.post<ICart>('cart/add', productData, {
+    const response = await api.post<ICart>('cart/add', productData, {
       headers: { 'Content-Type': 'application/json' },
     });
+
+    return response;
   } catch (error) {
     console.error(`Ошибка добавления в корзину: ${error}`);
     throw error;
@@ -253,8 +254,6 @@ export const createCartProduct = async (productData: {
 
 export const deleteCartProduct = async (id: number): Promise<void> => {
   try {
-    console.log('deleteCartProduct ', id);
-
     await api.delete(`cart/remove/${id}`, {
       headers: { 'Content-Type': 'application/json' },
     });
@@ -324,8 +323,6 @@ export const sendPassword = async (email: string) => {
   try {
     const response = await api.post('users/forgot-password', { email });
 
-    console.log('sendPassword data ', response);
-
     return response;
   } catch (error) {
     console.error('Ошибка в sendPassword: ', error);
@@ -338,7 +335,6 @@ export const resetPassword = async (token: string, password: string) => {
     const response = await api.post(`users/reset-password/${token}`, {
       password,
     });
-    console.log('resetPassword data ', response);
     return response;
   } catch (error) {
     console.error('Ошибка в resetPassword: ', error);
