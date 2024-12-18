@@ -151,7 +151,7 @@ export default function DetailPage({ params }: DetailPageProps) {
 
   if (!product) {
     return (
-      <AppContainer title="Детальная" myClass="flex-col">
+      <AppContainer title="" myClass="flex-col">
         <Heading>Товар не найден!</Heading>
       </AppContainer>
     );
