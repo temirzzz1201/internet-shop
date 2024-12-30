@@ -45,7 +45,6 @@ const Home = async ({ searchParams }: IHomeProps) => {
           >
             <CategoryMenu categories={categories} />
           </Box>
-          {/* Передаем категорию в клиентский компонент */}
           <ClientProducts products={products} selectedCategory={categoryId} />
         </Box>
       </AppContainer>

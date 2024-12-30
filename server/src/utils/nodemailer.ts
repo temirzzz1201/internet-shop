@@ -1,9 +1,9 @@
-import 'dotenv/config';
-import nodemailer from 'nodemailer';
-import { IUserOrderForEmail } from '../types';
+import "dotenv/config";
+import nodemailer from "nodemailer";
+import { IUserOrderForEmail } from "../types";
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -20,15 +20,18 @@ export const sendOrderEmails = ({
   orders: IUserOrderForEmail[];
 }) => {
   if (!Array.isArray(orders)) {
-    console.error('Error: orders is not an array', orders);
+    console.error("Error: orders is not an array", orders);
     return;
   }
 
   const orderDetailsHtml = orders
     .map((order) => {
       const imageTags = order.images
-        .map((url) => `<img src="${url}" alt="Product Image" width="200"/>`)
-        .join('<br>');
+        .map(
+          (url) =>
+            `<img src="${process.env.IMAGES_PATH_FOR_EMAIL}/uploads/${url}" alt="Product Image" width="150px" height="150px" style="margin-right: 10px;" />`
+        )
+        .join("<br>");
 
       return `
         <h3>Товар: ${order.productName}</h3>
@@ -39,18 +42,18 @@ export const sendOrderEmails = ({
           <li>ID продукта: ${order.productId}</li>
         </ul>
         <h4>Изображения товара:</h4>
-        ${imageTags}
+        <div style="display: flex;">${imageTags}</div>
         <hr/>
       `;
     })
-    .join('');
+    .join("");
 
   const totalAmount = orders.reduce((sum, order) => sum + order.total_price, 0);
 
   const adminMailOptions = {
     from: process.env.EMAIL_USER,
-    to: process.env.ADMIN_EMAIL || 'defaultAdmin@example.com', 
-    subject: 'Новый заказ',
+    to: process.env.ADMIN_EMAIL || "defaultAdmin@example.com",
+    subject: "Новый заказ",
     html: `
       <h2>Заказ от пользователя: ${userEmail} - ${name.toUpperCase()}</h2>
       <p><strong>Суммарные подробности заказа:</strong></p>
@@ -62,7 +65,7 @@ export const sendOrderEmails = ({
   const userMailOptions = {
     from: process.env.EMAIL_USER,
     to: userEmail,
-    subject: 'Ваш заказ принят',
+    subject: "Ваш заказ принят",
     html: `
       <h1>Electronic Elephant :)</h1>
       <p>Спасибо за ваш заказ, ${name.toUpperCase()}!</p>
@@ -89,12 +92,19 @@ export const sendOrderEmails = ({
   });
 };
 
-export const  sendResetPassword = ({ email, name, resetUrl }: {email: string, name: string, resetUrl: string}) => {
-
+export const sendResetPassword = ({
+  email,
+  name,
+  resetUrl,
+}: {
+  email: string;
+  name: string;
+  resetUrl: string;
+}) => {
   const resetMailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: 'Сброс пароля',
+    subject: "Сброс пароля",
     html: `
       <h1>Сброс пароля</h1>
       <p>Привет, ${name}!</p>
@@ -111,5 +121,4 @@ export const  sendResetPassword = ({ email, name, resetUrl }: {email: string, na
       console.log(`Письмо для сброса пароля отправлено: ${info.response}`);
     }
   });
-
-}
+};

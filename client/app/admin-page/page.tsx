@@ -43,6 +43,7 @@ export default function Admin() {
   const [files, setFiles] = useState<File[]>([]);
   const [userName, setUserName] = useState('');
 
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const selectedFiles = Array.from(event.target.files);
@@ -62,6 +63,8 @@ export default function Admin() {
       images: files,
     };
 
+    if(!name || !description || !price || !stock || !files.length) return
+
     dispatch(placeProduct(productData));
     setName('');
     setCategoryId(0);
@@ -74,6 +77,7 @@ export default function Admin() {
   const handleSubmitCategory = (e: React.FormEvent) => {
     e.preventDefault();
     const categoryData = { categoryName };
+    if(!categoryName) return
     dispatch(placeCategory(categoryData));
   };
 
@@ -177,6 +181,7 @@ export default function Admin() {
                 colorScheme="teal"
                 type="submit"
                 onClick={handleSubmitCategory}
+                disabled={!categoryName}
               >
                 Создать
               </Button>
@@ -252,6 +257,7 @@ export default function Admin() {
                 colorScheme="teal"
                 type="submit"
                 onClick={handleSubmitProduct}
+                disabled={!name || !description || !price || !stock || !files.length}
               >
                 Создать
               </Button>

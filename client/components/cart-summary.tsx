@@ -40,10 +40,10 @@ const CartSummary: React.FC<ICartSummaryProps> = ({
         </Box>
       </Box>
       <VStack spacing="3" align="stretch">
-        <Button colorScheme="teal" size={buttonSize} onClick={onOrder}>
+        <Button disabled={!totalQuantity} colorScheme="teal" size={buttonSize} onClick={onOrder}>
           Оформить заказ
         </Button>
-        <Button colorScheme="red" size={buttonSize} onClick={onClear}>
+        <Button disabled={!totalQuantity} colorScheme="red" size={buttonSize} onClick={onClear}>
           Очистить корзину
         </Button>
       </VStack>

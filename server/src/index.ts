@@ -1,17 +1,21 @@
-import express from 'express';
-import path from 'path';
-import cors from 'cors';
-import { initModels } from './models';
-import router from './routes';
+import express from "express";
+import path from "path";
+import cors from "cors";
+import { initModels } from "./models";
+import router from "./routes";
 
 const app = express();
 const PORT = process.env.PORT || 5500;
 
-app.use(cors())
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
 
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/api', router);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/api", router);
 
 const start = async () => {
   try {

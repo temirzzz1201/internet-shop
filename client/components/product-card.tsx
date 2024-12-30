@@ -152,7 +152,7 @@ const ProductCard: React.FC<IProductCardProps & { query: string }> = ({
   const input = getInputProps();
 
   return (
-    <Box className={stock === 0 ? 'pointer-events-none' : 'bg-slate-50'}>
+    <>
       <Suspense fallback={<Box as="div">Загрузка...</Box>}>
         <AppModal
           modalSize="sm"
@@ -199,7 +199,9 @@ const ProductCard: React.FC<IProductCardProps & { query: string }> = ({
 
       <Box
         p={{ base: '7px', md: '20px' }}
-        bg={stock === 0 ? 'gray.100' : 'white'}
+        className={
+          stock === 0 ? 'pointer-events-none bg-slate-100' : 'bg-white '
+        }
         borderRadius={10}
         as="article"
         border="1px solid #DCDCDC"
@@ -209,9 +211,9 @@ const ProductCard: React.FC<IProductCardProps & { query: string }> = ({
           <Link href={`/detail/${product.id}`}>
             <CImage
               h="200px"
+              w="100%"
               objectFit="contain"
               objectPosition="center center"
-              w="100%"
               src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${product?.images[0]?.imageUrl}`}
               alt={`изображение ${product.name}`}
               cursor="pointer"
@@ -268,7 +270,7 @@ const ProductCard: React.FC<IProductCardProps & { query: string }> = ({
           {formatDate(product.createdAt)}{' '}
         </Text>
       </Box>
-    </Box>
+    </>
   );
 };
 
