@@ -9,12 +9,12 @@ Client - Nextjs , typescript, chakra ui, embla - carousel, formike, yap
 Server - express, typescript, jsonwebtoken, nodemailer, nodemailer, multer.
 
 
-#Client
+#Client: 
 cd client
 npm i
 npm run dev
 
-#Server
+#Server: 
 cd server
 npm i
 in root derictory mkdir uploads
