@@ -5,7 +5,7 @@ link to an vps adress https://electro-elephant.ru/
 
 
 The application uses the following stack:
-Client - Nextjs , typescript, chakra ui, embla - carousel, formike, yap
+Client - nextjs , typescript, chakra ui, embla-carousel, formike, yap.
 Server - express, typescript, jsonwebtoken, nodemailer, nodemailer, multer.
 
 
