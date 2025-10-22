@@ -23,3 +23,5 @@ cd server
 npm i
 in root derictory - mkdir uploads
 npm run start:dev
+
+---
