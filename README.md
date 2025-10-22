@@ -21,5 +21,5 @@ npm run dev
 ```bash
 cd server
 npm i
-in root derictory mkdir uploads
+in root derictory - mkdir uploads
 npm run start:dev
